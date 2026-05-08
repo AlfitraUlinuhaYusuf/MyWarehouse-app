@@ -54,19 +54,26 @@
         <div class="table-responsive">
             <table class="table table-bordered table-hover" width="100%" cellspacing="0">
                 <thead class="thead-light">
-                    <tr>
-                        <th width="50px" class="text-center">No</th>
-                        <th>Kategori</th>
-                        <th>Nama Produk</th>
-                        <th class="text-center">Stok</th>
-                        <th>Harga</th>
-                        <th width="150px" class="text-center">Aksi</th>
-                    </tr>
+                <tr>
+                    <th width="50px" class="text-center">No</th>
+                    <th width="100px" class="text-center">Gambar</th> <th>Kategori</th>
+                    <th>Nama Produk</th>
+                    <th class="text-center">Stok</th>
+                    <th>Harga</th>
+                    <th width="150px" class="text-center">Aksi</th>
+                </tr>
                 </thead>
                 <tbody>
                     @forelse($produk as $index => $item)
                     <tr>
                         <td class="text-center">{{ $produk->firstItem() + $index }}</td>
+                        <td class="text-center">
+                            @if($item->gambar)
+                                <img src="{{ asset('storage/' . $item->gambar) }}" class="img-thumbnail" style="width: 80px; height: 80px; object-fit: cover;">
+                            @else
+                                <img src="{{ asset('img/no-image.png') }}" class="img-thumbnail" style="width: 80px; height: 80px; object-fit: cover;">
+                            @endif
+                        </td>
                         <td><span class="badge badge-info">{{ $item->kategori->nama_kategori }}</span></td>
                         <td>{{ $item->nama_produk }}</td>
                         <td class="text-center">{{ $item->stok }}</td>

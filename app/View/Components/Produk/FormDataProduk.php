@@ -16,15 +16,12 @@ class FormDataProduk extends Component
     public function __construct($id = null)
     {
         $this->id = $id;
-        // Mengambil semua kategori untuk pilihan dropdown
         $this->kategoris = KategoriProduk::all();
 
         if ($id) {
-            // Mode Edit: Ambil data produk berdasarkan ID
             $this->produk = Produk::find($id);
             $this->action = route('master-data.produk.update', $id);
         } else {
-            // Mode Tambah: Produk kosong
             $this->produk = null;
             $this->action = route('master-data.produk.store');
         }

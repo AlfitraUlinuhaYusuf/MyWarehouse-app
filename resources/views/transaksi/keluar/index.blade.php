@@ -46,15 +46,19 @@
                 <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
                     <thead>
                         <tr>
-                            <th>Tanggal</th>
-                            <th>Produk</th>
-                            <th>Jumlah</th>
-                            <th>Keterangan</th>
+                            <th>No</th>
+                            <th class="text-center">ID</th>
+                            <th class="text-center">Tanggal</th>
+                            <th class="text-center">Produk</th>
+                            <th class="text-center">Jumlah</th>
+                            <th class="text-center">Keterangan</th>
                         </tr>
                     </thead>
                     <tbody>
                         @foreach($riwayat as $r)
                         <tr>
+                            <td>{{ $loop->iteration }}</td>
+                            <td class="text-center">{{ $r->id }}</td>
                             <td>{{ $r->created_at->format('d/m/Y H:i') }}</td>
                             <td>{{ $r->produk->nama_produk }}</td>
                             <td><span class="badge badge-danger">-{{ $r->jumlah }}</span></td>

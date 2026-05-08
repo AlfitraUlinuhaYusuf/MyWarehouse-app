@@ -69,44 +69,44 @@
             <table class="table table-bordered table-hover" width="100%" cellspacing="0">
                 <thead class="thead-light">
                     <tr>
-                        <th width="50px" class="text-center">No</th>
-                        <th>Nama Kategori</th>
-                        <th width="150px" class="text-center">Aksi</th>
+                                <th style="width: 150px">No</th>
+                                <th>Nama Kategori</th>
+                                <th style="width: 150px" class="text-center">Aksi</th>
                     </tr>
                 </thead>
-                <tbody>
-                    @forelse($kategori as $index => $item)
-                    <tr>
-                        <td class="text-center">{{ $kategori->firstItem() + $index }}</td>
-                        <td>{{ $item->nama_kategori }}</td>
-                        <td class="text-center">
-                            <div class="d-flex justify-content-center">
-                                <!-- Tombol Edit -->
+            <tbody>
+                @forelse($kategori as $index => $item)
+                <tr>
+                    <td class="text-center" style="width: 1%">{{ $kategori->firstItem() + $index }}</td>
+                    
+                    <td>{{ $item->nama_kategori }}</td>
+                    
+                    <td style="width: 1%; white-space: nowrap;">
+                        <div class="d-flex justify-content-center align-items-center">
+                            <div class="mr-1">
                                 <x-kategori-produk.form-kategori-produk :id="$item->id" />
-
-                                <!-- Tombol Hapus -->
-                                <form action="{{ route('master-data.kategori-produk.destroy', $item->id) }}" 
-                                      method="POST" class="ml-2">
-                                    @csrf
-                                    @method('DELETE')
-                                    <button type="submit" class="btn btn-sm btn-danger btn-icon-split" 
-                                            onclick="return confirm('Apakah Anda yakin ingin menghapus kategori ini?')">
-                                        <span class="icon text-white-50">
-                                            <i class="fas fa-trash"></i>
-                                        </span>
-                                    </button>
-                                </form>
                             </div>
-                        </td>
-                    </tr>
-                    @empty
-                    <tr>
-                        <td colspan="3" class="text-center py-4 text-muted">
-                            Data kategori tidak ditemukan.
-                        </td>
-                    </tr>
-                    @endforelse
-                </tbody>
+
+                            <form action="{{ route('master-data.kategori-produk.destroy', $item->id) }}" 
+                                method="POST" class="m-0">
+                                @csrf
+                                @method('DELETE')
+                                <button type="submit" class="btn btn-sm btn-danger" 
+                                        onclick="return confirm('Apakah Anda yakin ingin menghapus kategori ini?')">
+                                    <i class="fas fa-trash"></i>
+                                </button>
+                            </form>
+                        </div>
+                    </td>
+                </tr>
+                @empty
+                <tr>
+                    <td colspan="3" class="text-center py-4 text-muted">
+                        Data kategori tidak ditemukan.
+                    </td>
+                </tr>
+                @endforelse
+            </tbody>
             </table>
 
             <!-- Pagination -->

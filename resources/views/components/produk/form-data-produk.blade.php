@@ -1,5 +1,4 @@
 <div>
-    <!-- Tombol Pemicu Modal -->
     <button type="button" class="btn btn-sm {{ $id ? 'btn-warning' : 'btn-primary' }}" data-toggle="modal" data-target="#formProduk{{ $id ?? 'baru' }}">
         @if ($id)
             <i class="fas fa-edit"></i>
@@ -8,7 +7,6 @@
         @endif
     </button>
 
-    <!-- Modal -->
     <div class="modal fade" id="formProduk{{ $id ?? 'baru' }}" data-backdrop="static" tabindex="-1" role="dialog" aria-hidden="true">
         <div class="modal-dialog modal-lg" role="document">
             <div class="modal-content">
@@ -19,7 +17,7 @@
                     </button>
                 </div>
                 
-                <form action="{{ $action }}" method="POST">
+                <form action="{{ $action }}" method="POST" enctype="multipart/form-data">
                     @csrf
                     @if($id)
                         @method('PUT')
@@ -27,7 +25,6 @@
 
                     <div class="modal-body text-left">
                         <div class="row">
-                            <!-- Kategori Produk ID -->
                             <div class="col-md-6">
                                 <div class="form-group">
                                     <label class="font-weight-bold">Kategori Produk</label>
@@ -41,7 +38,6 @@
                                     </select>
                                 </div>
                             </div>
-                            <!-- Nama Produk -->
                             <div class="col-md-6">
                                 <div class="form-group">
                                     <label class="font-weight-bold">Nama Produk</label>
@@ -51,14 +47,12 @@
                         </div>
 
                         <div class="row">
-                            <!-- Harga -->
                             <div class="col-md-6">
                                 <div class="form-group">
                                     <label class="font-weight-bold">Harga (Rp)</label>
                                     <input type="number" name="harga" class="form-control" value="{{ $produk->harga ?? '' }}" placeholder="Contoh: 50000" required>
                                 </div>
                             </div>
-                            <!-- Stok -->
                             <div class="col-md-6">
                                 <div class="form-group">
                                     <label class="font-weight-bold">Stok Barang</label>
@@ -67,7 +61,24 @@
                             </div>
                         </div>
 
-                        <!-- Deskripsi -->
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="form-group">
+                                    <label class="font-weight-bold">Foto Produk</label>
+                                    <input type="file" name="gambar" class="form-control-file">
+                                    
+                                    {{-- Tampilkan preview jika sedang edit dan ada gambarnya --}}
+                                    @if($id && $produk->gambar)
+                                        <div class="mt-2">
+                                            <small class="text-muted d-block mb-1">Gambar saat ini:</small>
+                                            <img src="{{ asset('storage/' . $produk->gambar) }}" class="img-thumbnail" style="height: 100px; object-fit: cover;">
+                                        </div>
+                                    @endif
+                                    <small class="text-muted">Format: PNG, JPG, JPEG (Maks. 2MB)</small>
+                                </div>
+                            </div>
+                        </div>
+
                         <div class="form-group">
                             <label class="font-weight-bold">Deskripsi Produk</label>
                             <textarea name="deskripsi" class="form-control" rows="3" placeholder="Tambahkan keterangan produk...">{{ $produk->deskripsi ?? '' }}</textarea>

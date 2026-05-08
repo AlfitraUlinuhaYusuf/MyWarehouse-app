@@ -1,9 +1,10 @@
 <?php
 
 namespace App\Http\Controllers;
-use App\Models\Produk;
 use App\Models\KategoriProduk;
+use App\Models\Produk;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 
 
 class ProdukController extends Controller
@@ -27,31 +28,51 @@ class ProdukController extends Controller
 
     public function store(Request $request)
     {
-        $request->validate([
-            'kategori_produk_id' => 'required|exists:kategori_produks,id',
-            'nama_produk' => 'required|string|max:255',
-            'harga' => 'required|numeric|min:0',
-            'stok' => 'required|integer|min:0',
+        $data = $request->validate([
+            'nama_produk' => 'required',
+            'kategori_produk_id' => 'required',
+            'harga' => 'required|numeric',
+            'stok' => 'required|numeric',
+            'gambar' => 'nullable|image|mimes:jpeg,png,jpg|max:2048', // Validasi gambar
         ]);
 
-        Produk::create($request->all());
+        // LOGIKA SIMPAN GAMBAR
+        if ($request->hasFile('gambar')) {
+            // Ini yang akan otomatis membuat folder 'produk-images'
+            $data['gambar'] = $request->file('gambar')->store('produk-images', 'public');
+        }
 
-        return redirect()->route('master-data.produk.index')->with('success', 'Produk berhasil ditambah!');
+        Produk::create($data);
+
+        return redirect()->route('master-data.produk.index')->with('success', 'Produk berhasil ditambah');
     }
-    public function update(Request $request, $id)
-    {
-        $request->validate([
-            'kategori_produk_id' => 'required|exists:kategori_produks,id',
-            'nama_produk' => 'required|string|max:255',
-            'harga' => 'required|numeric|min:0',
-            'stok' => 'required|integer|min:0',
-        ]);
+   public function update(Request $request, $id)
+{
+    $request->validate([
+        'nama_produk' => 'required',
+        'kategori_produk_id' => 'required',
+        'harga' => 'required|numeric',
+        'stok' => 'required|integer',
+        'gambar' => 'nullable|image|mimes:jpeg,png,jpg|max:2048',
+    ]);
 
-        $produk = Produk::findOrFail($id);
-        $produk->update($request->all());
+    $produk = Produk::findOrFail($id);
+    $data = $request->all();
 
-        return redirect()->route('master-data.produk.index')->with('success', 'Produk berhasil diperbarui!');
+    if ($request->hasFile('gambar')) {
+        // Hapus gambar lama jika ada untuk menghemat storage
+        if ($produk->gambar && Storage::disk('public')->exists($produk->gambar)) {
+            Storage::disk('public')->delete($produk->gambar);
+        }
+        
+        // Simpan gambar baru dan ambil path-nya
+        $data['gambar'] = $request->file('gambar')->store('produk-images', 'public');
     }
+
+    $produk->update($data);
+
+    return redirect()->route('master-data.produk.index')->with('success', 'Produk berhasil diperbarui!');
+}
 
     public function destroy($id)
     {
