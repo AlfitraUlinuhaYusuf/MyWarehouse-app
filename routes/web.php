@@ -7,38 +7,50 @@ use App\Http\Controllers\TransaksiController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\LaporanController;
 use Illuminate\Support\Facades\Route;
-use Illuminate\Support\Facades\Auth; 
+use Illuminate\Support\Facades\Auth;
 
+/*
+|--------------------------------------------------------------------------
+| Web Routes
+|--------------------------------------------------------------------------
+*/
 
-
-// 1. Ubah rute utama agar otomatis ke login jika belum login, 
-// atau ke dashboard jika sudah login
-
-// Halaman ini bisa dibuka siapa saja tanpa login
+// Halaman awal website
+// Jika belum login, user diarahkan ke halaman login
+// Jika sudah login, user diarahkan ke homepage
 Route::get('/', function () {
-    return view('welcome'); // Atau ganti 'welcome' dengan nama file landing page-mu
+    if (Auth::check()) {
+        return redirect()->route('home');
+    }
+
+    return redirect()->route('login');
 });
 
-// Halaman dashboard tetap dikunci
-Route::get('/dashboard', [DashboardController::class, 'index'])
-    ->middleware(['auth', 'verified'])
-    ->name('dashboard');
-
-
-// 2. Bungkus semua rute aplikasi di dalam middleware AUTH
+// Semua halaman di bawah ini hanya bisa diakses setelah login
 Route::middleware(['auth', 'verified'])->group(function () {
-    
+
+    // Homepage setelah login
+    Route::get('/home', function () {
+        return view('home');
+    })->name('home');
+
     // Dashboard
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
 
-    // Master Data Group
+    // Master Data
     Route::prefix('master-data')->name('master-data.')->group(function () {
+
+        // Produk
         Route::resource('produk', ProdukController::class);
+
+        // Kategori Produk
         Route::resource('kategori-produk', KategoriProdukController::class);
-        
-        // Transaksi
+
+        // Transaksi Barang Masuk
         Route::get('/transaksi/masuk', [TransaksiController::class, 'masuk'])->name('transaksi.masuk');
         Route::post('/transaksi/masuk', [TransaksiController::class, 'storeMasuk'])->name('transaksi.masuk.store');
+
+        // Transaksi Barang Keluar
         Route::get('/transaksi/keluar', [TransaksiController::class, 'keluar'])->name('transaksi.keluar');
         Route::post('/transaksi/keluar', [TransaksiController::class, 'storeKeluar'])->name('transaksi.keluar.store');
     });
@@ -53,9 +65,9 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
 
-// Rute ini di luar auth jika memang untuk landing page publik
+// Halaman main lama, boleh tetap ada jika masih dibutuhkan
 Route::get('/main', function () {
     return view('main');
-});
+})->name('main');
 
 require __DIR__.'/auth.php';
