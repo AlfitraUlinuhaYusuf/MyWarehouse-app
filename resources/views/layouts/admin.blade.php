@@ -1,258 +1,353 @@
-
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MyWarehouse</title>
 
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <meta name="description" content="">
-    <meta name="author" content="">
-
-    <title>MyWarehouse </title>
-
-    <!-- Custom fonts for this template-->
-    <link href="{{ asset('sbadmin2/vendor/fontawesome-free/css/all.min.css') }} "  rel="stylesheet" type="text/css">
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link
-        href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i"
-        rel="stylesheet">
+        href="https://fonts.googleapis.com/css2?family=Playwrite+US+Modern:wght@100..400&family=Poppins:wght@300;400;500;600;700;800&display=swap"
+        rel="stylesheet"
+    >
 
-    <!-- Custom styles for this template-->
-    <link href="{{ asset('sbadmin2/css/sb-admin-2.min.css') }}" rel="stylesheet">
+    <!-- Bootstrap 4: agar modal/component Laravel kamu tetap jalan -->
+    <link
+        rel="stylesheet"
+        href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css"
+    >
 
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html,
+        body {
+            width: 100%;
+            min-height: 100vh;
+            background: #ffffff;
+            color: #000000;
+            font-family: "Poppins", sans-serif;
+        }
+
+        :root {
+            --green-main: #8fb36b;
+            --dropdown-hover: #eef5e8;
+        }
+
+        .admin-navbar {
+            width: 100%;
+            height: 72px;
+            background: var(--green-main);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 66px;
+            position: relative;
+            z-index: 999;
+        }
+
+        .admin-brand {
+            display: flex;
+            align-items: center;
+            gap: 13px;
+            text-decoration: none;
+            color: #000000;
+        }
+
+        .admin-brand:hover {
+            color: #000000;
+            text-decoration: none;
+        }
+
+        .admin-brand img {
+            width: 52px;
+            height: 52px;
+            object-fit: contain;
+        }
+
+        .admin-brand span {
+            font-family: "Playwrite US Modern", cursive;
+            font-size: 27px;
+            font-weight: 400;
+            color: #000000;
+            letter-spacing: -1px;
+            line-height: 1;
+        }
+
+        .admin-nav-right {
+            display: flex;
+            align-items: center;
+            gap: 34px;
+        }
+
+        .admin-nav-link,
+        .admin-dropdown summary {
+            color: #000000;
+            text-decoration: none;
+            font-family: "Poppins", sans-serif;
+            font-size: 16px;
+            font-weight: 500;
+            line-height: 1;
+            cursor: pointer;
+            list-style: none;
+        }
+
+        .admin-nav-link:hover,
+        .admin-dropdown summary:hover,
+        .admin-user-info:hover {
+            color: #000000;
+            text-decoration: none;
+            opacity: 0.85;
+        }
+
+        .admin-dropdown {
+            position: relative;
+        }
+
+        .admin-dropdown summary::-webkit-details-marker,
+        .admin-user-dropdown summary::-webkit-details-marker {
+            display: none;
+        }
+
+        .admin-dropdown summary::after {
+            content: "";
+            display: inline-block;
+            margin-left: 6px;
+            border-left: 5px solid transparent;
+            border-right: 5px solid transparent;
+            border-top: 6px solid #000000;
+            vertical-align: middle;
+            transition: transform 0.2s ease;
+        }
+
+        .admin-dropdown[open] summary::after {
+            transform: rotate(180deg);
+        }
+
+        .admin-dropdown-menu {
+            position: absolute;
+            top: 28px;
+            right: 0;
+            min-width: 178px;
+            background: #ffffff;
+            border-radius: 10px;
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.16);
+            padding: 8px 0;
+            z-index: 1000;
+        }
+
+        .admin-dropdown-menu a,
+        .admin-dropdown-menu button {
+            display: block;
+            width: 100%;
+            padding: 10px 16px;
+            border: none;
+            background: transparent;
+            color: #000000;
+            text-decoration: none;
+            font-family: "Poppins", sans-serif;
+            font-size: 14px;
+            font-weight: 400;
+            text-align: left;
+            white-space: nowrap;
+            cursor: pointer;
+        }
+
+        .admin-dropdown-menu a:hover,
+        .admin-dropdown-menu button:hover {
+            background: var(--dropdown-hover);
+            color: #000000;
+            text-decoration: none;
+        }
+
+        .admin-user-dropdown {
+            position: relative;
+        }
+
+        .admin-user-dropdown summary {
+            list-style: none;
+        }
+
+        .admin-user-info {
+            display: flex;
+            align-items: center;
+            gap: 7px;
+            color: #000000;
+            font-family: "Poppins", sans-serif;
+            font-size: 16px;
+            font-weight: 500;
+            cursor: pointer;
+            line-height: 1;
+        }
+
+        .admin-user-info::after {
+            content: "";
+            display: inline-block;
+            margin-left: 6px;
+            border-left: 5px solid transparent;
+            border-right: 5px solid transparent;
+            border-top: 6px solid #000000;
+            transition: transform 0.2s ease;
+        }
+
+        .admin-user-dropdown[open] .admin-user-info::after {
+            transform: rotate(180deg);
+        }
+
+        .admin-user-icon {
+            width: 27px;
+            height: 27px;
+            border: 2px solid #000000;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .admin-user-icon svg {
+            width: 18px;
+            height: 18px;
+        }
+
+        .admin-user-dropdown-menu {
+            top: 34px;
+            right: 0;
+            min-width: 178px;
+        }
+
+        .admin-user-dropdown-menu form {
+            margin: 0;
+            padding: 0;
+        }
+
+        .admin-main-content {
+            width: 100%;
+            min-height: calc(100vh - 72px);
+            background: #ffffff;
+        }
+
+        @media (max-width: 1000px) {
+            .admin-navbar {
+                height: auto;
+                flex-direction: column;
+                gap: 18px;
+                padding: 18px 24px;
+            }
+
+            .admin-nav-right {
+                flex-wrap: wrap;
+                justify-content: center;
+                gap: 20px;
+            }
+
+            .admin-dropdown-menu,
+            .admin-user-dropdown-menu {
+                top: 30px;
+                right: 0;
+            }
+        }
+    </style>
+
+    @stack('styles')
 </head>
+<body>
+    <nav class="admin-navbar">
+        <a href="{{ route('dashboard') }}" class="admin-brand">
+            <img src="{{ asset('images/logo-warehouse.png') }}" alt="MyWarehouse Logo">
+            <span>MyWarehouse</span>
+        </a>
 
-<body id="page-top">
+        <div class="admin-nav-right">
+            <a href="{{ route('dashboard') }}" class="admin-nav-link">Dashboard</a>
 
-    <!-- Page Wrapper -->
-    <div id="wrapper">
-
-        <!-- Sidebar -->
-        <ul class="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion" id="accordionSidebar">
-
-            <!-- Sidebar - Brand -->
-            <a class="sidebar-brand d-flex align-items-center justify-content-center" href="index.html">
-                <div class="sidebar-brand-icon rotate-n-15">
-                    <i class="fas fa-laugh-wink"></i>
+            <details class="admin-dropdown">
+                <summary>Data</summary>
+                <div class="admin-dropdown-menu">
+                    <a href="{{ route('master-data.produk.index') }}">Data Barang</a>
+                    <a href="{{ route('master-data.kategori-produk.index') }}">Kategori Barang</a>
                 </div>
-                <div class="sidebar-brand-text mx-3">MyWarehouse</div>
-            </a>
+            </details>
 
-            <!-- Divider -->
-            <hr class="sidebar-divider my-0">
+            <details class="admin-dropdown">
+                <summary>Transaksi</summary>
+                <div class="admin-dropdown-menu">
+                    <a href="{{ route('master-data.transaksi.masuk') }}">Barang Masuk</a>
+                    <a href="{{ route('master-data.transaksi.keluar') }}">Barang Keluar</a>
+                </div>
+            </details>
 
-            <!-- Nav Item - Dashboard -->
-            <li class="nav-item">
-                <a class="nav-link" href="{{ route('dashboard') }}">
-                    <i class="fas fa-fw fa-tachometer-alt"></i>
-                    <span>Dashboard</span></a>
-            </li>
+            <details class="admin-dropdown">
+                <summary>Laporan</summary>
+                <div class="admin-dropdown-menu">
+                    <a href="{{ route('laporan.index') }}">Laporan</a>
+                    <a href="{{ route('laporan.pdf') }}">Cetak PDF</a>
+                </div>
+            </details>
 
-            <!-- Divider -->
-            <hr class="sidebar-divider">
-
-            <!-- Heading -->
-            <div class="sidebar-heading">
-                Admin
-            </div>
-
-            <!-- Nav Item - Master Data Collapse Menu -->
-            <li class="nav-item">
-                <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseTwo"
-                    aria-expanded="true" aria-controls="collapseTwo">
-                    <i class="fas fa-fw fa-cog"></i>
-                    <span>Master Data</span>
-                </a>
-                <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" >
-                    <div class="bg-white py-2 collapse-inner rounded">
-                        <h6 class="collapse-header">Jenis data</h6>
-                        <a class="collapse-item" href="{{route('master-data.produk.index') }}">Data Produk</a>
-                        <a class="collapse-item" href="{{route('master-data.kategori-produk.index') }}">Data Kategori</a>
+            <details class="admin-user-dropdown">
+                <summary class="admin-user-info">
+                    <div class="admin-user-icon">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <circle cx="12" cy="8" r="4"></circle>
+                            <path d="M4 21c1.5-5 14.5-5 16 0"></path>
+                        </svg>
                     </div>
+                    <span>Hi, {{ auth()->user()->name ?? 'Nama' }}</span>
+                </summary>
+
+                <div class="admin-dropdown-menu admin-user-dropdown-menu">
+                    <form action="{{ route('logout') }}" method="POST">
+                        @csrf
+                        <button type="submit">Logout</button>
+                    </form>
                 </div>
-            </li>
-
-            <!-- Nav Item - Transaksi Collapse Menu -->
-            <li class="nav-item">
-                <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseTransaksi"
-                    aria-expanded="true" aria-controls="collapseTransaksi">
-                    <i class="fas fa-fw fa-wrench"></i>
-                    <span>Transaksi</span>
-                </a>
-                <div id="collapseTransaksi" class="collapse" aria-labelledby="headingTransaksi"
-                >
-                    <div class="bg-white py-2 collapse-inner rounded">
-                        <h6 class="collapse-header">Jenis Transaksi</h6>
-                        <a class="collapse-item" href="{{ route('master-data.transaksi.masuk') }}">Transaksi Masuk</a>
-                        <a class="collapse-item" href="{{ route('master-data.transaksi.keluar') }}">Transaksi Keluar</a>
-                    </div>
-                </div>
-            </li>
-
-            <li class="nav-item">
-                <a class="nav-link" href="{{ route('laporan.index') }}">
-                    <i class="fas fa-fw fa-tachometer-alt"></i>
-                    <span>Laporan</span></a>
-            </li>
-
-            <!-- Divider -->
-            <hr class="sidebar-divider">
-
-          
-
-          
-
-            <!-- Sidebar Toggler (Sidebar) -->
-            <div class="text-center d-none d-md-inline">
-                <button class="rounded-circle border-0" id="sidebarToggle"></button>
-            </div>
-
-        </ul>
-        <!-- End of Sidebar -->
-
-        <!-- Content Wrapper -->
-        <div id="content-wrapper" class="d-flex flex-column">
-
-            <!-- Main Content -->
-            <div id="content">
-
-                <!-- Topbar -->
-                <nav class="navbar navbar-expand navbar-light bg-white topbar mb-4 static-top shadow">
-
-                    <!-- Sidebar Toggle (Topbar) -->
-                    <button id="sidebarToggleTop" class="btn btn-link d-md-none rounded-circle mr-3">
-                        <i class="fa fa-bars"></i>
-                    </button>
-
-                
-
-                    <!-- Topbar Navbar -->
-                    <ul class="navbar-nav ml-auto">
-
-                        <!-- Nav Item - Search Dropdown (Visible Only XS) -->
-                        <li class="nav-item dropdown no-arrow d-sm-none">
-                            <a class="nav-link dropdown-toggle" href="#" id="searchDropdown" role="button"
-                                data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                <i class="fas fa-search fa-fw"></i>
-                            </a>
-                            <!-- Dropdown - Messages -->
-                            <div class="dropdown-menu dropdown-menu-right p-3 shadow animated--grow-in"
-                                aria-labelledby="searchDropdown">
-                                <form class="form-inline mr-auto w-100 navbar-search">
-                                    <div class="input-group">
-                                        <input type="text" class="form-control bg-light border-0 small"
-                                            placeholder="Search for..." aria-label="Search"
-                                            aria-describedby="basic-addon2">
-                                        <div class="input-group-append">
-                                            <button class="btn btn-primary" type="button">
-                                                <i class="fas fa-search fa-sm"></i>
-                                            </button>
-                                        </div>
-                                    </div>
-                                </form>
-                            </div>
-                        </li>
-
-                        
-
-                    
-
-                        <!-- Nav Item - User Information -->
-                        <li class="nav-item dropdown no-arrow">
-                            <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button"
-                                data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                <span class="mr-2 d-none d-lg-inline text-gray-600 small">{{ Auth::user()->name }}</span>
-                            </a>
-                            <!-- Dropdown - User Information -->
-                            <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in"
-                                aria-labelledby="userDropdown">
-                                
-                                <a class="dropdown-item" href="#" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
-                                <i class="fas fa-sign-out-alt fa-sm fa-fw mr-2 text-gray-400"></i>
-                                    Logout
-                                </a>
-
-                                <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
-                                    @csrf
-                                </form>
-                            </div>
-                        </li>
-
-                    </ul>
-
-                </nav>
-                <!-- End of Topbar -->
-
-                <!-- Begin Page Content -->
-                <div class="container-fluid">
-
-                    <!-- Page Heading -->
-                        @yield('content')
-
-                </div>
-                <!-- /.container-fluid -->
-
-            </div>
-            <!-- End of Main Content -->
-
-            <!-- Footer -->
-            <footer class="sticky-footer bg-white">
-                <div class="container my-auto">
-                    <div class="copyright text-center my-auto">
-                        <span>Copyright &copy; MyWarehouse 2026</span>
-                    </div>
-                </div>
-            </footer>
-            <!-- End of Footer -->
-
+            </details>
         </div>
-        <!-- End of Content Wrapper -->
+    </nav>
 
-    </div>
-    <!-- End of Page Wrapper -->
+    <main class="admin-main-content">
+        @yield('content')
+    </main>
 
-    <!-- Scroll to Top Button-->
-    <a class="scroll-to-top rounded" href="#page-top">
-        <i class="fas fa-angle-up"></i>
-    </a>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script
+        src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.bundle.min.js">
+    </script>
 
-    <!-- Logout Modal-->
-    <div class="modal fade" id="logoutModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
-        aria-hidden="true">
-        <div class="modal-dialog" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLabel">Ready to Leave?</h5>
-                    <button class="close" type="button" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">×</span>
-                    </button>
-                </div>
-                <div class="modal-body">Select "Logout" below if you are ready to end your current session.</div>
-                <div class="modal-footer">
-                    <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
-                    <a class="btn btn-primary" href="login.html">Logout</a>
-                </div>
-            </div>
-        </div>
-    </div>
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const allDropdowns = document.querySelectorAll('.admin-dropdown, .admin-user-dropdown');
 
-    <!-- Bootstrap core JavaScript-->
-    <script src="{{ asset('sbadmin2/vendor/jquery/jquery.min.js') }}"></script>
-    <script src="{{ asset('sbadmin2/vendor/bootstrap/js/bootstrap.bundle.min.js') }}"></script>
+            allDropdowns.forEach(function (dropdown) {
+                dropdown.addEventListener('toggle', function () {
+                    if (dropdown.open) {
+                        allDropdowns.forEach(function (item) {
+                            if (item !== dropdown) {
+                                item.removeAttribute('open');
+                            }
+                        });
+                    }
+                });
+            });
 
-    <!-- Core plugin JavaScript-->
-    <script src="{{ asset('sbadmin2/vendor/jquery-easing/jquery.easing.min.js') }}"></script>
+            document.addEventListener('click', function (event) {
+                const clickedInsideDropdown = event.target.closest('.admin-dropdown, .admin-user-dropdown');
 
-    <!-- Custom scripts for all pages-->
-    <script src="{{ asset('sbadmin2/js/sb-admin-2.min.js') }}"></script>
+                if (!clickedInsideDropdown) {
+                    allDropdowns.forEach(function (dropdown) {
+                        dropdown.removeAttribute('open');
+                    });
+                }
+            });
+        });
+    </script>
 
-    <!-- Di bagian paling bawah sebelum tag </body> -->
-    
-    <script src="{{ asset('sbadmin2/vendor/datatables/jquery.dataTables.min.js') }}"></script>
-    <script src="{{ asset('sbadmin2/vendor/datatables/dataTables.bootstrap4.min.js') }}"></script>
-    @yield('scripts')
-
+    @stack('scripts')
 </body>
-
 </html>

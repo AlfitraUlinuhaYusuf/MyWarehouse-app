@@ -39,6 +39,7 @@
             --danger: #d93025;
             --warning: #f4c430;
             --safe: #3f611b;
+            --danger-soft: #ffe6e6;
         }
 
         /* =========================
@@ -398,10 +399,105 @@
             padding: 16px 18px 30px;
         }
 
+        .stock-title-row {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 16px;
+            flex-wrap: wrap;
+        }
+
         .stock-title {
             font-size: 20px;
             font-weight: 400;
-            margin-bottom: 16px;
+            margin: 0;
+        }
+
+        .stock-warning-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 7px;
+            min-height: 30px;
+            padding: 5px 12px;
+            border-radius: 999px;
+            background: var(--danger-soft);
+            border: 1px solid rgba(217, 48, 37, 0.25);
+            color: var(--danger);
+            font-size: 13px;
+            font-weight: 600;
+            letter-spacing: 0.2px;
+            animation: warningFloat 2.4s ease-in-out infinite;
+        }
+
+        .warning-dot {
+            width: 9px;
+            height: 9px;
+            border-radius: 50%;
+            background: var(--danger);
+            position: relative;
+            flex-shrink: 0;
+        }
+
+        .warning-dot::after {
+            content: "";
+            position: absolute;
+            inset: -5px;
+            border-radius: 50%;
+            background: rgba(217, 48, 37, 0.22);
+            animation: warningPulse 1.8s ease-in-out infinite;
+        }
+
+        .warning-icon {
+            width: 16px;
+            height: 16px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+
+        .warning-icon svg {
+            width: 16px;
+            height: 16px;
+            fill: none;
+            stroke: currentColor;
+            stroke-width: 2.4;
+            stroke-linecap: round;
+            stroke-linejoin: round;
+        }
+
+        @keyframes warningFloat {
+            0% {
+                transform: translateY(0);
+                box-shadow: 0 0 0 rgba(217, 48, 37, 0);
+            }
+
+            50% {
+                transform: translateY(-2px);
+                box-shadow: 0 7px 15px rgba(217, 48, 37, 0.16);
+            }
+
+            100% {
+                transform: translateY(0);
+                box-shadow: 0 0 0 rgba(217, 48, 37, 0);
+            }
+        }
+
+        @keyframes warningPulse {
+            0% {
+                opacity: 0.7;
+                transform: scale(0.75);
+            }
+
+            70% {
+                opacity: 0;
+                transform: scale(1.45);
+            }
+
+            100% {
+                opacity: 0;
+                transform: scale(1.45);
+            }
         }
 
         .stock-table-wrap {
@@ -550,6 +646,11 @@
                 min-width: 760px;
                 font-size: 14px;
             }
+
+            .stock-warning-badge {
+                font-size: 12px;
+                padding: 5px 10px;
+            }
         }
     </style>
 </head>
@@ -565,6 +666,7 @@
             maka menu Cetak PDF di dropdown Laporan dibuat nonaktif.
         */
         $laporanKosong = $totalBarangMasuk <= 0 && $totalBarangKeluar <= 0;
+        $adaStokMinimum = $stokMinimum->count() > 0;
 
         $safeChartLabels = $chartLabels ?? [];
         $safeChartStocks = $chartStocks ?? [];
@@ -680,10 +782,10 @@
                 </div>
 
                 <div class="stat-icon" aria-hidden="true">
-                    <!-- Ikon panah naik -->
+                    <!-- Ikon panah turun untuk Barang Masuk -->
                     <svg viewBox="0 0 120 120">
-                        <path class="arrow-line" d="M34 52 L72 14"></path>
-                        <path class="arrow-line" d="M48 14 H72 V38"></path>
+                        <path class="arrow-line" d="M72 14 L34 52"></path>
+                        <path class="arrow-line" d="M34 28 V52 H58"></path>
 
                         <path
                             class="stairs-shape"
@@ -716,10 +818,10 @@
                 </div>
 
                 <div class="stat-icon" aria-hidden="true">
-                    <!-- Ikon panah turun -->
+                    <!-- Ikon panah naik untuk Barang Keluar -->
                     <svg viewBox="0 0 120 120">
-                        <path class="arrow-line" d="M72 14 L34 52"></path>
-                        <path class="arrow-line" d="M34 28 V52 H58"></path>
+                        <path class="arrow-line" d="M34 52 L72 14"></path>
+                        <path class="arrow-line" d="M48 14 H72 V38"></path>
 
                         <path
                             class="stairs-shape"
@@ -762,7 +864,25 @@
 
         <section class="stock-card">
             <div class="stock-inner">
-                <h2 class="stock-title">Stock mencapai batas minimum :</h2>
+                <div class="stock-title-row">
+                    <h2 class="stock-title">Stock mencapai batas minimum :</h2>
+
+                    @if ($adaStokMinimum)
+                        <div class="stock-warning-badge" title="Ada barang yang stoknya mencapai batas minimum">
+                            <span class="warning-dot"></span>
+
+                            <span class="warning-icon" aria-hidden="true">
+                                <svg viewBox="0 0 24 24">
+                                    <path d="M12 9V13"></path>
+                                    <path d="M12 17H12.01"></path>
+                                    <path d="M10.3 4.2L2.6 18.1C2.1 19 2.7 20 3.8 20H20.2C21.3 20 21.9 19 21.4 18.1L13.7 4.2C13.2 3.3 10.8 3.3 10.3 4.2Z"></path>
+                                </svg>
+                            </span>
+
+                            <span>Stok perlu diperhatikan</span>
+                        </div>
+                    @endif
+                </div>
 
                 <div class="stock-table-wrap">
                     <table class="stock-table">
@@ -792,6 +912,7 @@
 
                                 <tr>
                                     <td>{{ $index + 1 }}</td>
+
                                     <td class="text-left">
                                         {{ $item->kategori->nama_kategori
                                             ?? $item->kategoriProduk->nama_kategori
@@ -800,12 +921,14 @@
                                             ?? $item->nama_kategori
                                             ?? '-' }}
                                     </td>
+
                                     <td class="text-left">
                                         {{ $item->nama_barang
                                             ?? $item->nama_produk
                                             ?? $item->nama
                                             ?? '-' }}
                                     </td>
+
                                     <td>
                                         <div class="stock-cell">
                                             <span class="stock-value">{{ $stokValue }}</span>
