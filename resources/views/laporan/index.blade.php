@@ -6,9 +6,22 @@
         width: 100%;
         min-height: calc(100vh - 72px);
         background: #ffffff;
-        padding: 46px 42px 80px;
+        padding: 44px 42px 80px;
         font-family: "Poppins", sans-serif;
         color: #000000;
+        animation: pageFadeIn 0.45s ease;
+    }
+
+    @keyframes pageFadeIn {
+        from {
+            opacity: 0;
+            transform: translateY(10px);
+        }
+
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
     }
 
     .laporan-header {
@@ -16,7 +29,20 @@
         align-items: flex-start;
         justify-content: space-between;
         gap: 24px;
-        margin-bottom: 58px;
+        margin-bottom: 34px;
+        animation: headerSlide 0.5s ease both;
+    }
+
+    @keyframes headerSlide {
+        from {
+            opacity: 0;
+            transform: translateY(12px);
+        }
+
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
     }
 
     .laporan-title-wrap {
@@ -28,7 +54,7 @@
     .laporan-title {
         margin: 0;
         font-size: 30px;
-        font-weight: 500;
+        font-weight: 600;
         letter-spacing: 0.3px;
         text-transform: uppercase;
         color: #000000;
@@ -45,7 +71,7 @@
         display: flex;
         align-items: center;
         gap: 10px;
-        margin-top: 52px;
+        margin-top: 48px;
     }
 
     .print-label {
@@ -65,13 +91,42 @@
         justify-content: center;
         text-decoration: none;
         cursor: pointer;
-        transition: 0.2s ease;
+        transition: 0.22s ease;
+        position: relative;
+        overflow: visible;
+    }
+
+    .print-button::after {
+        content: "";
+        position: absolute;
+        inset: -5px;
+        border-radius: 11px;
+        border: 2px solid rgba(76, 148, 255, 0.35);
+        animation: printPulse 2.3s ease-in-out infinite;
+    }
+
+    @keyframes printPulse {
+        0% {
+            opacity: 0.55;
+            transform: scale(0.96);
+        }
+
+        65% {
+            opacity: 0;
+            transform: scale(1.13);
+        }
+
+        100% {
+            opacity: 0;
+            transform: scale(1.13);
+        }
     }
 
     .print-button:hover {
         background: #3d84ed;
         text-decoration: none;
-        transform: translateY(-1px);
+        transform: translateY(-2px);
+        box-shadow: 0 8px 16px rgba(76, 148, 255, 0.22);
     }
 
     .print-button svg {
@@ -82,13 +137,123 @@
         fill: none;
         stroke-linecap: round;
         stroke-linejoin: round;
+        position: relative;
+        z-index: 1;
+    }
+
+    .laporan-summary {
+        display: grid;
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        gap: 18px;
+        margin-bottom: 34px;
+        animation: panelSlideUp 0.5s ease both;
+        animation-delay: 0.08s;
+    }
+
+    .summary-card {
+        min-height: 82px;
+        border-radius: 18px;
+        border: 1px solid #e4e4e4;
+        background: #ffffff;
+        padding: 16px 18px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        box-shadow: 0 10px 25px rgba(0, 0, 0, 0.035);
+        transition: 0.22s ease;
+        overflow: hidden;
+        position: relative;
+    }
+
+    .summary-card::before {
+        content: "";
+        position: absolute;
+        inset: 0;
+        background: linear-gradient(110deg, transparent 0%, rgba(143, 179, 107, 0.10) 45%, transparent 80%);
+        transform: translateX(-100%);
+        animation: softShine 4.5s ease-in-out infinite;
+    }
+
+    @keyframes softShine {
+        0%, 55% {
+            transform: translateX(-100%);
+        }
+
+        100% {
+            transform: translateX(100%);
+        }
+    }
+
+    .summary-card:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 14px 28px rgba(0, 0, 0, 0.07);
+    }
+
+    .summary-label {
+        position: relative;
+        z-index: 1;
+        font-size: 14px;
+        font-weight: 500;
+        color: #666666;
+        margin-bottom: 4px;
+    }
+
+    .summary-number {
+        position: relative;
+        z-index: 1;
+        font-size: 26px;
+        font-weight: 700;
+        color: #000000;
+        line-height: 1;
+    }
+
+    .summary-icon {
+        position: relative;
+        z-index: 1;
+        width: 42px;
+        height: 42px;
+        border-radius: 14px;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 22px;
+        font-weight: 700;
+    }
+
+    .summary-total .summary-icon {
+        background: #eef5e8;
+        color: #31521a;
+    }
+
+    .summary-in .summary-icon {
+        background: #e6f5df;
+        color: #2f7d32;
+    }
+
+    .summary-out .summary-icon {
+        background: #ffe4e4;
+        color: #c62828;
     }
 
     .laporan-card {
         width: 100%;
         background: #ffffff;
-        border-radius: 16px;
+        border-radius: 18px;
         padding: 24px 0 10px;
+        animation: panelSlideUp 0.55s ease both;
+        animation-delay: 0.14s;
+    }
+
+    @keyframes panelSlideUp {
+        from {
+            opacity: 0;
+            transform: translateY(14px);
+        }
+
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
     }
 
     .laporan-control-row {
@@ -118,6 +283,12 @@
         color: #000000;
         padding: 0 8px;
         outline: none;
+        transition: 0.2s ease;
+    }
+
+    .entries-control select:focus {
+        border-color: #8fb36b;
+        box-shadow: 0 0 0 3px rgba(143, 179, 107, 0.18);
     }
 
     .laporan-search {
@@ -129,6 +300,13 @@
         align-items: center;
         padding: 0 18px;
         background: #ffffff;
+        transition: 0.22s ease;
+    }
+
+    .laporan-search:focus-within {
+        border-color: #8fb36b;
+        box-shadow: 0 0 0 3px rgba(143, 179, 107, 0.20);
+        transform: translateY(-1px);
     }
 
     .laporan-search svg {
@@ -162,7 +340,7 @@
     .laporan-table-wrap {
         width: 100%;
         overflow-x: auto;
-        border-radius: 10px;
+        border-radius: 12px;
     }
 
     .laporan-table {
@@ -180,12 +358,12 @@
         text-align: center;
         vertical-align: middle;
         font-size: 18px;
-        font-weight: 500;
+        font-weight: 600;
         text-transform: uppercase;
     }
 
     .laporan-table td {
-        height: 56px;
+        height: 58px;
         border: 1px solid #dcdcdc;
         text-align: center;
         vertical-align: middle;
@@ -193,6 +371,29 @@
         font-weight: 400;
         color: #000000;
         background: #ffffff;
+        transition: 0.22s ease;
+    }
+
+    .laporan-row {
+        animation: rowFade 0.35s ease both;
+    }
+
+    .laporan-row:nth-child(1) { animation-delay: 0.03s; }
+    .laporan-row:nth-child(2) { animation-delay: 0.06s; }
+    .laporan-row:nth-child(3) { animation-delay: 0.09s; }
+    .laporan-row:nth-child(4) { animation-delay: 0.12s; }
+    .laporan-row:nth-child(5) { animation-delay: 0.15s; }
+
+    @keyframes rowFade {
+        from {
+            opacity: 0;
+            transform: translateY(6px);
+        }
+
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
     }
 
     .laporan-table tbody tr:hover td {
@@ -220,15 +421,39 @@
     }
 
     .transaction-badge {
-        min-width: 92px;
+        min-width: 108px;
         height: 32px;
         border-radius: 999px;
         display: inline-flex;
         align-items: center;
         justify-content: center;
+        gap: 7px;
         font-size: 14px;
-        font-weight: 600;
+        font-weight: 700;
         letter-spacing: 0.2px;
+        position: relative;
+        overflow: hidden;
+    }
+
+    .transaction-badge::before {
+        content: "";
+        width: 7px;
+        height: 7px;
+        border-radius: 50%;
+        display: inline-block;
+        animation: badgeDot 1.8s ease-in-out infinite;
+    }
+
+    @keyframes badgeDot {
+        0%, 100% {
+            opacity: 0.6;
+            transform: scale(1);
+        }
+
+        50% {
+            opacity: 1;
+            transform: scale(1.3);
+        }
     }
 
     .transaction-in {
@@ -237,10 +462,18 @@
         border: 1px solid rgba(47, 125, 50, 0.25);
     }
 
+    .transaction-in::before {
+        background: #2f7d32;
+    }
+
     .transaction-out {
         background: #ffe4e4;
         color: #c62828;
         border: 1px solid rgba(198, 40, 40, 0.25);
+    }
+
+    .transaction-out::before {
+        background: #c62828;
     }
 
     .transaction-neutral {
@@ -249,15 +482,48 @@
         border: 1px solid #d0d0d0;
     }
 
+    .transaction-neutral::before {
+        background: #777777;
+    }
+
     .jumlah-badge {
-        min-width: 54px;
+        min-width: 58px;
         height: 32px;
         border-radius: 9px;
-        background: #f1f1f1;
         display: inline-flex;
         align-items: center;
         justify-content: center;
-        font-weight: 600;
+        font-size: 15px;
+        font-weight: 800;
+        transition: 0.22s ease;
+    }
+
+    .jumlah-in {
+        background: #e6f5df;
+        color: #2f7d32;
+        border: 1px solid rgba(47, 125, 50, 0.25);
+    }
+
+    .jumlah-out {
+        background: #ffe4e4;
+        color: #c62828;
+        border: 1px solid rgba(198, 40, 40, 0.25);
+    }
+
+    .jumlah-neutral {
+        background: #f1f1f1;
+        color: #555555;
+        border: 1px solid #d0d0d0;
+    }
+
+    .laporan-row:hover .jumlah-in {
+        transform: translateY(-1px);
+        box-shadow: 0 8px 14px rgba(47, 125, 50, 0.15);
+    }
+
+    .laporan-row:hover .jumlah-out {
+        transform: translateY(-1px);
+        box-shadow: 0 8px 14px rgba(198, 40, 40, 0.14);
     }
 
     .laporan-empty {
@@ -312,6 +578,19 @@
         font-size: 15px;
     }
 
+    .no-result-row {
+        display: none;
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+        *,
+        *::before,
+        *::after {
+            animation: none !important;
+            transition: none !important;
+        }
+    }
+
     @media (max-width: 900px) {
         .laporan-page {
             padding: 32px 20px 60px;
@@ -319,7 +598,7 @@
 
         .laporan-header {
             flex-direction: column;
-            margin-bottom: 36px;
+            margin-bottom: 32px;
         }
 
         .laporan-title {
@@ -328,6 +607,10 @@
 
         .print-row {
             margin-top: 0;
+        }
+
+        .laporan-summary {
+            grid-template-columns: 1fr;
         }
 
         .laporan-control-row {
@@ -351,6 +634,16 @@
     }
 </style>
 
+@php
+    $laporanCollection = $laporan instanceof \Illuminate\Pagination\AbstractPaginator
+        ? collect($laporan->items())
+        : collect($laporan);
+
+    $totalTransaksi = $laporanCollection->count();
+    $totalMasuk = $laporanCollection->filter(fn ($row) => strtolower($row->jenis ?? '') === 'masuk')->count();
+    $totalKeluar = $laporanCollection->filter(fn ($row) => strtolower($row->jenis ?? '') === 'keluar')->count();
+@endphp
+
 <div class="laporan-page">
     <div class="laporan-header">
         <div class="laporan-title-wrap">
@@ -371,6 +664,32 @@
                     <path d="M8 17H16"></path>
                 </svg>
             </a>
+        </div>
+    </div>
+
+    <div class="laporan-summary">
+        <div class="summary-card summary-total">
+            <div>
+                <div class="summary-label">Total Transaksi</div>
+                <div class="summary-number">{{ $totalTransaksi }}</div>
+            </div>
+            <div class="summary-icon">≡</div>
+        </div>
+
+        <div class="summary-card summary-in">
+            <div>
+                <div class="summary-label">Barang Masuk</div>
+                <div class="summary-number">{{ $totalMasuk }}</div>
+            </div>
+            <div class="summary-icon">+</div>
+        </div>
+
+        <div class="summary-card summary-out">
+            <div>
+                <div class="summary-label">Barang Keluar</div>
+                <div class="summary-number">{{ $totalKeluar }}</div>
+            </div>
+            <div class="summary-icon">−</div>
         </div>
     </div>
 
@@ -415,16 +734,23 @@
                     @forelse($laporan as $row)
                         @php
                             $jenis = strtolower($row->jenis ?? '-');
+                            $jumlah = (int) ($row->jumlah ?? 0);
 
                             if ($jenis === 'masuk') {
                                 $jenisLabel = 'Barang Masuk';
                                 $jenisClass = 'transaction-in';
+                                $jumlahClass = 'jumlah-in';
+                                $jumlahText = '+' . $jumlah;
                             } elseif ($jenis === 'keluar') {
                                 $jenisLabel = 'Barang Keluar';
                                 $jenisClass = 'transaction-out';
+                                $jumlahClass = 'jumlah-out';
+                                $jumlahText = '-' . $jumlah;
                             } else {
                                 $jenisLabel = ucfirst($row->jenis ?? '-');
                                 $jenisClass = 'transaction-neutral';
+                                $jumlahClass = 'jumlah-neutral';
+                                $jumlahText = (string) $jumlah;
                             }
                         @endphp
 
@@ -438,8 +764,8 @@
                             </td>
                             <td>{{ $row->produk->nama_produk ?? '-' }}</td>
                             <td>
-                                <span class="jumlah-badge">
-                                    {{ $row->jumlah ?? 0 }}
+                                <span class="jumlah-badge {{ $jumlahClass }}">
+                                    {{ $jumlahText }}
                                 </span>
                             </td>
                         </tr>
@@ -450,6 +776,12 @@
                             </td>
                         </tr>
                     @endforelse
+
+                    <tr class="no-result-row" id="noResultRow">
+                        <td colspan="5" class="laporan-empty">
+                            Data yang dicari tidak ditemukan.
+                        </td>
+                    </tr>
                 </tbody>
             </table>
         </div>
@@ -477,6 +809,7 @@
         const prevButton = document.getElementById('prevPage');
         const nextButton = document.getElementById('nextPage');
         const currentPageText = document.getElementById('currentPageText');
+        const noResultRow = document.getElementById('noResultRow');
 
         let currentPage = 1;
 
@@ -508,6 +841,10 @@
             filteredRows.slice(startIndex, endIndex).forEach(function (row) {
                 row.style.display = '';
             });
+
+            if (noResultRow) {
+                noResultRow.style.display = totalRows === 0 && rows.length > 0 ? '' : 'none';
+            }
 
             const showingStart = totalRows === 0 ? 0 : startIndex + 1;
             const showingEnd = Math.min(endIndex, totalRows);

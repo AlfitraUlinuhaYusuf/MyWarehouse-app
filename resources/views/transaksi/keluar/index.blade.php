@@ -1,131 +1,1014 @@
 @extends('layouts.admin')
 
 @section('content')
-<div class="container-fluid">
-    <div class="d-sm-flex align-items-center justify-content-between mb-4">
-        <h1 class="h3 mb-0 text-gray-800">Riwayat Barang Keluar</h1>
-        <button class="btn btn-danger btn-icon-split" data-toggle="modal" data-target="#modalKeluar">
-            <span class="icon text-white-50">
-                <i class="fas fa-minus"></i>
-            </span>
-            <span class="text">Tambah Barang Keluar</span>
-        </button>
-    </div>
-    
+<style>
+    .keluar-page {
+        width: 100%;
+        min-height: calc(100vh - 72px);
+        background: #ffffff;
+        padding: 42px 40px 70px;
+        font-family: "Poppins", sans-serif;
+        color: #000000;
+        animation: pageFadeIn 0.45s ease;
+    }
+
+    @keyframes pageFadeIn {
+        from {
+            opacity: 0;
+            transform: translateY(10px);
+        }
+
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    .keluar-title {
+        margin: 0 0 30px;
+        font-size: 30px;
+        font-weight: 600;
+        letter-spacing: 0.2px;
+        text-transform: uppercase;
+        color: #000000;
+    }
+
+    .keluar-panel {
+        width: 100%;
+        background: #ffffff;
+        border-radius: 18px;
+        padding: 22px 0 18px;
+        animation: panelSlideUp 0.5s ease;
+    }
+
+    @keyframes panelSlideUp {
+        from {
+            opacity: 0;
+            transform: translateY(14px);
+        }
+
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    .top-action-row {
+        display: flex;
+        align-items: flex-start;
+        justify-content: space-between;
+        gap: 28px;
+        margin-bottom: 28px;
+    }
+
+    .filter-block {
+        flex: 1;
+        min-width: 0;
+    }
+
+    .date-label {
+        display: block;
+        margin: 0 0 14px 12px;
+        font-size: 18px;
+        font-weight: 400;
+        color: #000000;
+    }
+
+    .filter-form {
+        display: grid;
+        grid-template-columns: minmax(260px, 1fr) minmax(260px, 1fr) 118px 118px;
+        align-items: center;
+        gap: 18px;
+        width: 100%;
+    }
+
+    .date-input-wrap {
+        position: relative;
+        width: 100%;
+    }
+
+    .date-input {
+        width: 100%;
+        height: 50px;
+        border: none;
+        border-radius: 11px;
+        background: #eeeeee;
+        color: #6f6f6f;
+        font-family: "Poppins", sans-serif;
+        font-size: 24px;
+        font-weight: 400;
+        padding: 0 54px 0 18px;
+        outline: none;
+        transition: 0.22s ease;
+    }
+
+    .date-input:focus {
+        background: #f5f5f5;
+        box-shadow: 0 0 0 3px rgba(143, 179, 107, 0.23);
+    }
+
+    .date-input::-webkit-calendar-picker-indicator {
+        opacity: 0;
+        cursor: pointer;
+    }
+
+    .calendar-icon {
+        position: absolute;
+        right: 18px;
+        top: 50%;
+        transform: translateY(-50%);
+        width: 25px;
+        height: 25px;
+        pointer-events: none;
+    }
+
+    .calendar-icon svg {
+        width: 25px;
+        height: 25px;
+        stroke: #1f1f1f;
+        stroke-width: 2;
+        fill: none;
+        stroke-linecap: round;
+        stroke-linejoin: round;
+    }
+
+    .filter-btn,
+    .refresh-btn {
+        width: 118px;
+        height: 50px;
+        border: none;
+        border-radius: 11px;
+        font-family: "Poppins", sans-serif;
+        font-size: 20px;
+        font-weight: 500;
+        color: #ffffff;
+        cursor: pointer;
+        transition: 0.22s ease;
+        text-decoration: none;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .filter-btn {
+        background: #405565;
+    }
+
+    .filter-btn:hover {
+        background: #344755;
+        transform: translateY(-2px);
+        box-shadow: 0 8px 16px rgba(64, 85, 101, 0.18);
+    }
+
+    .refresh-btn {
+        background: #5a9829;
+    }
+
+    .refresh-btn:hover {
+        background: #4d8522;
+        color: #ffffff;
+        text-decoration: none;
+        transform: translateY(-2px);
+        box-shadow: 0 8px 16px rgba(90, 152, 41, 0.18);
+    }
+
+    .add-area {
+        display: flex;
+        align-items: center;
+        justify-content: flex-end;
+        gap: 12px;
+        padding-top: 34px;
+        white-space: nowrap;
+        min-width: 370px;
+    }
+
+    .add-label {
+        font-size: 23px;
+        font-weight: 400;
+        color: #000000;
+    }
+
+    .add-btn {
+        width: 88px;
+        height: 35px;
+        border: none;
+        border-radius: 8px;
+        background: #ff4b4b;
+        color: #000000;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        position: relative;
+        transition: 0.22s ease;
+        overflow: visible;
+    }
+
+    .add-btn::after {
+        content: "";
+        position: absolute;
+        inset: -5px;
+        border-radius: 11px;
+        border: 2px solid rgba(255, 75, 75, 0.35);
+        animation: addPulse 2.2s ease-in-out infinite;
+    }
+
+    @keyframes addPulse {
+        0% {
+            opacity: 0.55;
+            transform: scale(0.96);
+        }
+
+        60% {
+            opacity: 0;
+            transform: scale(1.12);
+        }
+
+        100% {
+            opacity: 0;
+            transform: scale(1.12);
+        }
+    }
+
+    .add-btn:hover {
+        background: #f23d3d;
+        transform: translateY(-2px);
+        box-shadow: 0 8px 14px rgba(255, 75, 75, 0.25);
+    }
+
+    .add-btn span {
+        font-size: 40px;
+        font-weight: 700;
+        line-height: 1;
+        margin-top: -5px;
+        position: relative;
+        z-index: 1;
+    }
+
+    .table-toolbar {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 24px;
+        margin-bottom: 10px;
+    }
+
+    .entries-control {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        font-size: 20px;
+        font-weight: 400;
+        color: #000000;
+    }
+
+    .entries-control select {
+        width: 72px;
+        height: 38px;
+        border: 1px solid #c4c4c4;
+        background: #eeeeee;
+        font-family: "Poppins", sans-serif;
+        font-size: 14px;
+        color: #000000;
+        padding: 0 8px;
+        outline: none;
+    }
+
+    .search-box {
+        width: 300px;
+        height: 48px;
+        border: 1px solid #9f9f9f;
+        border-radius: 999px;
+        display: flex;
+        align-items: center;
+        padding: 0 18px;
+        background: #ffffff;
+        transition: 0.22s ease;
+    }
+
+    .search-box:focus-within {
+        border-color: #8fb36b;
+        box-shadow: 0 0 0 3px rgba(143, 179, 107, 0.2);
+    }
+
+    .search-box svg {
+        width: 27px;
+        height: 27px;
+        margin-right: 14px;
+        stroke: #000000;
+        stroke-width: 2.7;
+        fill: none;
+        stroke-linecap: round;
+        stroke-linejoin: round;
+        flex-shrink: 0;
+    }
+
+    .search-box input {
+        width: 100%;
+        border: none;
+        outline: none;
+        background: transparent;
+        font-family: "Poppins", sans-serif;
+        font-size: 28px;
+        font-weight: 400;
+        color: #000000;
+        line-height: 1;
+    }
+
+    .search-box input::placeholder {
+        color: #5f5f5f;
+    }
+
+    .keluar-table-wrap {
+        width: 100%;
+        overflow-x: auto;
+        border-radius: 10px;
+    }
+
+    .keluar-table {
+        width: 100%;
+        border-collapse: collapse;
+        table-layout: fixed;
+        font-family: "Poppins", sans-serif;
+        color: #000000;
+    }
+
+    .keluar-table th {
+        height: 50px;
+        background: #eeeeee;
+        border: 1px solid #d4d4d4;
+        text-align: center;
+        vertical-align: middle;
+        font-size: 19px;
+        font-weight: 600;
+        text-transform: uppercase;
+    }
+
+    .keluar-table td {
+        height: 52px;
+        border: 1px solid #dcdcdc;
+        text-align: center;
+        vertical-align: middle;
+        font-size: 17px;
+        font-weight: 400;
+        color: #000000;
+        background: #ffffff;
+    }
+
+    .keluar-row {
+        animation: rowFade 0.35s ease both;
+        transition: 0.2s ease;
+    }
+
+    .keluar-row:nth-child(1) { animation-delay: 0.03s; }
+    .keluar-row:nth-child(2) { animation-delay: 0.06s; }
+    .keluar-row:nth-child(3) { animation-delay: 0.09s; }
+    .keluar-row:nth-child(4) { animation-delay: 0.12s; }
+    .keluar-row:nth-child(5) { animation-delay: 0.15s; }
+
+    @keyframes rowFade {
+        from {
+            opacity: 0;
+            transform: translateY(5px);
+        }
+
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    .keluar-table tbody tr:hover td {
+        background: #fff8f8;
+    }
+
+    .col-no {
+        width: 8%;
+    }
+
+    .col-kategori {
+        width: 17%;
+    }
+
+    .col-tanggal {
+        width: 17%;
+    }
+
+    .col-barang {
+        width: 22%;
+    }
+
+    .col-jumlah {
+        width: 15%;
+    }
+
+    .col-keterangan {
+        width: 21%;
+    }
+
+    .category-badge {
+        min-width: 98px;
+        min-height: 30px;
+        border-radius: 999px;
+        padding: 5px 13px;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        background: #eef5e8;
+        border: 1px solid rgba(143, 179, 107, 0.45);
+        color: #31521a;
+        font-size: 14px;
+        font-weight: 600;
+    }
+
+    .jumlah-badge {
+        min-width: 58px;
+        height: 32px;
+        border-radius: 9px;
+        background: #ffe4e4;
+        color: #c62828;
+        border: 1px solid rgba(198, 40, 40, 0.25);
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 15px;
+        font-weight: 700;
+    }
+
+    .keterangan-text {
+        color: #333333;
+        font-size: 16px;
+    }
+
+    .empty-row {
+        height: 78px !important;
+        color: #777777 !important;
+        font-size: 16px !important;
+    }
+
+    .table-footer {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 20px;
+        margin-top: 10px;
+        font-family: "Poppins", sans-serif;
+        font-size: 18px;
+        font-weight: 400;
+        color: #000000;
+    }
+
+    .pagination-custom {
+        display: flex;
+        align-items: center;
+        gap: 7px;
+    }
+
+    .pagination-custom button,
+    .pagination-custom span {
+        border: none;
+        background: transparent;
+        font-family: "Poppins", sans-serif;
+        font-size: 18px;
+        font-weight: 400;
+        color: #000000;
+        cursor: pointer;
+        padding: 0;
+    }
+
+    .pagination-custom button:disabled {
+        opacity: 0.45;
+        cursor: not-allowed;
+    }
+
+    .pagination-custom .page-number {
+        min-width: 50px;
+        height: 36px;
+        border: 1px solid #bcbcbc;
+        background: #eeeeee;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 16px;
+    }
+
+    .alert-custom {
+        margin-bottom: 18px;
+        border-radius: 12px;
+        font-family: "Poppins", sans-serif;
+    }
+
+    /* =========================
+       MODAL TAMBAH BARANG KELUAR
+    ========================= */
+    .modal-backdrop.show {
+        opacity: 0.38 !important;
+    }
+
+    .modal-dialog {
+        max-width: 720px;
+    }
+
+    .modal-content {
+        border: none;
+        border-radius: 22px;
+        box-shadow: 0 18px 45px rgba(0, 0, 0, 0.22);
+        overflow: hidden;
+        font-family: "Poppins", sans-serif;
+    }
+
+    .modal-header {
+        min-height: 74px;
+        background: #8fb36b;
+        border-bottom: none;
+        padding: 22px 26px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+    }
+
+    .modal-title {
+        color: #000000;
+        font-size: 24px;
+        font-weight: 700;
+        margin: 0;
+    }
+
+    .modal-header .close {
+        width: 38px;
+        height: 38px;
+        min-width: 38px;
+        border: none;
+        border-radius: 50%;
+        background: #ffe4e4;
+        color: #e53935;
+        opacity: 1;
+        padding: 0;
+        margin: 0;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        box-shadow: none;
+        text-shadow: none;
+        font-size: 0;
+        line-height: 1;
+    }
+
+    .modal-header .close::before {
+        content: "×";
+        font-family: "Poppins", sans-serif;
+        font-size: 30px;
+        font-weight: 700;
+        color: #e53935;
+        line-height: 1;
+        margin-top: -3px;
+    }
+
+    .modal-header .close span {
+        display: none;
+    }
+
+    .modal-body {
+        padding: 26px 28px 12px;
+        background: #ffffff;
+    }
+
+    .modal-body label {
+        font-size: 15px;
+        font-weight: 600;
+        color: #000000;
+        margin-bottom: 8px;
+    }
+
+    .modal .form-control {
+        min-height: 44px;
+        border: 1px solid #c9c9c9;
+        border-radius: 10px;
+        box-shadow: none;
+        font-family: "Poppins", sans-serif;
+        font-size: 15px;
+        color: #000000;
+        padding: 9px 12px;
+        background: #ffffff;
+    }
+
+    .modal textarea.form-control {
+        min-height: 90px;
+        resize: vertical;
+    }
+
+    .modal .form-control:focus {
+        border-color: #8fb36b;
+        box-shadow: 0 0 0 3px rgba(143, 179, 107, 0.22);
+    }
+
+    .modal-footer {
+        border-top: none;
+        background: #ffffff;
+        padding: 16px 28px 28px;
+        display: flex;
+        justify-content: flex-end;
+        gap: 12px;
+    }
+
+    .modal-footer .btn {
+        min-width: 118px;
+        height: 43px;
+        border: none;
+        border-radius: 14px;
+        font-family: "Poppins", sans-serif;
+        font-size: 15px;
+        font-weight: 600;
+        box-shadow: none;
+        padding: 0 18px;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .btn-modal-cancel {
+        background: #eeeeee;
+        color: #000000;
+    }
+
+    .btn-modal-cancel:hover {
+        background: #dddddd;
+        color: #000000;
+    }
+
+    .btn-modal-save {
+        background: #ff4b4b;
+        color: #ffffff;
+    }
+
+    .btn-modal-save:hover {
+        background: #e83e3e;
+        color: #ffffff;
+    }
+
+    @media (max-width: 1150px) {
+        .top-action-row {
+            flex-direction: column-reverse;
+            align-items: stretch;
+        }
+
+        .add-area {
+            padding-top: 0;
+            min-width: 0;
+            justify-content: flex-end;
+        }
+
+        .filter-form {
+            grid-template-columns: 1fr 1fr;
+        }
+
+        .filter-btn,
+        .refresh-btn {
+            width: 100%;
+        }
+    }
+
+    @media (max-width: 800px) {
+        .keluar-page {
+            padding: 32px 20px 60px;
+        }
+
+        .keluar-title {
+            font-size: 24px;
+        }
+
+        .filter-form {
+            grid-template-columns: 1fr;
+        }
+
+        .table-toolbar {
+            flex-direction: column-reverse;
+            align-items: flex-start;
+        }
+
+        .search-box {
+            width: 100%;
+            max-width: 360px;
+        }
+
+        .keluar-table {
+            min-width: 1080px;
+        }
+
+        .table-footer {
+            flex-direction: column;
+            align-items: flex-start;
+        }
+
+        .add-label {
+            font-size: 20px;
+        }
+    }
+</style>
+
+<div class="keluar-page">
+    <h1 class="keluar-title">Laporan Barang Keluar</h1>
+
     @if(session('error'))
-        <div class="alert alert-danger">{{ session('error') }}</div>
+        <div class="alert alert-danger alert-dismissible fade show alert-custom" role="alert">
+            {{ session('error') }}
+
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
     @endif
 
-    <!-- Filter Tanggal -->
-    <div class="card shadow mb-4">
-        <div class="card-body">
-            <form action="" method="GET" class="form-inline">
-                <div class="form-group mr-2">
-                    <label for="start_date" class="mr-2">Dari:</label>
-                    <input type="date" name="start_date" id="start_date" value="{{ request('start_date') }}" class="form-control form-control-sm">
-                </div>
-                <div class="form-group mr-2">
-                    <label for="end_date" class="mr-2">Sampai:</label>
-                    <input type="date" name="end_date" id="end_date" value="{{ request('end_date') }}" class="form-control form-control-sm">
-                </div>
-                <button type="submit" class="btn btn-primary btn-sm">
-                    <i class="fas fa-filter fa-sm"></i> Filter
+    @if ($errors->any())
+        <div class="alert alert-danger alert-dismissible fade show alert-custom" role="alert">
+            <ul class="mb-0">
+                @foreach ($errors->all() as $error)
+                    <li>{{ $error }}</li>
+                @endforeach
+            </ul>
+
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+    @endif
+
+    @if(session('success'))
+        <div class="alert alert-success alert-dismissible fade show alert-custom" role="alert">
+            {{ session('success') }}
+
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+    @endif
+
+    <div class="keluar-panel">
+        <div class="top-action-row">
+            <div class="filter-block">
+                <label class="date-label">Pilih tanggal keluar</label>
+
+                <form action="{{ url()->current() }}" method="GET" class="filter-form">
+                    <div class="date-input-wrap">
+                        <input
+                            type="date"
+                            name="start_date"
+                            class="date-input"
+                            value="{{ request('start_date') }}"
+                        >
+
+                        <span class="calendar-icon">
+                            <svg viewBox="0 0 24 24">
+                                <path d="M7 3V6"></path>
+                                <path d="M17 3V6"></path>
+                                <path d="M4 9H20"></path>
+                                <rect x="4" y="5" width="16" height="16" rx="2"></rect>
+                            </svg>
+                        </span>
+                    </div>
+
+                    <div class="date-input-wrap">
+                        <input
+                            type="date"
+                            name="end_date"
+                            class="date-input"
+                            value="{{ request('end_date') }}"
+                        >
+
+                        <span class="calendar-icon">
+                            <svg viewBox="0 0 24 24">
+                                <path d="M7 3V6"></path>
+                                <path d="M17 3V6"></path>
+                                <path d="M4 9H20"></path>
+                                <rect x="4" y="5" width="16" height="16" rx="2"></rect>
+                            </svg>
+                        </span>
+                    </div>
+
+                    <button type="submit" class="filter-btn">Filter</button>
+                    <a href="{{ url()->current() }}" class="refresh-btn">Refresh</a>
+                </form>
+            </div>
+
+            <div class="add-area">
+                <span class="add-label">Tambah barang keluar :</span>
+
+                <button class="add-btn" type="button" data-toggle="modal" data-target="#modalKeluar">
+                    <span>−</span>
                 </button>
-                <a href="{{ url()->current() }}" class="btn btn-secondary btn-sm ml-2">Reset</a>
-            </form>
+            </div>
         </div>
-    </div>
 
-    <!-- Tabel Riwayat Transaksi Keluar -->
-    <div class="card shadow mb-4">
-        <div class="card-header py-3">
-            <h6 class="m-0 font-weight-bold text-danger">Daftar Transaksi Keluar</h6>
+        <div class="table-toolbar">
+            <div class="entries-control">
+                <span>Show</span>
+
+                <select id="keluarEntries">
+                    <option value="5" selected>5</option>
+                    <option value="10">10</option>
+                    <option value="25">25</option>
+                    <option value="50">50</option>
+                </select>
+
+                <span>Entries</span>
+            </div>
+
+            <div class="search-box">
+                <svg viewBox="0 0 24 24">
+                    <circle cx="11" cy="11" r="7"></circle>
+                    <path d="M16.5 16.5L21 21"></path>
+                </svg>
+
+                <input type="text" id="keluarSearch" placeholder="Search">
+            </div>
         </div>
-        <div class="card-body">
-            <div class="table-responsive">
-                <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
-                    <thead>
-                        <tr>
-                            <th>No</th>
-                            <th class="text-center">ID</th>
-                            <th class="text-center">Tanggal</th>
-                            <th class="text-center">Produk</th>
-                            <th class="text-center">Jumlah</th>
-                            <th class="text-center">Keterangan</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @foreach($riwayat as $r)
-                        <tr>
+
+        <div class="keluar-table-wrap">
+            <table class="keluar-table">
+                <thead>
+                    <tr>
+                        <th class="col-no">NO</th>
+                        <th class="col-kategori">KATEGORI</th>
+                        <th class="col-tanggal">TANGGAL KELUAR</th>
+                        <th class="col-barang">NAMA BARANG</th>
+                        <th class="col-jumlah">JUMLAH KELUAR</th>
+                        <th class="col-keterangan">KETERANGAN</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+                    @forelse($riwayat as $r)
+                        <tr class="keluar-row">
                             <td>{{ $loop->iteration }}</td>
-                            <td class="text-center">{{ $r->id }}</td>
-                            <td>{{ $r->created_at->format('d/m/Y H:i') }}</td>
-                            <td>{{ $r->produk->nama_produk }}</td>
-                            <td><span class="badge badge-danger">-{{ $r->jumlah }}</span></td>
-                            <td>{{ $r->keterangan ?? '-' }}</td>
+
+                            <td>
+                                <span class="category-badge">
+                                    {{ optional(optional($r->produk)->kategori)->nama_kategori
+                                        ?? optional(optional($r->produk)->kategoriProduk)->nama_kategori
+                                        ?? '-' }}
+                                </span>
+                            </td>
+
+                            <td>{{ optional($r->created_at)->format('d/m/Y') ?? '-' }}</td>
+
+                            <td>{{ optional($r->produk)->nama_produk ?? '-' }}</td>
+
+                            <td>
+                                <span class="jumlah-badge">-{{ $r->jumlah ?? 0 }}</span>
+                            </td>
+
+                            <td>
+                                <span class="keterangan-text">{{ $r->keterangan ?? '-' }}</span>
+                            </td>
                         </tr>
-                        @endforeach
-                    </tbody>
-                </table>
+                    @empty
+                        <tr>
+                            <td colspan="6" class="empty-row">
+                                Data barang keluar belum tersedia.
+                            </td>
+                        </tr>
+                    @endforelse
+                </tbody>
+            </table>
+        </div>
+
+        <div class="table-footer">
+            <div id="keluarInfo">
+                Showing 0 out of 0 entries
+            </div>
+
+            <div class="pagination-custom">
+                <button type="button" id="prevPage">‹ Prev</button>
+                <span class="page-number" id="currentPageText">1</span>
+                <button type="button" id="nextPage">Next ›</button>
             </div>
         </div>
     </div>
 </div>
 
-<!-- Modal Keluar -->
-<div class="modal fade" id="modalKeluar" tabindex="-1" role="dialog">
+<div class="modal fade" id="modalKeluar" tabindex="-1" role="dialog" aria-labelledby="modalKeluarLabel" aria-hidden="true">
     <div class="modal-dialog" role="document">
-        <div class="modal-content">
+        <form action="{{ route('master-data.transaksi.keluar.store') }}" method="POST" class="modal-content">
+            @csrf
+
             <div class="modal-header">
-                <h5 class="modal-title text-danger">Form Barang Keluar</h5>
-                <button class="close" type="button" data-dismiss="modal"><span>×</span></button>
+                <h5 class="modal-title" id="modalKeluarLabel">Tambah Barang Keluar</h5>
+                <button class="close" type="button" data-dismiss="modal" aria-label="Tutup">
+                    <span>×</span>
+                </button>
             </div>
-            <form action="{{ route('master-data.transaksi.keluar.store') }}" method="POST">
-                @csrf
-                <div class="modal-body">
-                    <div class="form-group">
-                        <label>Pilih Produk</label>
-                        <select name="produk_id" class="form-control" required>
-                            @foreach($produks as $p)
-                                <option value="{{ $p->id }}">{{ $p->nama_produk }} (Stok: {{ $p->stok }})</option>
-                            @endforeach
-                        </select>
-                    </div>
-                    <div class="form-group">
-                        <label>Jumlah Keluar</label>
-                        <input type="number" name="jumlah" class="form-control" min="1" required>
-                    </div>
-                    <div class="form-group">
-                        <label>Keterangan / Tujuan</label>
-                        <textarea name="keterangan" class="form-control" rows="2"></textarea>
-                    </div>
+
+            <div class="modal-body">
+                <div class="form-group">
+                    <label>Pilih Produk</label>
+                    <select name="produk_id" class="form-control" required>
+                        <option value="">-- Pilih Produk --</option>
+                        @foreach($produks as $p)
+                            <option value="{{ $p->id }}">
+                                {{ $p->nama_produk }} — Stok: {{ $p->stok }}
+                            </option>
+                        @endforeach
+                    </select>
                 </div>
-                <div class="modal-footer">
-                    <button class="btn btn-secondary" type="button" data-dismiss="modal">Batal</button>
-                    <button class="btn btn-danger" type="submit">Catat Keluar</button>
+
+                <div class="form-group">
+                    <label>Jumlah Keluar</label>
+                    <input type="number" name="jumlah" class="form-control" min="1" placeholder="Masukkan jumlah barang keluar" required>
                 </div>
-            </form>
-        </div>
+
+                <div class="form-group">
+                    <label>Keterangan / Tujuan</label>
+                    <textarea name="keterangan" class="form-control" rows="3" placeholder="Tambahkan keterangan atau tujuan barang keluar..."></textarea>
+                </div>
+            </div>
+
+            <div class="modal-footer">
+                <button class="btn btn-modal-cancel" type="button" data-dismiss="modal">Batal</button>
+                <button class="btn btn-modal-save" type="submit">Simpan</button>
+            </div>
+        </form>
     </div>
 </div>
-@endsection
 
-@section('scripts')
 <script>
-    $(document).ready(function() {
-        $('#dataTable').DataTable({
-            "order": [[ 0, "desc" ]], 
-            "language": {
-                "search": "Cari Transaksi:",
-                "lengthMenu": "Tampilkan _MENU_ data",
-                "zeroRecords": "Data tidak ditemukan",
-                "info": "Menampilkan halaman _PAGE_ dari _PAGES_",
-                "paginate": {
-                    "next": "Lanjut",
-                    "previous": "Kembali"
-                }
+    document.addEventListener('DOMContentLoaded', function () {
+        const searchInput = document.getElementById('keluarSearch');
+        const entriesSelect = document.getElementById('keluarEntries');
+        const rows = Array.from(document.querySelectorAll('.keluar-row'));
+        const info = document.getElementById('keluarInfo');
+        const prevButton = document.getElementById('prevPage');
+        const nextButton = document.getElementById('nextPage');
+        const currentPageText = document.getElementById('currentPageText');
+
+        let currentPage = 1;
+
+        function getFilteredRows() {
+            const keyword = searchInput.value.toLowerCase().trim();
+
+            return rows.filter(function (row) {
+                return row.textContent.toLowerCase().includes(keyword);
+            });
+        }
+
+        function renderTable() {
+            const perPage = parseInt(entriesSelect.value, 10);
+            const filteredRows = getFilteredRows();
+            const totalRows = filteredRows.length;
+            const totalPages = Math.max(Math.ceil(totalRows / perPage), 1);
+
+            if (currentPage > totalPages) {
+                currentPage = totalPages;
+            }
+
+            const startIndex = (currentPage - 1) * perPage;
+            const endIndex = startIndex + perPage;
+
+            rows.forEach(function (row) {
+                row.style.display = 'none';
+            });
+
+            filteredRows.slice(startIndex, endIndex).forEach(function (row) {
+                row.style.display = '';
+            });
+
+            const showingStart = totalRows === 0 ? 0 : startIndex + 1;
+            const showingEnd = Math.min(endIndex, totalRows);
+
+            info.textContent = `Showing ${showingStart} to ${showingEnd} out of ${totalRows} entries`;
+            currentPageText.textContent = currentPage;
+
+            prevButton.disabled = currentPage <= 1;
+            nextButton.disabled = currentPage >= totalPages;
+        }
+
+        searchInput.addEventListener('input', function () {
+            currentPage = 1;
+            renderTable();
+        });
+
+        entriesSelect.addEventListener('change', function () {
+            currentPage = 1;
+            renderTable();
+        });
+
+        prevButton.addEventListener('click', function () {
+            if (currentPage > 1) {
+                currentPage--;
+                renderTable();
             }
         });
+
+        nextButton.addEventListener('click', function () {
+            const perPage = parseInt(entriesSelect.value, 10);
+            const totalPages = Math.max(Math.ceil(getFilteredRows().length / perPage), 1);
+
+            if (currentPage < totalPages) {
+                currentPage++;
+                renderTable();
+            }
+        });
+
+        renderTable();
     });
 </script>
 @endsection
