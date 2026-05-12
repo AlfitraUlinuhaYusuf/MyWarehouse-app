@@ -8,7 +8,10 @@
     <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Playwrite+US+Modern:wght@100..400&family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Playwrite+US+Modern:wght@100..400&family=Poppins:wght@300;400;500;600;700;800&display=swap"
+        rel="stylesheet"
+    >
 
     <style>
         * {
@@ -31,8 +34,12 @@
             --green-dark: #3f611b;
             --table-border: #b7b7b7;
             --table-head: #d9d9d9;
+            --dropdown-hover: #eef5e8;
         }
 
+        /* =========================
+           NAVBAR
+        ========================= */
         .navbar {
             width: 100%;
             height: 78px;
@@ -41,6 +48,8 @@
             align-items: center;
             justify-content: space-between;
             padding: 0 75px;
+            position: relative;
+            z-index: 100;
         }
 
         .brand {
@@ -77,17 +86,25 @@
             list-style: none;
             text-decoration: none;
             color: #000000;
+            font-family: "Poppins", sans-serif;
             font-size: 16px;
             font-weight: 500;
             cursor: pointer;
             line-height: 1;
         }
 
+        .nav-link:hover,
+        .nav-dropdown summary:hover,
+        .user-info:hover {
+            opacity: 0.85;
+        }
+
         .nav-dropdown {
             position: relative;
         }
 
-        .nav-dropdown summary::-webkit-details-marker {
+        .nav-dropdown summary::-webkit-details-marker,
+        .user-dropdown summary::-webkit-details-marker {
             display: none;
         }
 
@@ -99,6 +116,11 @@
             border-right: 5px solid transparent;
             border-top: 6px solid #000000;
             vertical-align: middle;
+            transition: transform 0.2s ease;
+        }
+
+        .nav-dropdown[open] summary::after {
+            transform: rotate(180deg);
         }
 
         .dropdown-menu {
@@ -110,28 +132,73 @@
             border-radius: 10px;
             box-shadow: 0 8px 24px rgba(0, 0, 0, 0.16);
             padding: 8px 0;
-            z-index: 10;
+            z-index: 999;
         }
 
-        .dropdown-menu a {
+        .dropdown-menu a,
+        .dropdown-disabled {
             display: block;
             padding: 10px 16px;
             text-decoration: none;
-            color: #000000;
+            font-family: "Poppins", sans-serif;
             font-size: 14px;
+            font-weight: 400;
+            white-space: nowrap;
+        }
+
+        .dropdown-menu a {
+            color: #000000;
         }
 
         .dropdown-menu a:hover {
-            background: #eef5e8;
+            background: var(--dropdown-hover);
+        }
+
+        .dropdown-disabled {
+            color: #9a9a9a;
+            cursor: not-allowed;
+            user-select: none;
+        }
+
+        .dropdown-disabled:hover {
+            background: #f5f5f5;
+        }
+
+        /* =========================
+           USER DROPDOWN
+        ========================= */
+        .user-dropdown {
+            position: relative;
+        }
+
+        .user-dropdown summary {
+            list-style: none;
         }
 
         .user-info {
             display: flex;
             align-items: center;
             gap: 7px;
+            font-family: "Poppins", sans-serif;
             font-size: 16px;
             font-weight: 500;
             color: #000000;
+            cursor: pointer;
+            line-height: 1;
+        }
+
+        .user-info::after {
+            content: "";
+            display: inline-block;
+            margin-left: 6px;
+            border-left: 5px solid transparent;
+            border-right: 5px solid transparent;
+            border-top: 6px solid #000000;
+            transition: transform 0.2s ease;
+        }
+
+        .user-dropdown[open] .user-info::after {
+            transform: rotate(180deg);
         }
 
         .user-icon {
@@ -149,6 +216,44 @@
             height: 18px;
         }
 
+        .user-dropdown-menu {
+            top: 34px;
+            right: 0;
+            min-width: 180px;
+            padding: 8px 0;
+            z-index: 1000;
+        }
+
+        .user-dropdown-menu form {
+            margin: 0;
+            padding: 0;
+        }
+
+        .logout-btn {
+            display: block;
+            width: 100%;
+            border: none;
+            outline: none;
+            background: transparent;
+            appearance: none;
+            -webkit-appearance: none;
+            padding: 10px 16px;
+            color: #000000;
+            font-family: "Poppins", sans-serif;
+            font-size: 14px;
+            font-weight: 400;
+            line-height: 1.4;
+            text-align: left;
+            cursor: pointer;
+        }
+
+        .logout-btn:hover {
+            background: var(--dropdown-hover);
+        }
+
+        /* =========================
+           DASHBOARD CONTENT
+        ========================= */
         .dashboard-wrapper {
             width: 100%;
             padding: 31px 70px 47px;
@@ -292,6 +397,9 @@
             font-size: 15px;
         }
 
+        /* =========================
+           RESPONSIVE
+        ========================= */
         @media (max-width: 1000px) {
             .navbar {
                 height: auto;
@@ -304,6 +412,12 @@
                 flex-wrap: wrap;
                 justify-content: center;
                 gap: 20px;
+            }
+
+            .dropdown-menu,
+            .user-dropdown-menu {
+                top: 30px;
+                right: 0;
             }
 
             .dashboard-wrapper {
@@ -332,6 +446,12 @@
         $totalBarangMasuk = $totalBarangMasuk ?? 0;
         $totalBarangKeluar = $totalBarangKeluar ?? 0;
         $stokMinimum = $stokMinimum ?? collect();
+
+        /*
+            Jika data barang masuk dan barang keluar masih kosong,
+            maka tombol Cetak PDF di dropdown Laporan akan dibuat nonaktif.
+        */
+        $laporanKosong = $totalBarangMasuk <= 0 && $totalBarangKeluar <= 0;
 
         $safeChartLabels = $chartLabels ?? [];
         $safeChartStocks = $chartStocks ?? [];
@@ -384,19 +504,39 @@
                 <summary>Laporan</summary>
                 <div class="dropdown-menu">
                     <a href="{{ route('laporan.index') }}">Laporan</a>
-                    <a href="{{ route('laporan.pdf') }}">Cetak PDF</a>
+
+                    @if ($laporanKosong)
+                        <span
+                            class="dropdown-disabled"
+                            title="Belum ada data laporan untuk dicetak"
+                            aria-disabled="true"
+                        >
+                            Cetak PDF
+                        </span>
+                    @else
+                        <a href="{{ route('laporan.pdf') }}">Cetak PDF</a>
+                    @endif
                 </div>
             </details>
 
-            <div class="user-info">
-                <div class="user-icon">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                        <circle cx="12" cy="8" r="4"></circle>
-                        <path d="M4 21c1.5-5 14.5-5 16 0"></path>
-                    </svg>
+            <details class="user-dropdown">
+                <summary class="user-info">
+                    <div class="user-icon">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <circle cx="12" cy="8" r="4"></circle>
+                            <path d="M4 21c1.5-5 14.5-5 16 0"></path>
+                        </svg>
+                    </div>
+                    <span>Hi, {{ auth()->user()->name ?? 'Nama' }}</span>
+                </summary>
+
+                <div class="dropdown-menu user-dropdown-menu">
+                    <form action="{{ route('logout') }}" method="POST">
+                        @csrf
+                        <button type="submit" class="logout-btn">Logout</button>
+                    </form>
                 </div>
-                <span>Hi, {{ auth()->user()->name ?? 'Nama' }}</span>
-            </div>
+            </details>
         </div>
     </nav>
 
@@ -461,7 +601,12 @@
                                             ?? $item->nama_kategori
                                             ?? '-' }}
                                     </td>
-                                    <td>{{ $item->nama_barang ?? $item->nama_produk ?? $item->nama ?? '-' }}</td>
+                                    <td>
+                                        {{ $item->nama_barang
+                                            ?? $item->nama_produk
+                                            ?? $item->nama
+                                            ?? '-' }}
+                                    </td>
                                     <td>{{ $item->stok ?? 0 }}</td>
                                 </tr>
                             @empty
@@ -492,54 +637,56 @@
                 type: 'bar',
                 data: {
                     labels: stockLabels,
-                    datasets: [{
-    label: 'Stok Barang',
-    data: stockData,
-    backgroundColor: stockData.map((_, index) => {
-        const colors = [
-            '#8FB36B',
-            '#A8D957',
-            '#6FA8DC',
-            '#F6B26B',
-            '#C27BA0',
-            '#76A5AF',
-            '#FFD966',
-            '#93C47D',
-            '#E06666',
-            '#8E7CC3'
-        ];
+                    datasets: [
+                        {
+                            label: 'Stok Barang',
+                            data: stockData,
+                            backgroundColor: stockData.map((_, index) => {
+                                const colors = [
+                                    '#8FB36B',
+                                    '#A8D957',
+                                    '#6FA8DC',
+                                    '#F6B26B',
+                                    '#C27BA0',
+                                    '#76A5AF',
+                                    '#FFD966',
+                                    '#93C47D',
+                                    '#E06666',
+                                    '#8E7CC3'
+                                ];
 
-        return colors[index % colors.length];
-    }),
-    borderColor: stockData.map((_, index) => {
-        const borderColors = [
-            '#3F611B',
-            '#7FA832',
-            '#3D85C6',
-            '#E69138',
-            '#A64D79',
-            '#45818E',
-            '#D6A800',
-            '#6AA84F',
-            '#CC0000',
-            '#674EA7'
-        ];
+                                return colors[index % colors.length];
+                            }),
+                            borderColor: stockData.map((_, index) => {
+                                const borderColors = [
+                                    '#3F611B',
+                                    '#7FA832',
+                                    '#3D85C6',
+                                    '#E69138',
+                                    '#A64D79',
+                                    '#45818E',
+                                    '#D6A800',
+                                    '#6AA84F',
+                                    '#CC0000',
+                                    '#674EA7'
+                                ];
 
-        return borderColors[index % borderColors.length];
-    }),
-    borderWidth: 1.5,
-    borderRadius: 6,
-    barThickness: 45
-}]
+                                return borderColors[index % borderColors.length];
+                            }),
+                            borderWidth: 1.5,
+                            borderRadius: 6,
+                            barThickness: 45
+                        }
+                    ]
                 },
                 options: {
                     responsive: true,
                     maintainAspectRatio: false,
                     plugins: {
-    legend: {
-        display: false
-    }
-},
+                        legend: {
+                            display: false
+                        }
+                    },
                     scales: {
                         x: {
                             ticks: {
@@ -570,6 +717,34 @@
                 }
             });
         }
+    </script>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const allDropdowns = document.querySelectorAll('.nav-dropdown, .user-dropdown');
+
+            allDropdowns.forEach(function (dropdown) {
+                dropdown.addEventListener('toggle', function () {
+                    if (dropdown.open) {
+                        allDropdowns.forEach(function (item) {
+                            if (item !== dropdown) {
+                                item.removeAttribute('open');
+                            }
+                        });
+                    }
+                });
+            });
+
+            document.addEventListener('click', function (event) {
+                const clickedInsideDropdown = event.target.closest('.nav-dropdown, .user-dropdown');
+
+                if (!clickedInsideDropdown) {
+                    allDropdowns.forEach(function (dropdown) {
+                        dropdown.removeAttribute('open');
+                    });
+                }
+            });
+        });
     </script>
 </body>
 </html>
