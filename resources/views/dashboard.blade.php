@@ -35,6 +35,10 @@
             --table-border: #b7b7b7;
             --table-head: #d9d9d9;
             --dropdown-hover: #eef5e8;
+            --icon-color: #2f2f2f;
+            --danger: #d93025;
+            --warning: #f4c430;
+            --safe: #3f611b;
         }
 
         /* =========================
@@ -275,10 +279,21 @@
         }
 
         .stat-card {
-            height: 132px;
+            min-height: 132px;
             background: var(--green-main);
             border-radius: 18px;
             padding: 16px 22px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 14px;
+        }
+
+        .stat-content {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            flex: 1;
         }
 
         .stat-label {
@@ -292,6 +307,37 @@
             font-size: 28px;
             font-weight: 400;
             letter-spacing: 5px;
+        }
+
+        .stat-icon {
+            width: 96px;
+            height: 96px;
+            flex-shrink: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--icon-color);
+        }
+
+        .stat-icon svg {
+            width: 90px;
+            height: 90px;
+        }
+
+        .stat-icon .arrow-line {
+            fill: none;
+            stroke: currentColor;
+            stroke-width: 10;
+            stroke-linecap: round;
+            stroke-linejoin: round;
+        }
+
+        .stat-icon .stairs-shape {
+            fill: currentColor;
+        }
+
+        .stat-icon .menu-shape {
+            fill: currentColor;
         }
 
         .chart-card {
@@ -337,6 +383,9 @@
             border-radius: 4px;
         }
 
+        /* =========================
+           STOCK MINIMUM TABLE
+        ========================= */
         .stock-card {
             background: var(--green-main);
             border-radius: 16px;
@@ -346,55 +395,109 @@
         .stock-inner {
             background: #ffffff;
             border-radius: 15px;
-            padding: 13px 17px 29px;
+            padding: 16px 18px 30px;
         }
 
         .stock-title {
             font-size: 20px;
             font-weight: 400;
-            margin-bottom: 10px;
+            margin-bottom: 16px;
         }
 
         .stock-table-wrap {
-            display: flex;
-            justify-content: center;
+            width: 100%;
+            overflow-x: auto;
         }
 
-        table {
-            width: 86%;
+        .stock-table {
+            width: 100%;
             border-collapse: collapse;
-            font-size: 16px;
+            table-layout: fixed;
+            font-size: 15px;
             font-weight: 400;
         }
 
-        th,
-        td {
+        .stock-table th,
+        .stock-table td {
             border: 1px solid var(--table-border);
             text-align: center;
-            padding: 7px 8px;
-            height: 37px;
+            padding: 10px 12px;
+            min-height: 42px;
+            vertical-align: middle;
         }
 
-        th {
+        .stock-table th {
             background: var(--table-head);
-            font-weight: 400;
+            font-weight: 500;
         }
 
         .col-no {
-            width: 48px;
+            width: 60px;
         }
 
-        .col-kategori {
-            width: 230px;
+        .col-kategori,
+        .col-nama {
+            width: 30%;
         }
 
         .col-stok {
-            width: 64px;
+            width: 30%;
+        }
+
+        .text-left {
+            text-align: left;
+        }
+
+        .stock-cell {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            width: 100%;
+        }
+
+        .stock-value {
+            min-width: 28px;
+            height: 28px;
+            border-radius: 8px;
+            background: #f3f3f3;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 13px;
+            font-weight: 600;
+            color: #000000;
+        }
+
+        .stock-bar-track {
+            flex: 1;
+            height: 13px;
+            background: #eeeeee;
+            border-radius: 999px;
+            overflow: hidden;
+        }
+
+        .stock-bar-fill {
+            height: 100%;
+            border-radius: 999px;
+            transition: width 0.3s ease;
+        }
+
+        .stock-low {
+            background: var(--danger);
+        }
+
+        .stock-warning {
+            background: var(--warning);
+        }
+
+        .stock-safe {
+            background: var(--safe);
         }
 
         .empty-text {
             color: #777777;
             font-size: 15px;
+            padding: 18px 12px;
         }
 
         /* =========================
@@ -429,12 +532,22 @@
                 gap: 20px;
             }
 
+            .stat-icon {
+                width: 82px;
+                height: 82px;
+            }
+
+            .stat-icon svg {
+                width: 76px;
+                height: 76px;
+            }
+
             .chart-box {
                 height: 240px;
             }
 
-            table {
-                width: 100%;
+            .stock-table {
+                min-width: 760px;
                 font-size: 14px;
             }
         }
@@ -448,8 +561,8 @@
         $stokMinimum = $stokMinimum ?? collect();
 
         /*
-            Jika data barang masuk dan barang keluar masih kosong,
-            maka tombol Cetak PDF di dropdown Laporan akan dibuat nonaktif.
+            Jika barang masuk dan barang keluar masih kosong,
+            maka menu Cetak PDF di dropdown Laporan dibuat nonaktif.
         */
         $laporanKosong = $totalBarangMasuk <= 0 && $totalBarangKeluar <= 0;
 
@@ -545,18 +658,91 @@
 
         <section class="stats-row">
             <div class="stat-card">
-                <div class="stat-label">Kategori Barang</div>
-                <div class="stat-number">{{ $totalKategoriBarang }}</div>
+                <div class="stat-content">
+                    <div class="stat-label">Kategori Barang</div>
+                    <div class="stat-number">{{ $totalKategoriBarang }}</div>
+                </div>
+
+                <div class="stat-icon" aria-hidden="true">
+                    <!-- Ikon menu kategori -->
+                    <svg viewBox="0 0 120 120">
+                        <rect class="menu-shape" x="24" y="28" width="72" height="14" rx="7"></rect>
+                        <rect class="menu-shape" x="24" y="53" width="72" height="14" rx="7"></rect>
+                        <rect class="menu-shape" x="24" y="78" width="72" height="14" rx="7"></rect>
+                    </svg>
+                </div>
             </div>
 
             <div class="stat-card">
-                <div class="stat-label">Barang Masuk</div>
-                <div class="stat-number">{{ $totalBarangMasuk }}</div>
+                <div class="stat-content">
+                    <div class="stat-label">Barang Masuk</div>
+                    <div class="stat-number">{{ $totalBarangMasuk }}</div>
+                </div>
+
+                <div class="stat-icon" aria-hidden="true">
+                    <!-- Ikon panah naik -->
+                    <svg viewBox="0 0 120 120">
+                        <path class="arrow-line" d="M34 52 L72 14"></path>
+                        <path class="arrow-line" d="M48 14 H72 V38"></path>
+
+                        <path
+                            class="stairs-shape"
+                            d="M28 92
+                               H48
+                               V74
+                               H66
+                               V56
+                               H84
+                               V38
+                               H104
+                               V52
+                               H96
+                               V70
+                               H78
+                               V88
+                               H60
+                               V106
+                               H28
+                               Z"
+                        ></path>
+                    </svg>
+                </div>
             </div>
 
             <div class="stat-card">
-                <div class="stat-label">Barang Keluar</div>
-                <div class="stat-number">{{ $totalBarangKeluar }}</div>
+                <div class="stat-content">
+                    <div class="stat-label">Barang Keluar</div>
+                    <div class="stat-number">{{ $totalBarangKeluar }}</div>
+                </div>
+
+                <div class="stat-icon" aria-hidden="true">
+                    <!-- Ikon panah turun -->
+                    <svg viewBox="0 0 120 120">
+                        <path class="arrow-line" d="M72 14 L34 52"></path>
+                        <path class="arrow-line" d="M34 28 V52 H58"></path>
+
+                        <path
+                            class="stairs-shape"
+                            d="M28 92
+                               H48
+                               V74
+                               H66
+                               V56
+                               H84
+                               V38
+                               H104
+                               V52
+                               H96
+                               V70
+                               H78
+                               V88
+                               H60
+                               V106
+                               H28
+                               Z"
+                        ></path>
+                    </svg>
+                </div>
             </div>
         </section>
 
@@ -579,21 +765,34 @@
                 <h2 class="stock-title">Stock mencapai batas minimum :</h2>
 
                 <div class="stock-table-wrap">
-                    <table>
+                    <table class="stock-table">
                         <thead>
                             <tr>
                                 <th class="col-no">No</th>
                                 <th class="col-kategori">Kategori Barang</th>
-                                <th>Nama Barang</th>
+                                <th class="col-nama">Nama Barang</th>
                                 <th class="col-stok">Stok</th>
                             </tr>
                         </thead>
 
                         <tbody>
                             @forelse ($stokMinimum as $index => $item)
+                                @php
+                                    $stokValue = (int) ($item->stok ?? 0);
+                                    $stokPercent = $stokValue <= 0 ? 4 : min(100, $stokValue * 20);
+
+                                    if ($stokValue <= 2) {
+                                        $stockLevelClass = 'stock-low';
+                                    } elseif ($stokValue <= 5) {
+                                        $stockLevelClass = 'stock-warning';
+                                    } else {
+                                        $stockLevelClass = 'stock-safe';
+                                    }
+                                @endphp
+
                                 <tr>
                                     <td>{{ $index + 1 }}</td>
-                                    <td>
+                                    <td class="text-left">
                                         {{ $item->kategori->nama_kategori
                                             ?? $item->kategoriProduk->nama_kategori
                                             ?? $item->kategori_produk->nama_kategori
@@ -601,13 +800,24 @@
                                             ?? $item->nama_kategori
                                             ?? '-' }}
                                     </td>
-                                    <td>
+                                    <td class="text-left">
                                         {{ $item->nama_barang
                                             ?? $item->nama_produk
                                             ?? $item->nama
                                             ?? '-' }}
                                     </td>
-                                    <td>{{ $item->stok ?? 0 }}</td>
+                                    <td>
+                                        <div class="stock-cell">
+                                            <span class="stock-value">{{ $stokValue }}</span>
+
+                                            <div class="stock-bar-track">
+                                                <div
+                                                    class="stock-bar-fill {{ $stockLevelClass }}"
+                                                    style="width: {{ $stokPercent }}%;"
+                                                ></div>
+                                            </div>
+                                        </div>
+                                    </td>
                                 </tr>
                             @empty
                                 <tr>
