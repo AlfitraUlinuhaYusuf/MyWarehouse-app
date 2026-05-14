@@ -758,10 +758,78 @@
             transform: rotate(-16deg);
         }
 
+        .chart-scroll {
+            position: relative;
+            z-index: 1;
+            width: 100%;
+            height: 100%;
+            padding: 12px 14px 8px;
+            overflow-x: auto;
+            overflow-y: hidden;
+            scroll-behavior: smooth;
+            scrollbar-width: thin;
+            scrollbar-color: rgba(111, 150, 81, 0.72) rgba(143, 179, 107, 0.16);
+        }
+
+        .chart-scroll::-webkit-scrollbar {
+            height: 8px;
+        }
+
+        .chart-scroll::-webkit-scrollbar-track {
+            background: rgba(143, 179, 107, 0.14);
+            border-radius: 999px;
+            margin: 0 6px;
+        }
+
+        .chart-scroll::-webkit-scrollbar-thumb {
+            background: linear-gradient(90deg, rgba(111, 150, 81, 0.78), rgba(143, 179, 107, 0.78));
+            border-radius: 999px;
+            border: 2px solid rgba(255, 255, 255, 0.78);
+        }
+
+        .chart-track {
+            min-width: 100%;
+            height: 100%;
+            position: relative;
+        }
+
+        .chart-slide-hint {
+            position: absolute;
+            top: 12px;
+            right: 16px;
+            z-index: 3;
+            display: inline-flex;
+            align-items: center;
+            gap: 7px;
+            padding: 7px 11px;
+            border-radius: 999px;
+            background: rgba(255, 255, 255, 0.82);
+            border: 1px solid rgba(111, 150, 81, 0.18);
+            box-shadow: 0 10px 22px rgba(63, 97, 27, 0.10);
+            color: rgba(5, 7, 4, 0.62);
+            font-size: 11px;
+            font-weight: 700;
+            backdrop-filter: blur(10px);
+            pointer-events: none;
+        }
+
+        .chart-slide-hint::before {
+            content: "↔";
+            width: 18px;
+            height: 18px;
+            border-radius: 50%;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            background: rgba(143, 179, 107, 0.18);
+            color: var(--green-dark);
+            font-size: 12px;
+            line-height: 1;
+        }
+
         #stockChart {
             width: 100% !important;
             height: 100% !important;
-            padding: 12px 14px 8px;
         }
 
         .empty-chart-text {
@@ -1001,33 +1069,33 @@
         }
 
         .stock-category {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    gap: 7px;
-    max-width: 100%;
-    padding: 6px 12px;
-    border-radius: 999px;
-    background: linear-gradient(135deg, #fff1f1, #ffffff);
-    border: 1px solid rgba(220, 53, 69, 0.24);
-    font-size: 13px;
-    font-weight: 700;
-    color: #b4232f;
-    box-shadow: 0 5px 12px rgba(220, 53, 69, 0.10);
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-}
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 7px;
+            max-width: 100%;
+            padding: 6px 12px;
+            border-radius: 999px;
+            background: linear-gradient(135deg, #eef6e8, #ffffff);
+            border: 1px solid rgba(111, 150, 81, 0.22);
+            font-size: 13px;
+            font-weight: 700;
+            color: var(--green-dark);
+            box-shadow: 0 5px 12px rgba(90, 123, 64, 0.08);
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
 
-.stock-category::before {
-    content: "";
-    width: 8px;
-    height: 8px;
-    border-radius: 50%;
-    background: #dc3545;
-    box-shadow: 0 0 0 4px rgba(220, 53, 69, 0.14);
-    flex-shrink: 0;
-}
+        .stock-category::before {
+            content: "";
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: var(--green-main);
+            box-shadow: 0 0 0 4px rgba(143, 179, 107, 0.14);
+            flex-shrink: 0;
+        }
 
         .stock-value-wrap {
             display: flex;
@@ -1225,6 +1293,17 @@
                 height: 255px;
             }
 
+            .chart-scroll {
+                padding: 10px 10px 8px;
+            }
+
+            .chart-slide-hint {
+                top: 10px;
+                right: 12px;
+                font-size: 10px;
+                padding: 6px 9px;
+            }
+
             .stock-panel {
                 padding: 14px;
             }
@@ -1417,7 +1496,14 @@
                 <span class="panel-chip">{{ count($labels) }} item tercatat</span>
             </div>
             <div class="chart-area {{ $hasChart ? '' : 'empty' }}">
-                <canvas id="stockChart"></canvas>
+                <div class="chart-scroll" aria-label="Area grafik stok barang yang dapat digeser horizontal">
+                    <div class="chart-track" id="stockChartTrack">
+                        <canvas id="stockChart"></canvas>
+                    </div>
+                </div>
+                @if ($hasChart && count($labels) > 8)
+                    <div class="chart-slide-hint">Geser untuk melihat semua barang</div>
+                @endif
                 @if (!$hasChart)
                     <div class="empty-chart-text">Belum ada data stok barang untuk ditampilkan.</div>
                 @endif
@@ -1581,28 +1667,42 @@
             const stocks = @json($stocks);
 
             if (canvas && Array.isArray(labels) && labels.length > 0 && Array.isArray(stocks) && stocks.length > 0 && window.Chart) {
+                const chartTrack = document.getElementById('stockChartTrack');
+                const chartScroll = canvas.closest('.chart-scroll');
+                const visibleWidth = chartScroll ? chartScroll.clientWidth : canvas.clientWidth;
+                const itemWidth = window.innerWidth <= 620 ? 64 : 78;
+                const chartWidth = Math.max(visibleWidth || 0, labels.length * itemWidth);
+
+                if (chartTrack) {
+                    chartTrack.style.width = chartWidth + 'px';
+                }
+
                 const ctx = canvas.getContext('2d');
                 const gradient = ctx.createLinearGradient(0, 0, 0, 310);
-                gradient.addColorStop(0, 'rgba(143, 179, 107, 0.55)');
-                gradient.addColorStop(1, 'rgba(143, 179, 107, 0.05)');
+                gradient.addColorStop(0, 'rgba(143, 179, 107, 0.96)');
+                gradient.addColorStop(0.58, 'rgba(143, 179, 107, 0.72)');
+                gradient.addColorStop(1, 'rgba(143, 179, 107, 0.28)');
+
+                const hoverGradient = ctx.createLinearGradient(0, 0, 0, 310);
+                hoverGradient.addColorStop(0, 'rgba(111, 150, 81, 1)');
+                hoverGradient.addColorStop(1, 'rgba(143, 179, 107, 0.58)');
 
                 new Chart(ctx, {
-                    type: 'line',
+                    type: 'bar',
                     data: {
                         labels: labels,
                         datasets: [{
                             label: 'Stok Barang',
                             data: stocks,
-                            borderColor: '#6f9651',
                             backgroundColor: gradient,
-                            fill: true,
-                            borderWidth: 3,
-                            pointRadius: 5,
-                            pointHoverRadius: 8,
-                            pointBackgroundColor: '#8fb36b',
-                            pointBorderColor: '#ffffff',
-                            pointBorderWidth: 2,
-                            tension: 0.42
+                            hoverBackgroundColor: hoverGradient,
+                            borderColor: 'rgba(255, 255, 255, 0.82)',
+                            borderWidth: 1.5,
+                            borderRadius: 12,
+                            borderSkipped: false,
+                            maxBarThickness: 42,
+                            categoryPercentage: 0.72,
+                            barPercentage: 0.82
                         }]
                     },
                     options: {
@@ -1612,6 +1712,10 @@
                             duration: 1150,
                             easing: 'easeOutQuart'
                         },
+                        interaction: {
+                            mode: 'index',
+                            intersect: false
+                        },
                         plugins: {
                             legend: {
                                 display: false
@@ -1620,6 +1724,7 @@
                                 backgroundColor: 'rgba(0, 0, 0, 0.82)',
                                 padding: 12,
                                 cornerRadius: 10,
+                                displayColors: false,
                                 titleFont: {
                                     family: 'Poppins',
                                     size: 13,
@@ -1630,8 +1735,14 @@
                                     size: 12
                                 },
                                 callbacks: {
+                                    title: function (items) {
+                                        return items && items.length ? items[0].label : '';
+                                    },
                                     label: function (context) {
-                                        return ' Stok: ' + Number(context.parsed.y || 0).toLocaleString('id-ID');
+                                        return 'Jumlah stok: ' + Number(context.parsed.y || 0).toLocaleString('id-ID') + ' item';
+                                    },
+                                    afterLabel: function (context) {
+                                        return 'Urutan data: ' + (context.dataIndex + 1) + ' dari ' + labels.length;
                                     }
                                 }
                             }
@@ -1645,11 +1756,15 @@
                                     color: '#29331f',
                                     font: {
                                         family: 'Poppins',
-                                        size: 12
+                                        size: 11,
+                                        weight: '600'
                                     },
                                     maxRotation: 0,
-                                    autoSkip: true,
-                                    maxTicksLimit: 7
+                                    autoSkip: false,
+                                    callback: function (value) {
+                                        const label = this.getLabelForValue(value) || '';
+                                        return label.length > 12 ? label.slice(0, 12) + '…' : label;
+                                    }
                                 }
                             },
                             y: {
