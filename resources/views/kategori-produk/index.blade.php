@@ -12,109 +12,46 @@
     $totalHalaman = method_exists($kategori, 'lastPage') ? $kategori->lastPage() : 1;
 
     $totalData = method_exists($kategori, 'total') ? $kategori->total() : $jumlahTampil;
-    $modeTampilan = $sedangCari ? 'Pencarian' : 'Semua Data';
 @endphp
 
 <div class="kategori-page">
-    <div class="kategori-bg kategori-bg-1"></div>
-    <div class="kategori-bg kategori-bg-2"></div>
-    <div class="kategori-bg kategori-bg-3"></div>
-
-    <section class="kategori-hero">
-        <div class="kategori-hero-left">
-            <div class="kategori-badge">
-                <span></span>
-                Master Data
+    <div class="kategori-shell">
+        <div class="kategori-header">
+            <div class="kategori-title-wrap">
+                <span class="kategori-eyebrow">Master Data</span>
+                <h1 class="kategori-title">Kategori Barang</h1>
+                <p class="kategori-subtitle">
+                    Kelola kategori barang agar data persediaan lebih terstruktur, mudah dicari, dan konsisten dengan kebutuhan operasional gudang.
+                </p>
             </div>
 
-            <h1>{{ strtoupper($pageTitle ?? 'Kategori Produk') }}</h1>
-
-            <p>
-                Kelola kategori produk agar data barang lebih rapi, mudah dicari,
-                dan siap digunakan untuk transaksi gudang.
-            </p>
-        </div>
-
-        <div class="kategori-info-grid">
-            <div class="kategori-info-card">
-                <div class="info-icon">
-                    <svg viewBox="0 0 24 24" fill="none">
-                        <path d="M4 7H20" stroke="currentColor" stroke-width="2.3" stroke-linecap="round"/>
-                        <path d="M4 12H20" stroke="currentColor" stroke-width="2.3" stroke-linecap="round"/>
-                        <path d="M4 17H14" stroke="currentColor" stroke-width="2.3" stroke-linecap="round"/>
-                    </svg>
+            <div class="kategori-action-row">
+                <div class="kategori-action-label-group">
+                    <span class="kategori-action-label">Kategori Baru</span>
+                    <span class="kategori-action-helper">Tambah data kategori</span>
                 </div>
-                <span>Data Ditampilkan</span>
-                <strong>{{ $dataMulai }} - {{ $dataAkhir }}</strong>
-            </div>
-
-            <div class="kategori-info-card">
-                <div class="info-icon">
-                    <svg viewBox="0 0 24 24" fill="none">
-                        <path d="M8 3H16" stroke="currentColor" stroke-width="2.3" stroke-linecap="round"/>
-                        <path d="M7 21H17" stroke="currentColor" stroke-width="2.3" stroke-linecap="round"/>
-                        <path d="M12 7V17" stroke="currentColor" stroke-width="2.3" stroke-linecap="round"/>
-                        <path d="M8 11L12 7L16 11" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round"/>
-                    </svg>
-                </div>
-                <span>Halaman</span>
-                <strong>{{ $halamanSekarang }} / {{ $totalHalaman }}</strong>
-            </div>
-
-            <div class="kategori-info-card">
-                <div class="info-icon">
-                    <svg viewBox="0 0 24 24" fill="none">
-                        <path d="M5 12L10 17L20 7" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/>
-                    </svg>
-                </div>
-                <span>Mode Tampilan</span>
-                <strong>{{ $modeTampilan }}</strong>
-            </div>
-        </div>
-    </section>
-
-    <section class="kategori-panel">
-        <div class="kategori-toolbar">
-            <form action="{{ route('master-data.kategori-produk.index') }}" method="GET" class="kategori-search">
-                <button type="submit" class="kategori-search-icon" aria-label="Cari kategori">
-                    <svg viewBox="0 0 24 24" fill="none">
-                        <circle cx="11" cy="11" r="7" stroke="currentColor" stroke-width="2.5"></circle>
-                        <path d="M16.3 16.3L21 21" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"></path>
-                    </svg>
-                </button>
-
-                <input
-                    type="text"
-                    name="search"
-                    value="{{ request('search') }}"
-                    placeholder="Search"
-                    autocomplete="off"
-                >
-            </form>
-
-            <div class="kategori-add">
-                <span>Kategori Baru :</span>
 
                 <button
                     type="button"
-                    class="kategori-add-trigger"
+                    class="kategori-add-button"
                     data-toggle="modal"
                     data-target="#formKategoribaru"
                     title="Tambah kategori baru"
                 >
-                    +
+                    <svg viewBox="0 0 24 24" aria-hidden="true">
+                        <path d="M12 5V19"></path>
+                        <path d="M5 12H19"></path>
+                    </svg>
                 </button>
             </div>
         </div>
 
         @if(request('search'))
             <div class="kategori-alert kategori-alert-info">
-                <div>
-                    Menampilkan hasil pencarian untuk:
-                    <strong>{{ request('search') }}</strong>
-                </div>
-
-                <a href="{{ route('master-data.kategori-produk.index') }}">Reset Pencarian</a>
+                <span>
+                    Menampilkan hasil pencarian untuk <strong>{{ request('search') }}</strong>.
+                </span>
+                <a href="{{ route('master-data.kategori-produk.index') }}">Reset pencarian</a>
             </div>
         @endif
 
@@ -134,42 +71,128 @@
             </div>
         @endif
 
-        <div class="kategori-table-card">
-            <div class="kategori-table-header">
+        <div class="kategori-summary">
+            <div class="kategori-summary-card kategori-summary-total">
                 <div>
-                    <h2>Daftar Kategori</h2>
-                    <p>Total data kategori saat ini: {{ $totalData }}</p>
+                    <div class="kategori-summary-label">Total Kategori</div>
+                    <div class="kategori-summary-number">{{ $totalData }}</div>
+                    <div class="kategori-summary-caption">Kategori tercatat</div>
                 </div>
-
-                <div class="kategori-status-pill">
-                    <span></span>
-                    Aktif
+                <div class="kategori-summary-icon" aria-hidden="true">
+                    <svg viewBox="0 0 24 24">
+                        <path d="M12 3L20 7.5L12 12L4 7.5L12 3Z"></path>
+                        <path d="M4 12L12 16.5L20 12"></path>
+                        <path d="M4 16.5L12 21L20 16.5"></path>
+                    </svg>
                 </div>
             </div>
 
-            <div class="kategori-table-wrapper">
+            <div class="kategori-summary-card kategori-summary-shown">
+                <div>
+                    <div class="kategori-summary-label">Data Ditampilkan</div>
+                    <div class="kategori-summary-number">{{ $jumlahTampil }}</div>
+                    <div class="kategori-summary-caption">Rentang {{ $dataMulai }} - {{ $dataAkhir }}</div>
+                </div>
+                <div class="kategori-summary-icon" aria-hidden="true">
+                    <svg viewBox="0 0 24 24">
+                        <path d="M8 6H21"></path>
+                        <path d="M8 12H21"></path>
+                        <path d="M8 18H21"></path>
+                        <path d="M3 6H3.01"></path>
+                        <path d="M3 12H3.01"></path>
+                        <path d="M3 18H3.01"></path>
+                    </svg>
+                </div>
+            </div>
+
+            <div class="kategori-summary-card kategori-summary-page">
+                <div>
+                    <div class="kategori-summary-label">Halaman</div>
+                    <div class="kategori-summary-number">{{ $halamanSekarang }}/{{ $totalHalaman }}</div>
+                    <div class="kategori-summary-caption">Navigasi data kategori</div>
+                </div>
+                <div class="kategori-summary-icon" aria-hidden="true">
+                    <svg viewBox="0 0 24 24">
+                        <path d="M4 5H20"></path>
+                        <path d="M4 12H20"></path>
+                        <path d="M4 19H14"></path>
+                    </svg>
+                </div>
+            </div>
+        </div>
+
+        <div class="kategori-card">
+            <div class="kategori-card-head">
+                <div>
+                    <h2 class="kategori-section-title">Daftar Kategori Barang</h2>
+                    <p class="kategori-section-text">
+                        Gunakan pencarian untuk menemukan kategori tertentu, lalu kelola data melalui tombol aksi pada tabel.
+                    </p>
+                </div>
+            </div>
+
+            <div class="kategori-control-row">
+                <div class="kategori-entries-control">
+                    <span>Status</span>
+                    <strong>{{ $sedangCari ? 'Pencarian Aktif' : 'Semua Data' }}</strong>
+                </div>
+
+                <form action="{{ route('master-data.kategori-produk.index') }}" method="GET" class="kategori-search">
+                    <button type="submit" aria-label="Cari kategori">
+                        <svg viewBox="0 0 24 24">
+                            <circle cx="11" cy="11" r="7"></circle>
+                            <path d="M16.5 16.5L21 21"></path>
+                        </svg>
+                    </button>
+
+                    <input
+                        type="text"
+                        name="search"
+                        value="{{ request('search') }}"
+                        placeholder="Cari kategori..."
+                        autocomplete="off"
+                    >
+                </form>
+            </div>
+
+            <div class="kategori-table-wrap">
                 <table class="kategori-table">
                     <thead>
                         <tr>
-                            <th class="kategori-no">NO</th>
-                            <th>Nama Barang</th>
-                            <th class="kategori-action-title">Aksi</th>
+                            <th class="col-no">NO</th>
+                            <th class="col-kategori">NAMA KATEGORI</th>
+                            <th class="col-aksi">AKSI</th>
                         </tr>
                     </thead>
 
                     <tbody>
                         @forelse($kategori as $index => $item)
-                            <tr style="--delay: {{ min($index * 65, 520) }}ms;">
-                                <td class="kategori-number">
-                                    {{ $dataMulai + $index }}
+                            <tr class="kategori-row" style="--row-delay: {{ min($index * 45, 360) }}ms;">
+                                <td>
+                                    <span class="kategori-number-pill">{{ $dataMulai + $index }}</span>
                                 </td>
 
-                                <td class="kategori-name">
-                                    <span>{{ $item->nama_kategori }}</span>
+                                <td>
+                                    <span class="kategori-name-pill" title="{{ $item->nama_kategori }}">
+                                        {{ $item->nama_kategori }}
+                                    </span>
                                 </td>
 
-                                <td class="kategori-action-cell">
+                                <td>
                                     <div class="kategori-action-group">
+                                        <button
+                                            type="button"
+                                            class="kategori-table-button kategori-edit-button"
+                                            data-toggle="modal"
+                                            data-target="#formKategori{{ $item->id }}"
+                                            title="Edit kategori"
+                                        >
+                                            <svg viewBox="0 0 24 24" aria-hidden="true">
+                                                <path d="M4 20H8.2L18.75 9.45L14.55 5.25L4 15.8V20Z"></path>
+                                                <path d="M14.55 5.25L16.5 3.3C16.9 2.9 17.55 2.9 17.95 3.3L20.7 6.05C21.1 6.45 21.1 7.1 20.7 7.5L18.75 9.45"></path>
+                                            </svg>
+                                        </button>
+
                                         <form
                                             id="deleteKategori{{ $item->id }}"
                                             action="{{ route('master-data.kategori-produk.destroy', $item->id) }}"
@@ -181,33 +204,20 @@
 
                                             <button
                                                 type="button"
-                                                class="kategori-btn-delete js-delete-trigger"
+                                                class="kategori-table-button kategori-delete-button js-delete-trigger"
                                                 data-form-id="deleteKategori{{ $item->id }}"
                                                 data-name="{{ $item->nama_kategori }}"
                                                 title="Hapus kategori"
                                             >
-                                                <svg viewBox="0 0 24 24" fill="none">
-                                                    <path d="M5 7H19" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"/>
-                                                    <path d="M10 11V17" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"/>
-                                                    <path d="M14 11V17" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"/>
-                                                    <path d="M8 7L9 4H15L16 7" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/>
-                                                    <path d="M7 7L8 20H16L17 7" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/>
+                                                <svg viewBox="0 0 24 24" aria-hidden="true">
+                                                    <path d="M5 7H19"></path>
+                                                    <path d="M10 11V17"></path>
+                                                    <path d="M14 11V17"></path>
+                                                    <path d="M8 7L9 4H15L16 7"></path>
+                                                    <path d="M7 7L8 20H16L17 7"></path>
                                                 </svg>
                                             </button>
                                         </form>
-
-                                        <button
-                                            type="button"
-                                            class="kategori-btn-edit"
-                                            data-toggle="modal"
-                                            data-target="#formKategori{{ $item->id }}"
-                                            title="Edit kategori"
-                                        >
-                                            <svg viewBox="0 0 24 24" fill="none">
-                                                <path d="M4 20H8.2L18.75 9.45L14.55 5.25L4 15.8V20Z" stroke="currentColor" stroke-width="2.2" stroke-linejoin="round"/>
-                                                <path d="M14.55 5.25L16.5 3.3C16.9 2.9 17.55 2.9 17.95 3.3L20.7 6.05C21.1 6.45 21.1 7.1 20.7 7.5L18.75 9.45" stroke="currentColor" stroke-width="2.2" stroke-linejoin="round"/>
-                                            </svg>
-                                        </button>
                                     </div>
                                 </td>
                             </tr>
@@ -215,10 +225,10 @@
                             <tr>
                                 <td colspan="3" class="kategori-empty">
                                     <div class="kategori-empty-box">
-                                        <div class="kategori-empty-icon">
-                                            <svg viewBox="0 0 24 24" fill="none">
-                                                <circle cx="11" cy="11" r="7" stroke="currentColor" stroke-width="2.2"/>
-                                                <path d="M16.3 16.3L21 21" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/>
+                                        <div class="kategori-empty-icon" aria-hidden="true">
+                                            <svg viewBox="0 0 24 24">
+                                                <circle cx="11" cy="11" r="7"></circle>
+                                                <path d="M16.5 16.5L21 21"></path>
                                             </svg>
                                         </div>
                                         <strong>Data kategori tidak ditemukan</strong>
@@ -232,8 +242,8 @@
             </div>
 
             <div class="kategori-footer">
-                <div class="kategori-info">
-                    Showing {{ $jumlahTampil }} out of {{ $totalData }} entries
+                <div class="kategori-info-text">
+                    Showing {{ $dataMulai }} to {{ $dataAkhir }} out of {{ $totalData }} entries
                 </div>
 
                 <div class="kategori-pagination">
@@ -241,7 +251,7 @@
                 </div>
             </div>
         </div>
-    </section>
+    </div>
 </div>
 
 <div class="kategori-modal-bank">
@@ -254,13 +264,13 @@
 
 <div class="kategori-confirm-backdrop" id="deleteConfirmModal" aria-hidden="true">
     <div class="kategori-confirm-box">
-        <div class="kategori-confirm-icon">
-            <svg viewBox="0 0 24 24" fill="none">
-                <path d="M5 7H19" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"/>
-                <path d="M10 11V17" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"/>
-                <path d="M14 11V17" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"/>
-                <path d="M8 7L9 4H15L16 7" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/>
-                <path d="M7 7L8 20H16L17 7" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/>
+        <div class="kategori-confirm-icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24">
+                <path d="M5 7H19"></path>
+                <path d="M10 11V17"></path>
+                <path d="M14 11V17"></path>
+                <path d="M8 7L9 4H15L16 7"></path>
+                <path d="M7 7L8 20H16L17 7"></path>
             </svg>
         </div>
 
@@ -284,341 +294,240 @@
 
 @push('styles')
 <style>
+    :root {
+        --mw-green: #8fb36b;
+        --mw-green-dark: #6f9651;
+        --mw-green-deep: #4f7438;
+        --mw-green-soft: #eef7e8;
+        --mw-green-pale: #f8fcf5;
+        --mw-black: #050704;
+        --mw-white: #ffffff;
+        --mw-muted: #6d7567;
+        --mw-border: rgba(79, 116, 56, 0.16);
+        --mw-shadow: 0 18px 42px rgba(90, 123, 64, 0.14);
+        --mw-shadow-soft: 0 12px 28px rgba(90, 123, 64, 0.10);
+        --mw-danger: #d9342b;
+        --mw-danger-soft: #fff0ee;
+        --mw-blue: #4c94ff;
+        --mw-blue-dark: #397feb;
+        --mw-warning: #f4b23e;
+        --mw-warning-soft: #fff8e8;
+    }
+
     .kategori-page {
-        position: relative;
         width: 100%;
         min-height: calc(100vh - 72px);
-        overflow: hidden;
-        padding: 34px 34px 44px;
-        background:
-            radial-gradient(circle at 93% 12%, rgba(164, 250, 149, 0.28), transparent 28%),
-            radial-gradient(circle at 4% 84%, rgba(143, 179, 107, 0.18), transparent 22%),
-            linear-gradient(180deg, #ffffff 0%, #fbfdf9 100%);
+        padding: 42px 46px 82px;
         font-family: "Poppins", sans-serif;
-        color: #111111;
+        color: var(--mw-black);
+        background:
+            radial-gradient(circle at 8% 14%, rgba(143, 179, 107, 0.15), transparent 28%),
+            radial-gradient(circle at 92% 72%, rgba(143, 179, 107, 0.12), transparent 30%),
+            linear-gradient(180deg, #ffffff 0%, #fbfdf9 100%);
+        overflow: hidden;
+        position: relative;
+        animation: kategoriFadeIn 0.52s ease both;
     }
 
-    .kategori-bg {
+    .kategori-page::before,
+    .kategori-page::after {
+        content: "";
         position: absolute;
         border-radius: 999px;
+        background: rgba(143, 179, 107, 0.10);
+        filter: blur(1px);
         pointer-events: none;
-        filter: blur(4px);
-        opacity: 0.32;
-        z-index: 1;
-        animation: kategoriFloat 8s ease-in-out infinite;
+        animation: kategoriFloat 6s ease-in-out infinite;
     }
 
-    .kategori-bg-1 {
-        width: 260px;
-        height: 260px;
-        top: 100px;
-        right: -90px;
-        background: #a4fa95;
+    .kategori-page::before {
+        width: 145px;
+        height: 145px;
+        right: 52px;
+        top: 108px;
     }
 
-    .kategori-bg-2 {
-        width: 170px;
-        height: 170px;
-        left: -70px;
-        bottom: 80px;
-        background: #8fb36b;
-        animation-delay: 1.4s;
+    .kategori-page::after {
+        width: 92px;
+        height: 92px;
+        left: 38px;
+        bottom: 74px;
+        animation-delay: 1.2s;
     }
 
-    .kategori-bg-3 {
-        width: 95px;
-        height: 95px;
-        right: 33%;
-        top: 170px;
-        background: rgba(143, 179, 107, 0.25);
-        animation-delay: 2.2s;
-    }
-
-    .kategori-hero,
-    .kategori-panel {
+    .kategori-shell {
         position: relative;
-        z-index: 2;
+        z-index: 1;
+        width: 100%;
+        max-width: 1240px;
+        margin: 0 auto;
     }
 
-    .kategori-hero {
+    .kategori-header {
         display: flex;
-        justify-content: space-between;
         align-items: flex-start;
+        justify-content: space-between;
         gap: 28px;
-        margin-bottom: 30px;
-        animation: kategoriFadeUp 0.55s ease both;
+        margin-bottom: 24px;
+        animation: kategoriSlideUp 0.58s ease both;
     }
 
-    .kategori-hero-left {
-        max-width: 680px;
+    .kategori-title-wrap {
+        max-width: 660px;
     }
 
-    .kategori-badge {
+    .kategori-eyebrow {
         display: inline-flex;
         align-items: center;
-        gap: 9px;
-        margin-bottom: 7px;
-        color: #4f7236;
-        font-size: 14px;
-        font-weight: 700;
-        letter-spacing: 0.1em;
-        text-transform: uppercase;
-    }
-
-    .kategori-badge span {
-        width: 34px;
-        height: 3px;
+        gap: 8px;
+        margin-bottom: 12px;
+        padding: 7px 12px;
         border-radius: 999px;
-        background: #6f9652;
-        display: inline-block;
-    }
-
-    .kategori-hero h1 {
-        margin: 0;
-        color: #050505;
-        font-size: 39px;
+        background: rgba(143, 179, 107, 0.14);
+        color: var(--mw-green-deep);
+        font-size: 13px;
         font-weight: 700;
-        line-height: 1.15;
         letter-spacing: 0.2px;
     }
 
-    .kategori-hero p {
-        max-width: 590px;
-        margin: 11px 0 0;
-        color: #6a6a6a;
-        font-size: 15px;
-        font-weight: 400;
-        line-height: 1.7;
-    }
-
-    .kategori-info-grid {
-        display: grid;
-        grid-template-columns: repeat(3, minmax(128px, 1fr));
-        gap: 14px;
-    }
-
-    .kategori-info-card {
-        position: relative;
-        overflow: hidden;
-        min-width: 138px;
-        padding: 15px 16px 16px;
-        border: 1px solid rgba(143, 179, 107, 0.26);
-        border-radius: 20px;
-        background: rgba(255, 255, 255, 0.72);
-        box-shadow: 0 16px 34px rgba(41, 57, 29, 0.08);
-        backdrop-filter: blur(12px);
-        transition: transform 0.28s ease, box-shadow 0.28s ease, border-color 0.28s ease;
-    }
-
-    .kategori-info-card::after {
+    .kategori-eyebrow::before {
         content: "";
-        position: absolute;
-        inset: auto -20px -45px auto;
-        width: 92px;
-        height: 92px;
-        border-radius: 999px;
-        background: rgba(164, 250, 149, 0.24);
-        transition: transform 0.28s ease;
+        width: 8px;
+        height: 8px;
+        border-radius: 50%;
+        background: var(--mw-green);
+        box-shadow: 0 0 0 5px rgba(143, 179, 107, 0.16);
+        animation: kategoriDotPulse 2s ease-in-out infinite;
     }
 
-    .kategori-info-card:hover {
-        transform: translateY(-6px);
-        border-color: rgba(143, 179, 107, 0.52);
-        box-shadow: 0 22px 50px rgba(41, 57, 29, 0.14);
+    .kategori-title {
+        margin: 0;
+        color: var(--mw-black);
+        font-size: clamp(26px, 3vw, 38px);
+        font-weight: 800;
+        line-height: 1.14;
+        letter-spacing: -0.8px;
     }
 
-    .kategori-info-card:hover::after {
-        transform: scale(1.18);
+    .kategori-subtitle {
+        max-width: 610px;
+        margin: 12px 0 0;
+        color: var(--mw-muted);
+        font-size: 15px;
+        font-weight: 500;
+        line-height: 1.72;
     }
 
-    .info-icon {
-        width: 36px;
-        height: 36px;
-        margin-bottom: 10px;
-        border-radius: 12px;
-        background: #eff7e9;
-        color: #5f823f;
+    .kategori-action-row {
+        min-width: 250px;
+        padding: 14px;
+        border: 1px solid var(--mw-border);
+        border-radius: 22px;
+        background: rgba(255, 255, 255, 0.82);
+        box-shadow: var(--mw-shadow-soft);
+        backdrop-filter: blur(10px);
         display: flex;
         align-items: center;
-        justify-content: center;
+        justify-content: space-between;
+        gap: 12px;
     }
 
-    .info-icon svg {
-        width: 22px;
-        height: 22px;
+    .kategori-action-label-group {
+        display: flex;
+        flex-direction: column;
+        gap: 3px;
     }
 
-    .kategori-info-card span {
-        display: block;
-        color: #69775c;
+    .kategori-action-label {
+        font-size: 14px;
+        font-weight: 800;
+        color: var(--mw-black);
+        line-height: 1.1;
+    }
+
+    .kategori-action-helper {
         font-size: 12px;
         font-weight: 600;
-        line-height: 1;
-        margin-bottom: 8px;
+        color: var(--mw-muted);
+        line-height: 1.25;
     }
 
-    .kategori-info-card strong {
-        position: relative;
-        z-index: 2;
-        display: block;
-        color: #121212;
-        font-size: 22px;
-        font-weight: 800;
-        line-height: 1.1;
-        white-space: nowrap;
-    }
-
-    .kategori-panel {
-        animation: kategoriFadeUp 0.65s ease both;
-    }
-
-    .kategori-toolbar {
-        display: flex;
-        justify-content: flex-end;
-        align-items: center;
-        gap: 30px;
-        width: 100%;
-        margin-bottom: 26px;
-        padding: 17px 22px;
-        border: 1px solid rgba(143, 179, 107, 0.2);
-        border-radius: 26px;
-        background: rgba(255, 255, 255, 0.76);
-        box-shadow: 0 18px 45px rgba(24, 45, 18, 0.08);
-        backdrop-filter: blur(14px);
-    }
-
-    .kategori-search {
-        position: relative;
-        width: 329px;
-        height: 54px;
-        margin: 0;
-    }
-
-    .kategori-search input {
-        width: 100%;
-        height: 100%;
-        border: 1.5px solid #a6a6a6;
-        border-radius: 999px;
-        outline: none;
-        padding: 0 20px 0 72px;
-        background: #ffffff;
-        color: #303030;
-        font-size: 30px;
-        font-weight: 400;
-        line-height: 1;
-        transition: border-color 0.24s ease, box-shadow 0.24s ease, transform 0.24s ease;
-    }
-
-    .kategori-search input::placeholder {
-        color: #555555;
-        opacity: 0.9;
-    }
-
-    .kategori-search input:focus {
-        border-color: #7ca65d;
-        box-shadow: 0 0 0 5px rgba(143, 179, 107, 0.15);
-        transform: translateY(-1px);
-    }
-
-    .kategori-search-icon {
-        position: absolute;
-        left: 23px;
-        top: 50%;
-        z-index: 2;
-        width: 34px;
-        height: 34px;
+    .kategori-add-button {
+        width: 48px;
+        height: 48px;
         border: none;
-        padding: 0;
-        background: transparent;
-        color: #222222;
-        transform: translateY(-50%);
-        cursor: pointer;
-        transition: transform 0.25s ease, color 0.25s ease;
-    }
-
-    .kategori-search-icon:hover {
-        color: #638d43;
-        transform: translateY(-50%) scale(1.1) rotate(-5deg);
-    }
-
-    .kategori-search-icon svg {
-        width: 100%;
-        height: 100%;
-        display: block;
-    }
-
-    .kategori-add {
-        display: flex;
-        align-items: center;
-        gap: 13px;
-        color: #000000;
-        font-size: 24px;
-        font-weight: 600;
-        line-height: 1;
-        white-space: nowrap;
-    }
-
-    .kategori-add-trigger {
-        position: relative;
-        width: 95px;
-        height: 38px;
-        overflow: hidden;
-        border: none;
-        border-radius: 11px;
-        padding: 0 0 5px;
-        background: linear-gradient(135deg, #a4fa95 0%, #8eef7a 100%);
-        color: #111111;
-        box-shadow: 0 9px 20px rgba(111, 194, 87, 0.27);
-        font-size: 48px;
-        font-weight: 400;
-        line-height: 1;
+        border-radius: 17px;
+        background: linear-gradient(135deg, var(--mw-green), var(--mw-green-dark));
+        color: #ffffff;
         display: inline-flex;
         align-items: center;
         justify-content: center;
         cursor: pointer;
         transition: transform 0.24s ease, box-shadow 0.24s ease, filter 0.24s ease;
+        position: relative;
+        isolation: isolate;
+        flex-shrink: 0;
+        box-shadow: 0 13px 24px rgba(143, 179, 107, 0.30);
     }
 
-    .kategori-add-trigger::after {
+    .kategori-add-button::after {
         content: "";
         position: absolute;
-        inset: 0;
-        background: linear-gradient(120deg, transparent, rgba(255, 255, 255, 0.55), transparent);
-        transform: translateX(-130%);
-        transition: transform 0.65s ease;
+        inset: -6px;
+        border-radius: 22px;
+        border: 2px solid rgba(143, 179, 107, 0.24);
+        animation: kategoriPulse 2.4s ease-in-out infinite;
+        z-index: -1;
     }
 
-    .kategori-add-trigger:hover {
-        transform: translateY(-3px);
-        filter: brightness(1.02);
-        box-shadow: 0 15px 30px rgba(111, 194, 87, 0.38);
+    .kategori-add-button:hover {
+        transform: translateY(-3px) scale(1.02);
+        box-shadow: 0 18px 34px rgba(143, 179, 107, 0.36);
+        filter: saturate(1.06);
     }
 
-    .kategori-add-trigger:hover::after {
-        transform: translateX(130%);
+    .kategori-add-button svg,
+    .kategori-table-button svg,
+    .kategori-confirm-icon svg,
+    .kategori-summary-icon svg,
+    .kategori-search svg,
+    .kategori-empty-icon svg {
+        fill: none;
+        stroke: currentColor;
+        stroke-width: 2.25;
+        stroke-linecap: round;
+        stroke-linejoin: round;
+    }
+
+    .kategori-add-button svg {
+        width: 26px;
+        height: 26px;
     }
 
     .kategori-alert {
-        width: 100%;
-        margin-bottom: 18px;
-        padding: 14px 18px;
-        border-radius: 16px;
-        font-size: 15px;
+        margin: 0 0 22px;
+        padding: 14px 16px;
+        border-radius: 18px;
+        font-size: 14px;
+        font-weight: 700;
+        box-shadow: 0 10px 24px rgba(93, 66, 10, 0.08);
+        animation: kategoriSlideUp 0.5s ease both;
         display: flex;
-        justify-content: space-between;
         align-items: center;
-        animation: kategoriAlertIn 0.35s ease both;
+        justify-content: space-between;
+        gap: 14px;
     }
 
     .kategori-alert ul {
         margin: 0;
-        padding-left: 18px;
+        padding-left: 20px;
     }
 
     .kategori-alert a {
         color: inherit;
-        font-weight: 700;
-        text-decoration: underline;
+        text-decoration: none;
+        font-weight: 900;
+        white-space: nowrap;
     }
 
     .kategori-alert-info {
@@ -628,259 +537,472 @@
     }
 
     .kategori-alert-danger {
-        background: #fff0f0;
-        border: 1px solid #ffb9b9;
-        color: #9d1c1c;
+        background: var(--mw-danger-soft);
+        border: 1px solid rgba(217, 52, 43, 0.22);
+        color: #a52620;
     }
 
     .kategori-alert-success {
-        background: #ecfff0;
-        border: 1px solid #afe6bb;
-        color: #237437;
+        background: #e7f7df;
+        border: 1px solid rgba(47, 125, 50, 0.22);
+        color: #2f7d32;
     }
 
-    .kategori-table-card {
-        overflow: hidden;
-        border: 1px solid rgba(210, 218, 204, 0.9);
-        border-radius: 26px;
-        background: rgba(255, 255, 255, 0.9);
-        box-shadow: 0 24px 60px rgba(35, 52, 25, 0.11);
-        backdrop-filter: blur(12px);
+    .kategori-summary {
+        display: grid;
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        gap: 18px;
+        margin-bottom: 24px;
+        animation: kategoriSlideUp 0.58s ease both;
+        animation-delay: 0.08s;
     }
 
-    .kategori-table-header {
+    .kategori-summary-card {
+        min-height: 116px;
+        border-radius: 24px;
+        border: 1px solid var(--mw-border);
+        background: rgba(255, 255, 255, 0.90);
+        padding: 20px;
         display: flex;
-        justify-content: space-between;
         align-items: center;
+        justify-content: space-between;
         gap: 16px;
-        padding: 20px 24px;
-        border-bottom: 1px solid rgba(210, 218, 204, 0.78);
-        background: linear-gradient(135deg, rgba(255, 255, 255, 0.95), rgba(244, 250, 239, 0.82));
+        box-shadow: var(--mw-shadow-soft);
+        transition: transform 0.24s ease, box-shadow 0.24s ease, border-color 0.24s ease;
+        overflow: hidden;
+        position: relative;
     }
 
-    .kategori-table-header h2 {
-        margin: 0;
-        color: #111111;
-        font-size: 20px;
-        font-weight: 800;
+    .kategori-summary-card::before {
+        content: "";
+        position: absolute;
+        top: -48%;
+        left: -45%;
+        width: 52%;
+        height: 190%;
+        background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.58), transparent);
+        animation: kategoriShine 5s ease-in-out infinite;
+        pointer-events: none;
     }
 
-    .kategori-table-header p {
-        margin: 5px 0 0;
-        color: #6b6b6b;
+    .kategori-summary-card::after {
+        content: "";
+        position: absolute;
+        width: 112px;
+        height: 112px;
+        right: -36px;
+        bottom: -42px;
+        border-radius: 50%;
+        background: rgba(143, 179, 107, 0.10);
+    }
+
+    .kategori-summary-card:hover {
+        transform: translateY(-5px);
+        box-shadow: var(--mw-shadow);
+        border-color: rgba(143, 179, 107, 0.34);
+    }
+
+    .kategori-summary-label,
+    .kategori-summary-number,
+    .kategori-summary-caption,
+    .kategori-summary-icon {
+        position: relative;
+        z-index: 1;
+    }
+
+    .kategori-summary-label {
+        margin-bottom: 7px;
         font-size: 14px;
+        font-weight: 700;
+        color: var(--mw-muted);
     }
 
-    .kategori-status-pill {
+    .kategori-summary-number {
+        color: var(--mw-black);
+        font-size: 34px;
+        font-weight: 800;
+        line-height: 1;
+        letter-spacing: -0.6px;
+    }
+
+    .kategori-summary-caption {
+        margin-top: 8px;
+        color: #839077;
+        font-size: 12px;
+        font-weight: 600;
+    }
+
+    .kategori-summary-icon {
+        width: 56px;
+        height: 56px;
+        border-radius: 19px;
         display: inline-flex;
         align-items: center;
-        gap: 8px;
-        padding: 9px 14px;
-        border-radius: 999px;
-        background: #eff8e9;
-        border: 1px solid rgba(143, 179, 107, 0.28);
-        color: #4f7236;
+        justify-content: center;
+        flex-shrink: 0;
+        transition: transform 0.24s ease;
+        background: var(--mw-green-soft);
+        color: var(--mw-green-deep);
+    }
+
+    .kategori-summary-card:hover .kategori-summary-icon {
+        transform: translateY(-2px) rotate(-4deg) scale(1.04);
+    }
+
+    .kategori-summary-icon svg {
+        width: 28px;
+        height: 28px;
+    }
+
+    .kategori-summary-shown .kategori-summary-icon {
+        background: #e7f7df;
+        color: #2f7d32;
+    }
+
+    .kategori-summary-page .kategori-summary-icon {
+        background: #f6faf2;
+        color: var(--mw-green-dark);
+    }
+
+    .kategori-card {
+        width: 100%;
+        border: 1px solid var(--mw-border);
+        border-radius: 28px;
+        background: rgba(255, 255, 255, 0.92);
+        padding: 22px;
+        box-shadow: var(--mw-shadow);
+        backdrop-filter: blur(10px);
+        animation: kategoriSlideUp 0.6s ease both;
+        animation-delay: 0.15s;
+        position: relative;
+        overflow: hidden;
+    }
+
+    .kategori-card::before {
+        content: "";
+        position: absolute;
+        inset: 0 0 auto 0;
+        height: 5px;
+        background: linear-gradient(90deg, var(--mw-green), rgba(143, 179, 107, 0.25), var(--mw-green-dark));
+    }
+
+    .kategori-card-head {
+        display: flex;
+        align-items: flex-start;
+        justify-content: space-between;
+        gap: 20px;
+        margin-bottom: 20px;
+        padding-top: 6px;
+    }
+
+    .kategori-section-title {
+        margin: 0;
+        font-size: 20px;
+        font-weight: 800;
+        color: var(--mw-black);
+        letter-spacing: -0.2px;
+    }
+
+    .kategori-section-text {
+        margin: 7px 0 0;
+        color: var(--mw-muted);
+        font-size: 13px;
+        font-weight: 600;
+        line-height: 1.55;
+    }
+
+    .kategori-control-row {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 18px;
+        margin-bottom: 18px;
+    }
+
+    .kategori-entries-control {
+        min-height: 48px;
+        padding: 7px 12px;
+        border: 1px solid rgba(79, 116, 56, 0.18);
+        border-radius: 18px;
+        background: var(--mw-green-pale);
+        display: flex;
+        align-items: center;
+        gap: 9px;
+        font-size: 13px;
+        font-weight: 700;
+        color: var(--mw-muted);
+        white-space: nowrap;
+    }
+
+    .kategori-entries-control strong {
+        min-height: 34px;
+        padding: 0 12px;
+        border: 1px solid rgba(79, 116, 56, 0.20);
+        border-radius: 12px;
+        background: #ffffff;
+        color: var(--mw-black);
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
         font-size: 13px;
         font-weight: 800;
     }
 
-    .kategori-status-pill span {
-        position: relative;
-        width: 9px;
-        height: 9px;
+    .kategori-search {
+        width: min(100%, 340px);
+        height: 50px;
+        border: 1px solid rgba(79, 116, 56, 0.18);
         border-radius: 999px;
-        background: #5fa340;
+        display: flex;
+        align-items: center;
+        padding: 0 18px;
+        background: #ffffff;
+        box-shadow: 0 10px 20px rgba(90, 123, 64, 0.06);
+        transition: border-color 0.22s ease, box-shadow 0.22s ease, transform 0.22s ease;
+        margin: 0;
     }
 
-    .kategori-status-pill span::after {
-        content: "";
-        position: absolute;
-        inset: -5px;
-        border-radius: 999px;
-        background: rgba(95, 163, 64, 0.22);
-        animation: kategoriPulse 1.8s ease-in-out infinite;
+    .kategori-search:focus-within {
+        border-color: var(--mw-green);
+        box-shadow: 0 0 0 4px rgba(143, 179, 107, 0.15), 0 14px 28px rgba(90, 123, 64, 0.11);
+        transform: translateY(-2px);
     }
 
-    .kategori-table-wrapper {
+    .kategori-search button {
+        width: 24px;
+        height: 24px;
+        border: none;
+        padding: 0;
+        margin: 0 10px 0 0;
+        background: transparent;
+        color: var(--mw-green-dark);
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        flex-shrink: 0;
+    }
+
+    .kategori-search svg {
+        width: 20px;
+        height: 20px;
+        stroke-width: 2.6;
+    }
+
+    .kategori-search input {
+        width: 100%;
+        border: none;
+        outline: none;
+        background: transparent;
+        font-family: "Poppins", sans-serif;
+        font-size: 14px;
+        font-weight: 600;
+        color: var(--mw-black);
+    }
+
+    .kategori-search input::placeholder {
+        color: #92a187;
+    }
+
+    .kategori-table-wrap {
         width: 100%;
         overflow-x: auto;
+        border: 1px solid rgba(79, 116, 56, 0.14);
+        border-radius: 22px;
+        background: #ffffff;
+        box-shadow: 0 12px 28px rgba(90, 123, 64, 0.08);
     }
 
     .kategori-table {
         width: 100%;
-        border-collapse: collapse;
+        border-collapse: separate;
+        border-spacing: 0;
         table-layout: fixed;
-        background: #ffffff;
-        color: #000000;
+        font-family: "Poppins", sans-serif;
+        color: var(--mw-black);
+        overflow: hidden;
     }
 
     .kategori-table th {
-        height: 60px;
-        border: 1px solid #dddddd;
-        background: linear-gradient(180deg, #f5f5f5 0%, #ececec 100%);
-        color: #111111;
-        font-size: 23px;
-        font-weight: 600;
-        line-height: 1;
+        height: 58px;
+        background: linear-gradient(180deg, #f1f6ed, #e9f2e4);
+        border-bottom: 1px solid rgba(79, 116, 56, 0.15);
+        text-align: center;
         vertical-align: middle;
-        padding: 0 21px;
+        color: #385a25;
+        font-size: 13px;
+        font-weight: 800;
+        text-transform: uppercase;
+        letter-spacing: 0.45px;
+        white-space: nowrap;
+    }
+
+    .kategori-table th:not(:last-child),
+    .kategori-table td:not(:last-child) {
+        border-right: 1px solid rgba(79, 116, 56, 0.10);
     }
 
     .kategori-table td {
         height: 64px;
-        border: 1px solid #e5e5e5;
-        background: rgba(255, 255, 255, 0.96);
-        color: #111111;
-        font-size: 23px;
-        font-weight: 400;
-        line-height: 1;
+        border-bottom: 1px solid rgba(79, 116, 56, 0.10);
+        text-align: center;
         vertical-align: middle;
-        padding: 0 21px;
+        font-size: 14px;
+        font-weight: 600;
+        color: var(--mw-black);
+        background: rgba(255, 255, 255, 0.94);
+        transition: background 0.22s ease;
+        padding: 0 16px;
     }
 
-    .kategori-table tbody tr {
-        animation: kategoriRowIn 0.46s ease both;
-        animation-delay: var(--delay);
-        transition: box-shadow 0.22s ease, transform 0.22s ease;
+    .kategori-table tbody tr:last-child td {
+        border-bottom: none;
     }
 
-    .kategori-table tbody tr:hover {
-        transform: translateY(-1px);
-        box-shadow: 0 11px 25px rgba(52, 77, 36, 0.08);
+    .kategori-row {
+        animation: kategoriRowIn 0.38s ease both;
+        animation-delay: var(--row-delay);
     }
 
-    .kategori-table tbody tr:hover td {
-        background: #fbfff8;
+    .kategori-table tbody .kategori-row:hover td {
+        background: #fbfef8;
     }
 
-    .kategori-no {
-        width: 145px;
-        text-align: center;
+    .col-no {
+        width: 10%;
     }
 
-    .kategori-action-title {
-        width: 342px;
-        text-align: center;
+    .col-kategori {
+        width: 66%;
     }
 
-    .kategori-number {
-        text-align: center;
-        font-weight: 500 !important;
+    .col-aksi {
+        width: 24%;
     }
 
-    .kategori-name {
-        text-align: left;
-    }
-
-    .kategori-name span {
+    .kategori-number-pill {
+        min-width: 38px;
+        height: 34px;
+        padding: 0 12px;
+        border-radius: 999px;
+        background: #f6faf2;
+        border: 1px solid rgba(79, 116, 56, 0.14);
+        color: #53634a;
         display: inline-flex;
         align-items: center;
-        gap: 11px;
+        justify-content: center;
+        font-size: 13px;
+        font-weight: 800;
     }
 
-    .kategori-name span::before {
-        content: "";
-        width: 9px;
-        height: 9px;
+    .kategori-name-pill {
+        max-width: 100%;
+        min-height: 34px;
+        padding: 7px 14px;
         border-radius: 999px;
-        background: #8fb36b;
-        box-shadow: 0 0 0 5px rgba(143, 179, 107, 0.14);
-        opacity: 0;
-        transform: scale(0.5);
-        transition: opacity 0.22s ease, transform 0.22s ease;
+        background: #f6faf2;
+        border: 1px solid rgba(79, 116, 56, 0.14);
+        color: #2d421f;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+        font-size: 13px;
+        font-weight: 800;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        vertical-align: middle;
+        box-shadow: 0 8px 18px rgba(47, 125, 50, 0.06);
+        transition: transform 0.22s ease, box-shadow 0.22s ease;
     }
 
-    .kategori-table tbody tr:hover .kategori-name span::before {
-        opacity: 1;
-        transform: scale(1);
+    .kategori-name-pill::before {
+        content: "";
+        width: 8px;
+        height: 8px;
+        border-radius: 50%;
+        background: var(--mw-green);
+        box-shadow: 0 0 0 4px rgba(143, 179, 107, 0.12);
+        animation: kategoriDotPulse 1.8s ease-in-out infinite;
+        flex-shrink: 0;
     }
 
-    .kategori-action-cell {
-        padding: 0 !important;
-        text-align: center;
+    .kategori-row:hover .kategori-name-pill {
+        transform: translateY(-2px);
+        box-shadow: 0 10px 18px rgba(47, 125, 50, 0.12);
     }
 
     .kategori-action-group {
-        display: flex;
+        display: inline-flex;
         align-items: center;
         justify-content: center;
-        gap: 19px;
+        gap: 10px;
     }
 
     .kategori-delete-form {
+        display: inline-flex;
         margin: 0;
         padding: 0;
-        line-height: 0;
     }
 
-    .kategori-btn-delete,
-    .kategori-btn-edit {
-        width: 95px;
-        height: 38px;
+    .kategori-table-button {
+        width: 40px;
+        height: 40px;
         border: none;
-        border-radius: 11px;
-        padding: 0;
-        margin: 0;
+        border-radius: 14px;
         display: inline-flex;
         align-items: center;
         justify-content: center;
         cursor: pointer;
         transition: transform 0.22s ease, box-shadow 0.22s ease, filter 0.22s ease;
+        color: #ffffff;
     }
 
-    .kategori-btn-delete {
-        background: linear-gradient(135deg, #ff5b5e 0%, #ff4649 100%);
-        color: #111111;
-        box-shadow: 0 8px 18px rgba(255, 79, 82, 0.24);
+    .kategori-table-button svg {
+        width: 20px;
+        height: 20px;
     }
 
-    .kategori-btn-edit {
-        background: linear-gradient(135deg, #6d9bff 0%, #5f8bf0 100%);
-        color: #111111;
-        box-shadow: 0 8px 18px rgba(102, 147, 248, 0.25);
+    .kategori-edit-button {
+        background: linear-gradient(135deg, var(--mw-blue), var(--mw-blue-dark));
+        box-shadow: 0 10px 18px rgba(76, 148, 255, 0.22);
     }
 
-    .kategori-btn-delete svg,
-    .kategori-btn-edit svg {
-        width: 29px;
-        height: 29px;
-        display: block;
-        transition: transform 0.24s ease;
+    .kategori-delete-button {
+        background: linear-gradient(135deg, #ef5b54, var(--mw-danger));
+        box-shadow: 0 10px 18px rgba(217, 52, 43, 0.20);
     }
 
-    .kategori-btn-delete:hover,
-    .kategori-btn-edit:hover {
+    .kategori-table-button:hover {
         transform: translateY(-3px);
-        filter: brightness(1.03);
+        filter: saturate(1.08);
     }
 
-    .kategori-btn-delete:hover {
-        box-shadow: 0 14px 25px rgba(255, 79, 82, 0.35);
+    .kategori-edit-button:hover {
+        box-shadow: 0 14px 24px rgba(76, 148, 255, 0.30);
     }
 
-    .kategori-btn-edit:hover {
-        box-shadow: 0 14px 25px rgba(102, 147, 248, 0.36);
+    .kategori-delete-button:hover {
+        box-shadow: 0 14px 24px rgba(217, 52, 43, 0.28);
     }
 
-    .kategori-btn-delete:hover svg {
+    .kategori-edit-button:hover svg {
+        transform: rotate(-8deg) scale(1.04);
+    }
+
+    .kategori-delete-button:hover svg {
         animation: kategoriShake 0.42s ease;
     }
 
-    .kategori-btn-edit:hover svg {
-        transform: rotate(-8deg) scale(1.08);
-    }
-
-    .kategori-btn-delete:focus,
-    .kategori-btn-edit:focus,
-    .kategori-add-trigger:focus {
-        outline: none;
-        box-shadow: 0 0 0 5px rgba(143, 179, 107, 0.18);
-    }
-
     .kategori-empty {
-        height: 160px !important;
-        text-align: center;
-        color: #777777 !important;
+        height: 136px !important;
+        padding: 28px !important;
+        color: var(--mw-muted) !important;
+        font-size: 14px !important;
+        font-weight: 700 !important;
+        line-height: 1.7;
+        background: #fbfef8 !important;
     }
 
     .kategori-empty-box {
@@ -888,15 +1010,14 @@
         flex-direction: column;
         align-items: center;
         gap: 7px;
-        padding: 24px;
     }
 
     .kategori-empty-icon {
         width: 58px;
         height: 58px;
         border-radius: 999px;
-        background: #f0f7ea;
-        color: #6d8f52;
+        background: var(--mw-green-soft);
+        color: var(--mw-green-deep);
         display: flex;
         align-items: center;
         justify-content: center;
@@ -908,79 +1029,90 @@
     }
 
     .kategori-empty-box strong {
-        color: #2d2d2d;
-        font-size: 19px;
+        color: var(--mw-black);
+        font-size: 16px;
         font-weight: 800;
     }
 
     .kategori-empty-box span {
-        color: #777777;
-        font-size: 14px;
+        color: var(--mw-muted);
+        font-size: 13px;
+        font-weight: 600;
     }
 
     .kategori-footer {
         display: flex;
-        justify-content: space-between;
         align-items: center;
-        width: 100%;
-        padding: 18px 24px;
-        background: rgba(255, 255, 255, 0.78);
+        justify-content: space-between;
+        gap: 20px;
+        margin-top: 18px;
+        font-size: 13px;
+        font-weight: 700;
+        color: var(--mw-muted);
     }
 
-    .kategori-info {
-        color: #000000;
-        font-size: 18px;
-        font-weight: 500;
-        line-height: 1;
+    .kategori-info-text {
+        font-size: 13px;
+        font-weight: 700;
+        color: var(--mw-muted);
     }
 
     .kategori-pagination {
         display: flex;
-        justify-content: flex-end;
         align-items: center;
+        justify-content: flex-end;
     }
 
-    .kategori-pagination nav {
+    .kategori-pagination nav,
+    .kategori-pagination .pagination {
         margin: 0;
     }
 
     .kategori-pagination .pagination {
-        margin: 0;
+        display: flex;
         align-items: center;
+        gap: 8px;
     }
 
     .kategori-pagination .page-item {
-        margin: 0 2px;
+        margin: 0;
     }
 
     .kategori-pagination .page-link {
-        border: none;
-        border-radius: 10px;
-        background: transparent;
-        color: #000000;
-        font-size: 20px;
-        font-weight: 500;
-        padding: 8px 10px;
+        min-width: 38px;
+        min-height: 38px;
+        border: 1px solid rgba(79, 116, 56, 0.16);
+        border-radius: 999px !important;
+        background: #ffffff;
+        color: var(--mw-green-deep);
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        padding: 0 13px;
+        font-family: "Poppins", sans-serif;
+        font-size: 13px;
+        font-weight: 800;
         line-height: 1;
         box-shadow: none;
-        transition: background 0.22s ease, transform 0.22s ease;
+        transition: transform 0.22s ease, box-shadow 0.22s ease, background 0.22s ease, opacity 0.22s ease;
     }
 
     .kategori-pagination .page-link:hover {
-        background: #edf6e7;
+        background: var(--mw-green-soft);
         transform: translateY(-2px);
+        box-shadow: 0 10px 20px rgba(90, 123, 64, 0.12);
     }
 
     .kategori-pagination .page-item.active .page-link {
-        border: 1px solid #9e9e9e;
-        background: #e8e8e8;
-        color: #000000;
-        padding: 10px 12px;
+        border-color: rgba(143, 179, 107, 0.52);
+        background: var(--mw-green);
+        color: #ffffff;
+        box-shadow: 0 10px 18px rgba(143, 179, 107, 0.24);
     }
 
     .kategori-pagination .page-item.disabled .page-link {
-        color: #000000;
-        opacity: 0.55;
+        opacity: 0.46;
+        cursor: not-allowed;
     }
 
     .kategori-modal-bank > div > button {
@@ -989,6 +1121,7 @@
 
     .kategori-modal-bank .modal {
         z-index: 2050 !important;
+        font-family: "Poppins", sans-serif;
     }
 
     .modal-backdrop {
@@ -1009,18 +1142,17 @@
         border: none;
         border-radius: 22px;
         box-shadow: 0 24px 70px rgba(0, 0, 0, 0.24);
-        font-family: "Poppins", sans-serif;
         overflow: hidden;
     }
 
     .kategori-modal-bank .modal-header {
-        border-bottom: 1px solid #eeeeee;
+        border-bottom: 1px solid rgba(79, 116, 56, 0.13);
         padding: 20px 24px;
         background: linear-gradient(135deg, #ffffff 0%, #f4faef 100%);
     }
 
     .kategori-modal-bank .modal-title {
-        color: #111111;
+        color: var(--mw-black);
         font-size: 22px;
         font-weight: 800;
     }
@@ -1029,8 +1161,8 @@
         width: 36px;
         height: 36px;
         border-radius: 999px;
-        background: #eef4e9;
-        color: #111111;
+        background: var(--mw-green-soft);
+        color: var(--mw-black);
         opacity: 1;
         text-shadow: none;
         transition: background 0.2s ease, transform 0.2s ease;
@@ -1047,7 +1179,7 @@
     }
 
     .kategori-modal-bank .modal-body label {
-        color: #111111;
+        color: var(--mw-black);
         font-size: 15px;
         font-weight: 700;
         margin-bottom: 8px;
@@ -1055,21 +1187,22 @@
 
     .kategori-modal-bank .modal-body .form-control {
         height: 48px;
-        border: 1px solid #d6d6d6;
+        border: 1px solid rgba(79, 116, 56, 0.18);
         border-radius: 12px;
         font-size: 15px;
+        font-weight: 600;
         box-shadow: none;
         transition: border-color 0.22s ease, box-shadow 0.22s ease;
     }
 
     .kategori-modal-bank .modal-body .form-control:focus {
-        border-color: #8fb36b;
+        border-color: var(--mw-green);
         box-shadow: 0 0 0 4px rgba(143, 179, 107, 0.14);
     }
 
     .kategori-modal-bank .modal-footer {
         border-top: none;
-        padding-top: 10px;
+        padding: 0 24px 24px;
     }
 
     .kategori-modal-bank .modal-footer .btn {
@@ -1078,7 +1211,7 @@
         border: none;
         border-radius: 11px;
         font-size: 15px;
-        font-weight: 700;
+        font-weight: 800;
         box-shadow: none;
     }
 
@@ -1088,7 +1221,7 @@
     }
 
     .kategori-modal-bank .modal-footer .btn-primary {
-        background: #8fb36b;
+        background: var(--mw-green);
         color: #ffffff;
     }
 
@@ -1118,6 +1251,7 @@
         box-shadow: 0 24px 70px rgba(0, 0, 0, 0.24);
         text-align: center;
         animation: kategoriConfirmIn 0.28s ease both;
+        font-family: "Poppins", sans-serif;
     }
 
     .kategori-confirm-icon {
@@ -1125,8 +1259,8 @@
         height: 76px;
         margin: 0 auto 16px;
         border-radius: 999px;
-        background: #fff0f0;
-        color: #ff4f52;
+        background: var(--mw-danger-soft);
+        color: var(--mw-danger);
         display: flex;
         align-items: center;
         justify-content: center;
@@ -1139,20 +1273,21 @@
 
     .kategori-confirm-box h3 {
         margin: 0 0 8px;
-        color: #111111;
+        color: var(--mw-black);
         font-size: 24px;
         font-weight: 800;
     }
 
     .kategori-confirm-box p {
         margin: 0;
-        color: #666666;
+        color: var(--mw-muted);
         font-size: 15px;
+        font-weight: 600;
         line-height: 1.55;
     }
 
     .kategori-confirm-box p strong {
-        color: #111111;
+        color: var(--mw-black);
     }
 
     .kategori-confirm-actions {
@@ -1169,9 +1304,10 @@
         border: none;
         border-radius: 12px;
         font-size: 15px;
-        font-weight: 700;
+        font-weight: 800;
         cursor: pointer;
         transition: transform 0.22s ease, box-shadow 0.22s ease;
+        font-family: "Poppins", sans-serif;
     }
 
     .kategori-confirm-cancel {
@@ -1180,9 +1316,9 @@
     }
 
     .kategori-confirm-delete {
-        background: #ff4f52;
+        background: var(--mw-danger);
         color: #ffffff;
-        box-shadow: 0 10px 20px rgba(255, 79, 82, 0.25);
+        box-shadow: 0 10px 20px rgba(217, 52, 43, 0.25);
     }
 
     .kategori-confirm-cancel:hover,
@@ -1190,67 +1326,39 @@
         transform: translateY(-2px);
     }
 
-    @keyframes kategoriFadeUp {
-        from {
-            opacity: 0;
-            transform: translateY(18px);
-        }
-
-        to {
-            opacity: 1;
-            transform: translateY(0);
-        }
-    }
-
-    @keyframes kategoriAlertIn {
-        from {
-            opacity: 0;
-            transform: translateY(-8px);
-        }
-
-        to {
-            opacity: 1;
-            transform: translateY(0);
-        }
-    }
-
-    @keyframes kategoriRowIn {
-        from {
-            opacity: 0;
-            transform: translateY(12px);
-        }
-
-        to {
-            opacity: 1;
-            transform: translateY(0);
-        }
+    @keyframes kategoriFadeIn {
+        from { opacity: 0; transform: translateY(14px); }
+        to { opacity: 1; transform: translateY(0); }
     }
 
     @keyframes kategoriFloat {
-        0%, 100% {
-            transform: translate3d(0, 0, 0) scale(1);
-        }
+        0%, 100% { transform: translateY(0); }
+        50% { transform: translateY(-12px); }
+    }
 
-        50% {
-            transform: translate3d(18px, -14px, 0) scale(1.06);
-        }
+    @keyframes kategoriSlideUp {
+        from { opacity: 0; transform: translateY(18px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
+
+    @keyframes kategoriShine {
+        0%, 58% { transform: translateX(-120%) rotate(14deg); }
+        100% { transform: translateX(120%) rotate(14deg); }
     }
 
     @keyframes kategoriPulse {
-        0% {
-            opacity: 0.65;
-            transform: scale(0.75);
-        }
+        0% { opacity: 0.55; transform: scale(0.94); }
+        70%, 100% { opacity: 0; transform: scale(1.18); }
+    }
 
-        70% {
-            opacity: 0;
-            transform: scale(1.55);
-        }
+    @keyframes kategoriDotPulse {
+        0%, 100% { opacity: 0.72; transform: scale(1); }
+        50% { opacity: 1; transform: scale(1.25); }
+    }
 
-        100% {
-            opacity: 0;
-            transform: scale(1.55);
-        }
+    @keyframes kategoriRowIn {
+        from { opacity: 0; transform: translateY(8px); }
+        to { opacity: 1; transform: translateY(0); }
     }
 
     @keyframes kategoriShake {
@@ -1266,109 +1374,73 @@
     }
 
     @keyframes kategoriConfirmIn {
-        from {
-            opacity: 0;
-            transform: translateY(18px) scale(0.96);
-        }
-
-        to {
-            opacity: 1;
-            transform: translateY(0) scale(1);
-        }
-    }
-
-    @media (max-width: 1200px) {
-        .kategori-hero {
-            flex-direction: column;
-        }
-
-        .kategori-info-grid {
-            width: 100%;
-        }
-
-        .kategori-toolbar {
-            justify-content: space-between;
-            flex-wrap: wrap;
-        }
-    }
-
-    @media (max-width: 768px) {
-        .kategori-page {
-            padding: 28px 18px 36px;
-        }
-
-        .kategori-hero h1 {
-            font-size: 30px;
-        }
-
-        .kategori-info-grid {
-            grid-template-columns: 1fr;
-        }
-
-        .kategori-toolbar {
-            align-items: flex-start;
-            gap: 18px;
-            padding: 16px;
-        }
-
-        .kategori-search {
-            width: 100%;
-        }
-
-        .kategori-search input {
-            font-size: 22px;
-        }
-
-        .kategori-add {
-            font-size: 18px;
-        }
-
-        .kategori-table-header {
-            flex-direction: column;
-            align-items: flex-start;
-        }
-
-        .kategori-table th,
-        .kategori-table td {
-            font-size: 17px;
-        }
-
-        .kategori-no {
-            width: 80px;
-        }
-
-        .kategori-action-title {
-            width: 210px;
-        }
-
-        .kategori-btn-delete,
-        .kategori-btn-edit {
-            width: 72px;
-            height: 36px;
-        }
-
-        .kategori-footer {
-            flex-direction: column;
-            align-items: flex-start;
-            gap: 14px;
-        }
-
-        .kategori-info {
-            font-size: 16px;
-        }
-
-        .kategori-pagination .page-link {
-            font-size: 18px;
-        }
+        from { opacity: 0; transform: translateY(18px) scale(0.96); }
+        to { opacity: 1; transform: translateY(0) scale(1); }
     }
 
     @media (prefers-reduced-motion: reduce) {
         *,
         *::before,
         *::after {
-            animation-duration: 0.001ms !important;
-            animation-iteration-count: 1 !important;
-            transition-duration: 0.001ms !important;
+            animation: none !important;
+            transition: none !important;
+        }
+    }
+
+    @media (max-width: 1050px) {
+        .kategori-page {
+            padding: 34px 24px 68px;
+        }
+
+        .kategori-header {
+            flex-direction: column;
+        }
+
+        .kategori-action-row {
+            width: 100%;
+            max-width: 420px;
+        }
+
+        .kategori-summary {
+            grid-template-columns: 1fr;
+        }
+    }
+
+    @media (max-width: 760px) {
+        .kategori-page {
+            padding: 28px 16px 56px;
+        }
+
+        .kategori-card {
+            padding: 18px 14px;
+            border-radius: 22px;
+        }
+
+        .kategori-card-head,
+        .kategori-control-row,
+        .kategori-footer {
+            flex-direction: column;
+            align-items: stretch;
+        }
+
+        .kategori-search,
+        .kategori-entries-control {
+            width: 100%;
+        }
+
+        .kategori-table {
+            min-width: 760px;
+        }
+
+        .kategori-pagination {
+            justify-content: flex-start;
+            overflow-x: auto;
+            padding-bottom: 4px;
+        }
+
+        .kategori-alert {
+            flex-direction: column;
+            align-items: flex-start;
         }
     }
 </style>

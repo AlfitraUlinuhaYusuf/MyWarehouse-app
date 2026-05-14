@@ -4,14 +4,22 @@
 <style>
     :root {
         --mw-green: #8fb36b;
-        --mw-green-dark: #5f823f;
-        --mw-green-soft: #eef6e7;
-        --mw-blue: #405565;
-        --mw-text: #121212;
-        --mw-muted: #6e746b;
-        --mw-line: #dfe5db;
-        --mw-card: rgba(255, 255, 255, 0.92);
-        --mw-shadow: 0 18px 45px rgba(32, 47, 24, 0.10);
+        --mw-green-dark: #6f9651;
+        --mw-green-deep: #4f7438;
+        --mw-green-soft: #eef7e8;
+        --mw-green-pale: #f8fcf5;
+        --mw-black: #050704;
+        --mw-white: #ffffff;
+        --mw-muted: #6d7567;
+        --mw-border: rgba(79, 116, 56, 0.16);
+        --mw-shadow: 0 18px 42px rgba(90, 123, 64, 0.14);
+        --mw-shadow-soft: 0 12px 28px rgba(90, 123, 64, 0.10);
+        --mw-danger: #d9342b;
+        --mw-danger-soft: #fff0ee;
+        --mw-blue: #4c94ff;
+        --mw-blue-dark: #397feb;
+        --mw-warning: #f4b23e;
+        --mw-warning-soft: #fff8e8;
     }
 
     .masuk-page,
@@ -22,315 +30,375 @@
     .masuk-page {
         width: 100%;
         min-height: calc(100vh - 72px);
-        position: relative;
-        overflow: hidden;
-        background:
-            radial-gradient(circle at 96% 18%, rgba(143, 179, 107, 0.18) 0 115px, transparent 116px),
-            radial-gradient(circle at 12% 92%, rgba(143, 179, 107, 0.11) 0 150px, transparent 151px),
-            linear-gradient(180deg, #ffffff 0%, #fbfdf8 100%);
-        padding: 44px 46px 72px;
+        padding: 42px 46px 82px;
         font-family: "Poppins", sans-serif;
-        color: var(--mw-text);
-        animation: pageFadeIn 0.55s ease both;
+        color: var(--mw-black);
+        background:
+            radial-gradient(circle at 8% 14%, rgba(143, 179, 107, 0.15), transparent 28%),
+            radial-gradient(circle at 92% 72%, rgba(143, 179, 107, 0.12), transparent 30%),
+            linear-gradient(180deg, #ffffff 0%, #fbfdf9 100%);
+        overflow: hidden;
+        position: relative;
+        animation: masukFadeIn 0.52s ease both;
     }
 
-    .masuk-page::before {
-        content: "";
-        position: absolute;
-        width: 420px;
-        height: 420px;
-        right: -180px;
-        top: 160px;
-        border-radius: 50%;
-        background: rgba(143, 179, 107, 0.09);
-        animation: floatBlob 7s ease-in-out infinite;
-        pointer-events: none;
-    }
-
+    .masuk-page::before,
     .masuk-page::after {
         content: "";
         position: absolute;
-        width: 180px;
-        height: 180px;
-        left: -70px;
-        bottom: 80px;
-        border-radius: 50%;
-        border: 34px solid rgba(143, 179, 107, 0.08);
-        animation: rotateSoft 12s linear infinite;
+        border-radius: 999px;
+        background: rgba(143, 179, 107, 0.10);
+        filter: blur(1px);
         pointer-events: none;
+        animation: masukFloat 6s ease-in-out infinite;
     }
 
-    @keyframes pageFadeIn {
-        from { opacity: 0; }
-        to { opacity: 1; }
+    .masuk-page::before {
+        width: 145px;
+        height: 145px;
+        right: 52px;
+        top: 108px;
     }
 
-    @keyframes floatBlob {
-        0%, 100% { transform: translate3d(0, 0, 0) scale(1); }
-        50% { transform: translate3d(-18px, 24px, 0) scale(1.04); }
+    .masuk-page::after {
+        width: 92px;
+        height: 92px;
+        left: 38px;
+        bottom: 74px;
+        animation-delay: 1.2s;
     }
 
-    @keyframes rotateSoft {
-        from { transform: rotate(0deg); }
-        to { transform: rotate(360deg); }
+    @keyframes masukFadeIn {
+        from {
+            opacity: 0;
+            transform: translateY(14px);
+        }
+
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    @keyframes masukFloat {
+        0%, 100% {
+            transform: translateY(0);
+        }
+
+        50% {
+            transform: translateY(-12px);
+        }
+    }
+
+    @keyframes masukSlideUp {
+        from {
+            opacity: 0;
+            transform: translateY(18px);
+        }
+
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    @keyframes masukShine {
+        0%, 58% {
+            transform: translateX(-120%) rotate(14deg);
+        }
+
+        100% {
+            transform: translateX(120%) rotate(14deg);
+        }
+    }
+
+    @keyframes masukPulse {
+        0% {
+            opacity: 0.55;
+            transform: scale(0.94);
+        }
+
+        70%, 100% {
+            opacity: 0;
+            transform: scale(1.18);
+        }
+    }
+
+    @keyframes masukDotPulse {
+        0%, 100% {
+            opacity: 0.72;
+            transform: scale(1);
+        }
+
+        50% {
+            opacity: 1;
+            transform: scale(1.25);
+        }
+    }
+
+    @keyframes masukRowIn {
+        from {
+            opacity: 0;
+            transform: translateY(8px);
+        }
+
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    .masuk-shell {
+        position: relative;
+        z-index: 1;
+        width: 100%;
+        max-width: 1240px;
+        margin: 0 auto;
     }
 
     .masuk-header {
-        position: relative;
-        z-index: 1;
         display: flex;
         align-items: flex-start;
         justify-content: space-between;
-        gap: 24px;
-        margin-bottom: 34px;
+        gap: 28px;
+        margin-bottom: 24px;
+        animation: masukSlideUp 0.58s ease both;
     }
 
     .title-area {
+        max-width: 670px;
         min-width: 0;
+    }
+
+    .masuk-eyebrow {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        margin-bottom: 12px;
+        padding: 7px 12px;
+        border-radius: 999px;
+        background: rgba(143, 179, 107, 0.14);
+        color: var(--mw-green-deep);
+        font-size: 13px;
+        font-weight: 700;
+        letter-spacing: 0.2px;
+    }
+
+    .masuk-eyebrow::before {
+        content: "";
+        width: 8px;
+        height: 8px;
+        border-radius: 50%;
+        background: var(--mw-green);
+        box-shadow: 0 0 0 5px rgba(143, 179, 107, 0.16);
+        animation: masukDotPulse 2s ease-in-out infinite;
     }
 
     .masuk-title {
-        position: relative;
-        width: fit-content;
-        margin: 0 0 10px;
-        font-size: 31px;
-        font-weight: 700;
-        letter-spacing: 0.1px;
-        text-transform: uppercase;
-        color: #111111;
-        animation: titleSlide 0.55s ease both;
-    }
-
-    .masuk-title::after {
-        content: "";
-        position: absolute;
-        left: 0;
-        bottom: -7px;
-        width: 56px;
-        height: 4px;
-        border-radius: 999px;
-        background: linear-gradient(90deg, var(--mw-green), #b7e68d);
-        animation: underlineGrow 0.75s 0.2s ease both;
+        margin: 0;
+        color: var(--mw-black);
+        font-size: clamp(26px, 3vw, 38px);
+        font-weight: 800;
+        line-height: 1.14;
+        letter-spacing: -0.8px;
     }
 
     .masuk-subtitle {
-        margin: 0;
+        max-width: 650px;
+        margin: 12px 0 0;
         color: var(--mw-muted);
-        font-size: 14px;
-        line-height: 1.7;
-        animation: titleSlide 0.65s 0.08s ease both;
-    }
-
-    @keyframes titleSlide {
-        from { opacity: 0; transform: translateY(12px); }
-        to { opacity: 1; transform: translateY(0); }
-    }
-
-    @keyframes underlineGrow {
-        from { width: 0; opacity: 0; }
-        to { width: 56px; opacity: 1; }
+        font-size: 15px;
+        font-weight: 500;
+        line-height: 1.72;
     }
 
     .header-mini-card {
-        display: inline-flex;
-        align-items: center;
-        gap: 12px;
-        min-width: 208px;
-        padding: 13px 16px;
-        border-radius: 20px;
-        border: 1px solid rgba(143, 179, 107, 0.26);
-        background: rgba(255, 255, 255, 0.72);
+        min-width: 250px;
+        padding: 14px;
+        border: 1px solid var(--mw-border);
+        border-radius: 22px;
+        background: rgba(255, 255, 255, 0.82);
+        box-shadow: var(--mw-shadow-soft);
         backdrop-filter: blur(10px);
-        box-shadow: 0 12px 28px rgba(58, 80, 46, 0.08);
-        animation: titleSlide 0.65s 0.12s ease both;
-    }
-
-    .mini-icon {
-        width: 42px;
-        height: 42px;
-        border-radius: 16px;
-        display: inline-flex;
+        display: flex;
         align-items: center;
-        justify-content: center;
-        background: var(--mw-green-soft);
-        color: var(--mw-green-dark);
-        animation: iconFloat 3s ease-in-out infinite;
+        justify-content: space-between;
+        gap: 12px;
     }
 
-    .mini-icon svg {
-        width: 23px;
-        height: 23px;
-        stroke: currentColor;
-        fill: none;
-        stroke-width: 2.4;
-        stroke-linecap: round;
-        stroke-linejoin: round;
-    }
-
-    @keyframes iconFloat {
-        0%, 100% { transform: translateY(0); }
-        50% { transform: translateY(-4px); }
+    .mini-content {
+        display: flex;
+        flex-direction: column;
+        gap: 3px;
     }
 
     .mini-content span {
-        display: block;
-        color: var(--mw-muted);
         font-size: 12px;
-        margin-bottom: 2px;
+        font-weight: 700;
+        color: var(--mw-muted);
+        line-height: 1.25;
     }
 
     .mini-content strong {
-        display: block;
-        color: #1d1d1d;
-        font-size: 18px;
-        line-height: 1.2;
+        font-size: 25px;
+        font-weight: 900;
+        color: var(--mw-black);
+        line-height: 1;
+        letter-spacing: -0.5px;
     }
 
-    .masuk-panel {
-        position: relative;
-        z-index: 1;
-        width: 100%;
-        padding: 0;
-        animation: panelSlideUp 0.65s 0.12s ease both;
+    .mini-helper {
+        font-size: 12px;
+        font-weight: 700;
+        color: var(--mw-green-deep) !important;
+        margin-top: 2px;
     }
 
-    @keyframes panelSlideUp {
-        from { opacity: 0; transform: translateY(18px); }
-        to { opacity: 1; transform: translateY(0); }
-    }
-
-    .top-action-row {
-        display: flex;
-        align-items: flex-start;
-        justify-content: space-between;
-        gap: 30px;
-        margin-bottom: 34px;
-    }
-
-    .filter-block {
-        flex: 1;
-        min-width: 0;
-    }
-
-    .date-label {
-        display: inline-flex;
-        align-items: center;
-        gap: 9px;
-        margin: 0 0 15px;
-        font-size: 16px;
-        font-weight: 600;
-        color: #1b1b1b;
-    }
-
-    .date-label svg {
-        width: 18px;
-        height: 18px;
-        stroke: var(--mw-green-dark);
-        stroke-width: 2.4;
-        fill: none;
-        stroke-linecap: round;
-        stroke-linejoin: round;
-    }
-
-    .filter-form {
-        display: grid;
-        grid-template-columns: minmax(260px, 1fr) minmax(260px, 1fr) 128px 128px;
-        align-items: center;
-        gap: 16px;
-        width: 100%;
-    }
-
-    .date-input-wrap {
-        position: relative;
-        width: 100%;
-    }
-
-    .date-input {
-        width: 100%;
-        height: 58px;
-        border: 1px solid rgba(31, 31, 31, 0.07);
-        border-radius: 14px;
-        background: #f0f0f0;
-        color: #777777;
-        font-family: "Poppins", sans-serif;
-        font-size: 22px;
-        font-weight: 500;
-        letter-spacing: 2px;
-        padding: 0 56px 0 20px;
-        outline: none;
-        transition: background 0.22s ease, box-shadow 0.22s ease, border-color 0.22s ease, transform 0.22s ease;
-    }
-
-    .date-input:hover {
-        background: #f6f6f6;
-        transform: translateY(-1px);
-    }
-
-    .date-input:focus {
-        background: #ffffff;
-        border-color: rgba(143, 179, 107, 0.75);
-        box-shadow: 0 0 0 4px rgba(143, 179, 107, 0.18), 0 10px 24px rgba(54, 74, 41, 0.08);
-    }
-
-    .date-input::-webkit-calendar-picker-indicator {
-        opacity: 0;
-        cursor: pointer;
-        position: absolute;
-        right: 0;
-        width: 54px;
-        height: 58px;
-    }
-
-    .calendar-icon {
-        position: absolute;
-        right: 18px;
-        top: 50%;
-        transform: translateY(-50%);
-        width: 25px;
-        height: 25px;
-        pointer-events: none;
-        color: #222222;
-        transition: transform 0.22s ease, color 0.22s ease;
-    }
-
-    .date-input-wrap:hover .calendar-icon {
-        transform: translateY(-50%) scale(1.08);
-        color: var(--mw-green-dark);
-    }
-
-    .calendar-icon svg {
-        width: 25px;
-        height: 25px;
-        stroke: currentColor;
-        stroke-width: 2;
-        fill: none;
-        stroke-linecap: round;
-        stroke-linejoin: round;
-    }
-
-    .filter-btn,
-    .refresh-btn {
-        width: 128px;
-        height: 58px;
-        border: none;
-        border-radius: 14px;
-        font-family: "Poppins", sans-serif;
-        font-size: 18px;
-        font-weight: 600;
-        color: #ffffff;
-        cursor: pointer;
-        transition: transform 0.22s ease, box-shadow 0.22s ease, background 0.22s ease;
-        text-decoration: none;
+    .mini-icon {
+        width: 48px;
+        height: 48px;
+        border-radius: 17px;
+        background: var(--mw-green-soft);
+        color: var(--mw-green-deep);
         display: inline-flex;
         align-items: center;
         justify-content: center;
-        gap: 9px;
+        position: relative;
+        isolation: isolate;
+        flex-shrink: 0;
+    }
+
+    .mini-icon::after {
+        content: "";
+        position: absolute;
+        inset: -6px;
+        border-radius: 22px;
+        border: 2px solid rgba(143, 179, 107, 0.20);
+        animation: masukPulse 2.4s ease-in-out infinite;
+        z-index: -1;
+    }
+
+    .mini-icon svg {
+        width: 25px;
+        height: 25px;
+        stroke: currentColor;
+        stroke-width: 2.2;
+        fill: none;
+        stroke-linecap: round;
+        stroke-linejoin: round;
+    }
+
+    .masuk-alert {
+        margin: 0 0 22px;
+        padding: 14px 16px;
+        border-radius: 18px;
+        border: none;
+        font-size: 14px;
+        font-weight: 700;
+        line-height: 1.7;
+        box-shadow: 0 10px 24px rgba(93, 66, 10, 0.08);
+        animation: masukSlideUp 0.5s ease both;
+    }
+
+    .masuk-alert.alert-danger {
+        background: var(--mw-danger-soft);
+        color: #a82019;
+        border: 1px solid rgba(217, 52, 43, 0.20);
+    }
+
+    .masuk-alert.alert-success {
+        background: #eff9e9;
+        color: var(--mw-green-deep);
+        border: 1px solid rgba(79, 116, 56, 0.18);
+    }
+
+    .masuk-alert .close {
+        outline: none;
+    }
+
+    .masuk-panel {
+        width: 100%;
+        border: 1px solid var(--mw-border);
+        border-radius: 28px;
+        background: rgba(255, 255, 255, 0.92);
+        padding: 22px;
+        box-shadow: var(--mw-shadow);
+        backdrop-filter: blur(10px);
+        animation: masukSlideUp 0.6s ease both;
+        animation-delay: 0.12s;
         position: relative;
         overflow: hidden;
     }
 
-    .filter-btn::before,
-    .refresh-btn::before,
+    .masuk-panel::before {
+        content: "";
+        position: absolute;
+        inset: 0 0 auto 0;
+        height: 5px;
+        background: linear-gradient(90deg, var(--mw-green), rgba(143, 179, 107, 0.25), var(--mw-green-dark));
+    }
+
+    .masuk-card-head {
+        display: flex;
+        align-items: flex-start;
+        justify-content: space-between;
+        gap: 20px;
+        margin-bottom: 20px;
+        padding-top: 6px;
+    }
+
+    .masuk-section-title {
+        margin: 0;
+        font-size: 20px;
+        font-weight: 800;
+        color: var(--mw-black);
+        letter-spacing: -0.2px;
+    }
+
+    .masuk-section-text {
+        margin: 7px 0 0;
+        color: var(--mw-muted);
+        font-size: 13px;
+        font-weight: 600;
+        line-height: 1.55;
+    }
+
+    .add-area {
+        display: flex;
+        align-items: center;
+        justify-content: flex-end;
+        gap: 12px;
+        white-space: nowrap;
+    }
+
+    .add-label {
+        color: var(--mw-muted);
+        font-size: 13px;
+        font-weight: 800;
+    }
+
+    .add-btn {
+        min-width: 156px;
+        height: 48px;
+        border: none;
+        border-radius: 17px;
+        background: linear-gradient(135deg, var(--mw-green), var(--mw-green-dark));
+        color: #ffffff;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 9px;
+        cursor: pointer;
+        position: relative;
+        isolation: isolate;
+        overflow: hidden;
+        box-shadow: 0 13px 24px rgba(143, 179, 107, 0.28);
+        transition: transform 0.24s ease, box-shadow 0.24s ease, filter 0.24s ease;
+        font-family: "Poppins", sans-serif;
+        font-size: 13px;
+        font-weight: 900;
+    }
+
     .add-btn::before {
         content: "";
         position: absolute;
@@ -341,12 +409,152 @@
         background: linear-gradient(90deg, transparent, rgba(255,255,255,0.32), transparent);
         transform: skewX(-18deg);
         transition: left 0.55s ease;
+        z-index: -1;
     }
 
-    .filter-btn:hover::before,
-    .refresh-btn:hover::before,
+    .add-btn::after {
+        content: "";
+        position: absolute;
+        inset: -6px;
+        border-radius: 22px;
+        border: 2px solid rgba(143, 179, 107, 0.26);
+        animation: masukPulse 2.4s ease-in-out infinite;
+        z-index: -2;
+    }
+
+    .add-btn:hover {
+        color: #ffffff;
+        transform: translateY(-3px) scale(1.02);
+        box-shadow: 0 18px 34px rgba(143, 179, 107, 0.34);
+        filter: saturate(1.06);
+    }
+
     .add-btn:hover::before {
         left: 120%;
+    }
+
+    .add-btn svg {
+        width: 19px;
+        height: 19px;
+        stroke: currentColor;
+        fill: none;
+        stroke-width: 2.7;
+        stroke-linecap: round;
+        stroke-linejoin: round;
+    }
+
+    .filter-card {
+        margin-bottom: 18px;
+        padding: 16px;
+        border: 1px solid rgba(79, 116, 56, 0.16);
+        border-radius: 22px;
+        background: var(--mw-green-pale);
+    }
+
+    .date-label {
+        display: inline-flex;
+        align-items: center;
+        gap: 9px;
+        margin: 0 0 12px;
+        color: var(--mw-green-deep);
+        font-size: 13px;
+        font-weight: 900;
+        letter-spacing: 0.15px;
+    }
+
+    .date-label svg {
+        width: 18px;
+        height: 18px;
+        stroke: currentColor;
+        stroke-width: 2.4;
+        fill: none;
+        stroke-linecap: round;
+        stroke-linejoin: round;
+    }
+
+    .filter-form {
+        display: grid;
+        grid-template-columns: minmax(190px, 1fr) minmax(190px, 1fr) 132px 132px;
+        align-items: center;
+        gap: 12px;
+        width: 100%;
+    }
+
+    .date-input-wrap {
+        position: relative;
+        width: 100%;
+    }
+
+    .date-input {
+        width: 100%;
+        height: 48px;
+        border: 1px solid rgba(79, 116, 56, 0.18);
+        border-radius: 16px;
+        background: #ffffff;
+        color: var(--mw-black);
+        font-family: "Poppins", sans-serif;
+        font-size: 13px;
+        font-weight: 800;
+        padding: 0 48px 0 15px;
+        outline: none;
+        transition: border-color 0.22s ease, box-shadow 0.22s ease, transform 0.22s ease;
+    }
+
+    .date-input:hover,
+    .date-input:focus {
+        border-color: var(--mw-green);
+        box-shadow: 0 0 0 4px rgba(143, 179, 107, 0.14), 0 12px 22px rgba(90, 123, 64, 0.08);
+        transform: translateY(-1px);
+    }
+
+    .date-input::-webkit-calendar-picker-indicator {
+        opacity: 0;
+        cursor: pointer;
+        position: absolute;
+        right: 0;
+        width: 48px;
+        height: 48px;
+    }
+
+    .calendar-icon {
+        position: absolute;
+        right: 15px;
+        top: 50%;
+        transform: translateY(-50%);
+        width: 20px;
+        height: 20px;
+        pointer-events: none;
+        color: var(--mw-green-dark);
+    }
+
+    .calendar-icon svg {
+        width: 20px;
+        height: 20px;
+        stroke: currentColor;
+        stroke-width: 2.2;
+        fill: none;
+        stroke-linecap: round;
+        stroke-linejoin: round;
+    }
+
+    .filter-btn,
+    .refresh-btn {
+        height: 48px;
+        border: none;
+        border-radius: 16px;
+        font-family: "Poppins", sans-serif;
+        font-size: 13px;
+        font-weight: 900;
+        color: #ffffff;
+        cursor: pointer;
+        text-decoration: none;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+        position: relative;
+        overflow: hidden;
+        transition: transform 0.22s ease, box-shadow 0.22s ease, background 0.22s ease;
     }
 
     .filter-btn svg,
@@ -358,175 +566,107 @@
         stroke-width: 2.4;
         stroke-linecap: round;
         stroke-linejoin: round;
-        position: relative;
-        z-index: 1;
-    }
-
-    .filter-btn span,
-    .refresh-btn span {
-        position: relative;
-        z-index: 1;
     }
 
     .filter-btn {
-        background: var(--mw-blue);
-        box-shadow: 0 9px 19px rgba(64, 85, 101, 0.18);
-    }
-
-    .filter-btn:hover {
-        background: #344755;
-        transform: translateY(-3px);
-        box-shadow: 0 14px 28px rgba(64, 85, 101, 0.24);
+        background: linear-gradient(135deg, var(--mw-blue), var(--mw-blue-dark));
+        box-shadow: 0 10px 20px rgba(76, 148, 255, 0.22);
     }
 
     .refresh-btn {
-        background: #5a9829;
-        box-shadow: 0 9px 19px rgba(90, 152, 41, 0.18);
+        background: linear-gradient(135deg, var(--mw-green), var(--mw-green-dark));
+        box-shadow: 0 10px 20px rgba(143, 179, 107, 0.20);
+    }
+
+    .filter-btn:hover,
+    .refresh-btn:hover {
+        color: #ffffff;
+        text-decoration: none;
+        transform: translateY(-2px);
+    }
+
+    .filter-btn:hover {
+        box-shadow: 0 14px 26px rgba(76, 148, 255, 0.28);
     }
 
     .refresh-btn:hover {
-        background: #4d8522;
-        color: #ffffff;
-        text-decoration: none;
-        transform: translateY(-3px);
-        box-shadow: 0 14px 28px rgba(90, 152, 41, 0.24);
-    }
-
-    .add-area {
-        display: flex;
-        align-items: center;
-        justify-content: flex-end;
-        gap: 13px;
-        padding-top: 36px;
-        white-space: nowrap;
-        min-width: 370px;
-    }
-
-    .add-label {
-        font-size: 22px;
-        font-weight: 500;
-        color: #111111;
-    }
-
-    .add-btn {
-        width: 92px;
-        height: 38px;
-        border: none;
-        border-radius: 10px;
-        background: #9dff8f;
-        color: #000000;
-        display: inline-flex;
-        align-items: center;
-        justify-content: center;
-        cursor: pointer;
-        position: relative;
-        transition: transform 0.22s ease, box-shadow 0.22s ease, background 0.22s ease;
-        overflow: hidden;
-        box-shadow: 0 9px 18px rgba(75, 174, 61, 0.19);
-    }
-
-    .add-btn::after {
-        content: "";
-        position: absolute;
-        inset: -6px;
-        border-radius: 14px;
-        border: 2px solid rgba(157, 255, 143, 0.68);
-        animation: addPulse 2.1s ease-in-out infinite;
-        pointer-events: none;
-    }
-
-    @keyframes addPulse {
-        0% { opacity: 0.65; transform: scale(0.94); }
-        65%, 100% { opacity: 0; transform: scale(1.18); }
-    }
-
-    .add-btn:hover {
-        background: #8ff080;
-        transform: translateY(-3px) scale(1.02);
-        box-shadow: 0 13px 24px rgba(75, 174, 61, 0.27);
-    }
-
-    .add-btn span {
-        font-size: 40px;
-        font-weight: 700;
-        line-height: 1;
-        margin-top: -5px;
-        position: relative;
-        z-index: 1;
+        box-shadow: 0 14px 26px rgba(143, 179, 107, 0.27);
     }
 
     .table-toolbar {
         display: flex;
         align-items: center;
         justify-content: space-between;
-        gap: 24px;
-        margin-bottom: 12px;
+        gap: 18px;
+        margin-bottom: 18px;
     }
 
     .entries-control {
+        min-height: 48px;
+        padding: 7px 12px;
+        border: 1px solid rgba(79, 116, 56, 0.18);
+        border-radius: 18px;
+        background: var(--mw-green-pale);
         display: flex;
         align-items: center;
-        gap: 8px;
-        font-size: 18px;
-        font-weight: 500;
-        color: #111111;
+        gap: 9px;
+        font-size: 13px;
+        font-weight: 700;
+        color: var(--mw-muted);
+        white-space: nowrap;
     }
 
     .entries-control select {
-        width: 72px;
-        height: 38px;
-        border: 1px solid #c9d2c2;
-        border-radius: 8px;
-        background: #eeeeee;
+        width: 76px;
+        height: 34px;
+        border: 1px solid rgba(79, 116, 56, 0.20);
+        border-radius: 12px;
+        background: #ffffff;
         font-family: "Poppins", sans-serif;
-        font-size: 14px;
-        color: #111111;
-        padding: 0 8px;
+        font-size: 13px;
+        font-weight: 700;
+        color: var(--mw-black);
+        padding: 0 9px;
         outline: none;
-        transition: 0.2s ease;
+        cursor: pointer;
+        transition: border-color 0.22s ease, box-shadow 0.22s ease, transform 0.22s ease;
     }
 
     .entries-control select:focus {
         border-color: var(--mw-green);
-        box-shadow: 0 0 0 3px rgba(143, 179, 107, 0.18);
+        box-shadow: 0 0 0 4px rgba(143, 179, 107, 0.15);
+        transform: translateY(-1px);
     }
 
     .search-box {
-        width: 312px;
+        width: min(100%, 340px);
         height: 50px;
-        border: 1px solid #a7aaa4;
+        border: 1px solid rgba(79, 116, 56, 0.18);
         border-radius: 999px;
         display: flex;
         align-items: center;
         padding: 0 18px;
-        background: rgba(255,255,255,0.74);
-        backdrop-filter: blur(8px);
-        transition: border-color 0.22s ease, box-shadow 0.22s ease, background 0.22s ease, transform 0.22s ease;
+        background: #ffffff;
+        box-shadow: 0 10px 20px rgba(90, 123, 64, 0.06);
+        transition: border-color 0.22s ease, box-shadow 0.22s ease, transform 0.22s ease;
     }
 
     .search-box:focus-within {
         border-color: var(--mw-green);
-        background: #ffffff;
-        box-shadow: 0 0 0 4px rgba(143, 179, 107, 0.18), 0 12px 24px rgba(47, 64, 37, 0.08);
+        box-shadow: 0 0 0 4px rgba(143, 179, 107, 0.15), 0 14px 28px rgba(90, 123, 64, 0.11);
         transform: translateY(-2px);
     }
 
     .search-box svg {
-        width: 27px;
-        height: 27px;
-        margin-right: 14px;
-        stroke: #111111;
-        stroke-width: 2.7;
+        width: 20px;
+        height: 20px;
+        margin-right: 10px;
+        stroke: var(--mw-green-dark);
+        stroke-width: 2.6;
         fill: none;
         stroke-linecap: round;
         stroke-linejoin: round;
         flex-shrink: 0;
-        transition: transform 0.22s ease, stroke 0.22s ease;
-    }
-
-    .search-box:focus-within svg {
-        transform: rotate(-8deg) scale(1.05);
-        stroke: var(--mw-green-dark);
     }
 
     .search-box input {
@@ -535,84 +675,86 @@
         outline: none;
         background: transparent;
         font-family: "Poppins", sans-serif;
-        font-size: 26px;
-        font-weight: 400;
-        color: #111111;
-        line-height: 1;
+        font-size: 14px;
+        font-weight: 600;
+        color: var(--mw-black);
     }
 
     .search-box input::placeholder {
-        color: #686868;
-    }
-
-    .table-card {
-        width: 100%;
-        border-radius: 18px;
-        border: 1px solid rgba(143, 179, 107, 0.22);
-        background: var(--mw-card);
-        box-shadow: var(--mw-shadow);
-        overflow: hidden;
-        position: relative;
-    }
-
-    .table-card::before {
-        content: "";
-        position: absolute;
-        inset: 0 0 auto;
-        height: 5px;
-        background: linear-gradient(90deg, var(--mw-green), #bde58e, var(--mw-green-dark));
-        background-size: 200% 100%;
-        animation: gradientMove 4s ease infinite;
-        z-index: 2;
-    }
-
-    @keyframes gradientMove {
-        0%, 100% { background-position: 0% 50%; }
-        50% { background-position: 100% 50%; }
+        color: #92a187;
     }
 
     .masuk-table-wrap {
         width: 100%;
         overflow-x: auto;
-        border-radius: 18px 18px 0 0;
+        border: 1px solid rgba(79, 116, 56, 0.14);
+        border-radius: 22px;
+        background: #ffffff;
+        box-shadow: 0 12px 28px rgba(90, 123, 64, 0.08);
+    }
+
+    .masuk-table-wrap::-webkit-scrollbar {
+        height: 9px;
+    }
+
+    .masuk-table-wrap::-webkit-scrollbar-track {
+        background: #f4f8f0;
+        border-radius: 999px;
+    }
+
+    .masuk-table-wrap::-webkit-scrollbar-thumb {
+        background: rgba(143, 179, 107, 0.72);
+        border-radius: 999px;
     }
 
     .masuk-table {
         width: 100%;
-        border-collapse: collapse;
+        border-collapse: separate;
+        border-spacing: 0;
         table-layout: fixed;
         font-family: "Poppins", sans-serif;
-        color: #111111;
+        color: var(--mw-black);
+        overflow: hidden;
     }
 
     .masuk-table th {
-        height: 56px;
-        background: #eeeeee;
-        border: 1px solid #dde1d9;
+        height: 58px;
+        background: linear-gradient(180deg, #f1f6ed, #e9f2e4);
+        border-bottom: 1px solid rgba(79, 116, 56, 0.15);
         text-align: center;
         vertical-align: middle;
-        font-size: 17px;
-        font-weight: 700;
+        color: #385a25;
+        font-size: 13px;
+        font-weight: 800;
         text-transform: uppercase;
-        color: #161616;
-        letter-spacing: 0.1px;
+        letter-spacing: 0.45px;
+        white-space: nowrap;
+    }
+
+    .masuk-table th:not(:last-child),
+    .masuk-table td:not(:last-child) {
+        border-right: 1px solid rgba(79, 116, 56, 0.10);
     }
 
     .masuk-table td {
-        height: 58px;
-        border: 1px solid #e3e7df;
+        height: 64px;
+        border-bottom: 1px solid rgba(79, 116, 56, 0.10);
         text-align: center;
         vertical-align: middle;
-        font-size: 16px;
-        font-weight: 500;
-        color: #111111;
-        background: #ffffff;
-        transition: background 0.2s ease, transform 0.2s ease, box-shadow 0.2s ease;
+        font-size: 14px;
+        font-weight: 600;
+        color: var(--mw-black);
+        background: rgba(255, 255, 255, 0.94);
+        padding: 8px 12px;
+        transition: background 0.22s ease, transform 0.22s ease;
+    }
+
+    .masuk-table tbody tr:last-child td {
+        border-bottom: none;
     }
 
     .masuk-row {
-        animation: rowFade 0.42s ease both;
-        transition: 0.22s ease;
+        animation: masukRowIn 0.38s ease both;
     }
 
     .masuk-row:nth-child(1) { animation-delay: 0.03s; }
@@ -620,75 +762,81 @@
     .masuk-row:nth-child(3) { animation-delay: 0.09s; }
     .masuk-row:nth-child(4) { animation-delay: 0.12s; }
     .masuk-row:nth-child(5) { animation-delay: 0.15s; }
-    .masuk-row:nth-child(6) { animation-delay: 0.18s; }
-    .masuk-row:nth-child(7) { animation-delay: 0.21s; }
-    .masuk-row:nth-child(8) { animation-delay: 0.24s; }
 
-    @keyframes rowFade {
-        from { opacity: 0; transform: translateY(7px); }
-        to { opacity: 1; transform: translateY(0); }
+    .masuk-table tbody .masuk-row:hover td {
+        background: #fbfef8;
     }
 
-    .masuk-table tbody tr:nth-child(even) td {
-        background: #fcfdfb;
-    }
-
-    .masuk-table tbody tr:hover td {
-        background: #f3faef;
-        box-shadow: inset 0 1px 0 rgba(143, 179, 107, 0.14), inset 0 -1px 0 rgba(143, 179, 107, 0.14);
+    .masuk-table tbody .masuk-row:hover td:first-child {
+        color: var(--mw-green-dark);
     }
 
     .col-no { width: 8%; }
-    .col-kategori { width: 17%; }
-    .col-tanggal { width: 17%; }
-    .col-barang { width: 22%; }
-    .col-jumlah { width: 15%; }
-    .col-keterangan { width: 21%; }
+    .col-kategori { width: 18%; }
+    .col-tanggal { width: 18%; }
+    .col-barang { width: 24%; }
+    .col-jumlah { width: 14%; }
+    .col-keterangan { width: 18%; }
 
-    .number-pill {
-        min-width: 38px;
-        height: 28px;
-        border-radius: 999px;
-        display: inline-flex;
-        align-items: center;
-        justify-content: center;
-        background: #eff4eb;
-        border: 1px solid rgba(143, 179, 107, 0.30);
-        color: #465b35;
-        font-size: 14px;
-        font-weight: 700;
-    }
-
-    .category-badge,
+    .number-pill,
     .date-badge,
+    .category-badge,
     .jumlah-badge {
         display: inline-flex;
         align-items: center;
         justify-content: center;
-        gap: 7px;
-        border-radius: 999px;
-        transition: transform 0.2s ease, box-shadow 0.2s ease;
+        transition: transform 0.22s ease, box-shadow 0.22s ease;
+    }
+
+    .number-pill {
+        min-width: 34px;
+        height: 34px;
+        border-radius: 13px;
+        background: #f6faf2;
+        border: 1px solid rgba(79, 116, 56, 0.14);
+        color: #53634a;
+        font-size: 13px;
+        font-weight: 900;
     }
 
     .category-badge {
-        min-width: 100px;
-        min-height: 31px;
-        padding: 6px 14px;
-        background: #eef5e8;
-        border: 1px solid rgba(143, 179, 107, 0.45);
-        color: #31521a;
-        font-size: 14px;
-        font-weight: 700;
+        min-width: 116px;
+        min-height: 34px;
+        padding: 7px 13px;
+        border-radius: 999px;
+        background: #e7f7df;
+        color: #2f7d32;
+        border: 1px solid rgba(47, 125, 50, 0.22);
+        box-shadow: 0 8px 18px rgba(47, 125, 50, 0.08);
+        gap: 8px;
+        font-size: 13px;
+        font-weight: 900;
+        letter-spacing: 0.1px;
+    }
+
+    .category-badge::before {
+        content: "";
+        width: 8px;
+        height: 8px;
+        border-radius: 50%;
+        display: inline-block;
+        flex-shrink: 0;
+        background: #2f7d32;
+        box-shadow: 0 0 0 4px rgba(47, 125, 50, 0.12);
+        animation: masukDotPulse 1.8s ease-in-out infinite;
     }
 
     .date-badge {
-        min-width: 114px;
-        height: 32px;
-        background: #f6f7f5;
-        border: 1px solid #dbe3d5;
-        color: #343434;
-        font-size: 14px;
-        font-weight: 700;
+        min-width: 108px;
+        height: 34px;
+        padding: 0 12px;
+        border-radius: 999px;
+        background: #f6faf2;
+        border: 1px solid rgba(79, 116, 56, 0.14);
+        color: #53634a;
+        gap: 7px;
+        font-size: 13px;
+        font-weight: 900;
     }
 
     .date-badge svg {
@@ -701,76 +849,84 @@
         stroke-linejoin: round;
     }
 
-    .jumlah-badge {
-        min-width: 64px;
-        height: 34px;
-        background: #e6f5df;
-        color: #2f7d32;
-        border: 1px solid rgba(47, 125, 50, 0.25);
-        font-size: 15px;
-        font-weight: 800;
-        box-shadow: inset 0 -8px 18px rgba(47, 125, 50, 0.04);
-    }
-
-    .masuk-table tr:hover .category-badge,
-    .masuk-table tr:hover .date-badge,
-    .masuk-table tr:hover .jumlah-badge {
-        transform: translateY(-1px);
-        box-shadow: 0 8px 18px rgba(78, 108, 56, 0.10);
-    }
-
     .product-name {
         display: inline-flex;
         align-items: center;
         justify-content: center;
         gap: 9px;
         max-width: 100%;
-        font-weight: 700;
-        color: #161616;
+        font-weight: 900;
     }
 
     .product-dot {
-        width: 9px;
-        height: 9px;
-        min-width: 9px;
+        width: 8px;
+        height: 8px;
+        min-width: 8px;
         border-radius: 50%;
         background: var(--mw-green);
         box-shadow: 0 0 0 5px rgba(143, 179, 107, 0.15);
-        animation: dotPulse 2s ease-in-out infinite;
+        animation: masukDotPulse 2s ease-in-out infinite;
     }
 
-    @keyframes dotPulse {
-        0%, 100% { box-shadow: 0 0 0 4px rgba(143, 179, 107, 0.13); }
-        50% { box-shadow: 0 0 0 8px rgba(143, 179, 107, 0.05); }
-    }
-
+    .product-text,
     .keterangan-text {
         display: inline-block;
-        max-width: 92%;
-        color: #393939;
-        font-size: 15px;
-        line-height: 1.45;
+        max-width: 100%;
         overflow: hidden;
         text-overflow: ellipsis;
         white-space: nowrap;
         vertical-align: middle;
     }
 
+    .jumlah-badge {
+        min-width: 70px;
+        height: 36px;
+        border-radius: 13px;
+        background: #e7f7df;
+        color: #2f7d32;
+        border: 1px solid rgba(47, 125, 50, 0.22);
+        font-size: 14px;
+        font-weight: 900;
+    }
+
+    .keterangan-text {
+        color: #53634a;
+        font-size: 13px;
+        font-weight: 700;
+        line-height: 1.45;
+    }
+
+    .masuk-row:hover .category-badge,
+    .masuk-row:hover .jumlah-badge,
+    .masuk-row:hover .date-badge {
+        transform: translateY(-2px);
+    }
+
+    .masuk-row:hover .jumlah-badge,
+    .masuk-row:hover .category-badge {
+        box-shadow: 0 10px 18px rgba(47, 125, 50, 0.14);
+    }
+
     .empty-row {
-        height: 92px !important;
-        color: #737b6d !important;
-        font-size: 16px !important;
-        background: #ffffff !important;
+        height: 96px !important;
+        padding: 28px !important;
+        color: var(--mw-muted) !important;
+        font-size: 14px !important;
+        font-weight: 700 !important;
+        line-height: 1.7;
+        background: #fbfef8 !important;
     }
 
     .empty-state {
         display: inline-flex;
         align-items: center;
+        justify-content: center;
         gap: 10px;
-        padding: 12px 18px;
+        padding: 13px 18px;
         border-radius: 999px;
-        background: #f6f9f2;
-        border: 1px dashed rgba(143, 179, 107, 0.45);
+        background: #f6faf2;
+        border: 1px dashed rgba(79, 116, 56, 0.26);
+        color: var(--mw-muted);
     }
 
     .empty-state svg {
@@ -788,69 +944,62 @@
         align-items: center;
         justify-content: space-between;
         gap: 20px;
-        padding: 14px 3px 0;
-        margin-top: 0;
-        font-family: "Poppins", sans-serif;
-        font-size: 16px;
-        font-weight: 500;
-        color: #111111;
+        margin-top: 18px;
+        font-size: 13px;
+        font-weight: 700;
+        color: var(--mw-muted);
     }
 
     .table-footer strong {
-        color: var(--mw-green-dark);
+        color: var(--mw-green-deep);
     }
 
     .pagination-custom {
         display: flex;
         align-items: center;
-        gap: 9px;
+        gap: 8px;
     }
 
     .pagination-custom button,
     .pagination-custom span {
-        border: none;
-        background: transparent;
         font-family: "Poppins", sans-serif;
-        font-size: 18px;
-        font-weight: 500;
-        color: #111111;
+        font-size: 13px;
+        font-weight: 800;
+    }
+
+    .pagination-custom button {
+        min-height: 38px;
+        border: 1px solid rgba(79, 116, 56, 0.16);
+        border-radius: 999px;
+        background: #ffffff;
+        color: var(--mw-green-deep);
         cursor: pointer;
-        padding: 0;
-        transition: color 0.2s ease, transform 0.2s ease, opacity 0.2s ease;
+        padding: 0 14px;
+        transition: transform 0.22s ease, box-shadow 0.22s ease, background 0.22s ease, opacity 0.22s ease;
     }
 
     .pagination-custom button:hover:not(:disabled) {
-        color: var(--mw-green-dark);
-        transform: translateY(-1px);
+        background: var(--mw-green-soft);
+        transform: translateY(-2px);
+        box-shadow: 0 10px 20px rgba(90, 123, 64, 0.12);
     }
 
     .pagination-custom button:disabled {
-        opacity: 0.43;
+        opacity: 0.46;
         cursor: not-allowed;
     }
 
     .pagination-custom .page-number {
-        min-width: 48px;
-        height: 36px;
-        border: 1px solid #c9d1c2;
-        border-radius: 8px;
-        background: #eeeeee;
+        min-width: 42px;
+        height: 38px;
+        border-radius: 14px;
+        border: 1px solid rgba(79, 116, 56, 0.18);
+        background: var(--mw-green);
+        color: #ffffff;
         display: inline-flex;
         align-items: center;
         justify-content: center;
-        font-size: 16px;
-        font-weight: 700;
-        cursor: default;
-    }
-
-    .alert-custom {
-        position: relative;
-        z-index: 2;
-        margin-bottom: 18px;
-        border-radius: 14px;
-        font-family: "Poppins", sans-serif;
-        border: none;
-        box-shadow: 0 12px 26px rgba(0,0,0,0.08);
+        box-shadow: 0 10px 18px rgba(143, 179, 107, 0.24);
     }
 
     /* =========================
@@ -1026,136 +1175,158 @@
         box-shadow: 0 10px 22px rgba(143, 179, 107, 0.28);
     }
 
-    @media (max-width: 1200px) {
-        .top-action-row {
-            flex-direction: column-reverse;
-            align-items: stretch;
+    @media (prefers-reduced-motion: reduce) {
+        *,
+        *::before,
+        *::after {
+            animation: none !important;
+            transition: none !important;
+        }
+    }
+
+    @media (max-width: 1050px) {
+        .masuk-page {
+            padding: 34px 24px 68px;
         }
 
-        .add-area {
-            padding-top: 0;
-            min-width: 0;
-            justify-content: flex-end;
+        .masuk-header,
+        .masuk-card-head {
+            flex-direction: column;
+        }
+
+        .header-mini-card {
+            width: 100%;
+            max-width: 420px;
         }
 
         .filter-form {
             grid-template-columns: 1fr 1fr;
         }
-
-        .filter-btn,
-        .refresh-btn {
-            width: 100%;
-        }
     }
 
-    @media (max-width: 850px) {
+    @media (max-width: 760px) {
         .masuk-page {
-            padding: 34px 20px 64px;
+            padding: 28px 16px 56px;
         }
 
-        .masuk-header {
+        .masuk-panel {
+            padding: 18px 14px;
+            border-radius: 22px;
+        }
+
+        .table-toolbar,
+        .table-footer {
             flex-direction: column;
+            align-items: stretch;
         }
 
-        .masuk-title {
-            font-size: 25px;
-        }
-
-        .header-mini-card {
+        .search-box,
+        .entries-control,
+        .add-area,
+        .add-btn {
             width: 100%;
-            min-width: 0;
+        }
+
+        .add-area {
+            justify-content: stretch;
         }
 
         .filter-form {
             grid-template-columns: 1fr;
         }
 
-        .date-input {
-            font-size: 19px;
-            height: 54px;
-        }
-
-        .table-toolbar {
-            flex-direction: column-reverse;
-            align-items: flex-start;
-        }
-
-        .search-box {
-            width: 100%;
-            max-width: 390px;
-        }
-
         .masuk-table {
-            min-width: 1080px;
+            min-width: 980px;
         }
 
-        .table-footer {
-            flex-direction: column;
-            align-items: flex-start;
-            padding-top: 14px;
-        }
-
-        .add-area {
-            justify-content: flex-start;
-            flex-wrap: wrap;
-        }
-
-        .add-label {
-            font-size: 19px;
+        .pagination-custom {
+            justify-content: space-between;
         }
     }
 </style>
 
+@php
+    $totalDataMasuk = method_exists($riwayat, 'total') ? $riwayat->total() : $riwayat->count();
+@endphp
+
 <div class="masuk-page">
-    <div class="masuk-header">
-        <div class="title-area">
-            <h1 class="masuk-title">Laporan Barang Masuk</h1>
-            <p class="masuk-subtitle">Pantau riwayat barang masuk, jumlah stok tambahan, tanggal transaksi, dan keterangan dengan tampilan yang lebih rapi.</p>
+    <div class="masuk-shell">
+        <div class="masuk-header">
+            <div class="title-area">
+                <span class="masuk-eyebrow">Transaksi Gudang</span>
+                <h1 class="masuk-title">Laporan Barang Masuk</h1>
+                <p class="masuk-subtitle">
+                    Pantau riwayat barang masuk, jumlah stok tambahan, tanggal transaksi, dan keterangan dengan tampilan yang konsisten seperti halaman laporan.
+                </p>
+            </div>
+
+            <div class="header-mini-card">
+                <span class="mini-content">
+                    <span>Total Data Masuk</span>
+                    <strong>{{ $totalDataMasuk }}</strong>
+                    <span class="mini-helper">transaksi tercatat</span>
+                </span>
+
+                <span class="mini-icon" aria-hidden="true">
+                    <svg viewBox="0 0 24 24">
+                        <path d="M8 6H21"></path>
+                        <path d="M8 12H21"></path>
+                        <path d="M8 18H21"></path>
+                        <path d="M3 6H3.01"></path>
+                        <path d="M3 12H3.01"></path>
+                        <path d="M3 18H3.01"></path>
+                    </svg>
+                </span>
+            </div>
         </div>
 
-        <div class="header-mini-card">
-            <span class="mini-icon">
-                <svg viewBox="0 0 24 24" aria-hidden="true">
-                    <path d="M4 9.5 12 5l8 4.5-8 4.5-8-4.5Z"></path>
-                    <path d="M4 9.5V16l8 4.5 8-4.5V9.5"></path>
-                    <path d="M12 14V5"></path>
-                    <path d="M9 10.5 12 14l3-3.5"></path>
-                </svg>
-            </span>
-            <span class="mini-content">
-                <span>Total data masuk</span>
-                <strong>{{ method_exists($riwayat, 'total') ? $riwayat->total() : $riwayat->count() }}</strong>
-            </span>
-        </div>
-    </div>
+        @if ($errors->any())
+            <div class="alert alert-danger alert-dismissible fade show masuk-alert" role="alert">
+                <ul class="mb-0">
+                    @foreach ($errors->all() as $error)
+                        <li>{{ $error }}</li>
+                    @endforeach
+                </ul>
 
-    @if ($errors->any())
-        <div class="alert alert-danger alert-dismissible fade show alert-custom" role="alert">
-            <ul class="mb-0">
-                @foreach ($errors->all() as $error)
-                    <li>{{ $error }}</li>
-                @endforeach
-            </ul>
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+        @endif
 
-            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                <span aria-hidden="true">&times;</span>
-            </button>
-        </div>
-    @endif
+        @if(session('success'))
+            <div class="alert alert-success alert-dismissible fade show masuk-alert" role="alert">
+                {{ session('success') }}
 
-    @if(session('success'))
-        <div class="alert alert-success alert-dismissible fade show alert-custom" role="alert">
-            {{ session('success') }}
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+        @endif
 
-            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                <span aria-hidden="true">&times;</span>
-            </button>
-        </div>
-    @endif
+        <div class="masuk-panel">
+            <div class="masuk-card-head">
+                <div>
+                    <h2 class="masuk-section-title">Daftar Transaksi Masuk</h2>
+                    <p class="masuk-section-text">
+                        Gunakan filter tanggal, pencarian, dan jumlah entri untuk melihat data barang masuk dengan lebih nyaman.
+                    </p>
+                </div>
 
-    <div class="masuk-panel">
-        <div class="top-action-row">
-            <div class="filter-block">
+                <div class="add-area">
+                    <span class="add-label">Tambah transaksi</span>
+
+                    <button class="add-btn" type="button" data-toggle="modal" data-target="#modalMasuk" aria-label="Tambah barang masuk">
+                        <svg viewBox="0 0 24 24">
+                            <path d="M12 5V19"></path>
+                            <path d="M5 12H19"></path>
+                        </svg>
+                        <span>Barang Masuk</span>
+                    </button>
+                </div>
+            </div>
+
+            <div class="filter-card">
                 <label class="date-label">
                     <svg viewBox="0 0 24 24">
                         <path d="M4 21v-7"></path>
@@ -1227,40 +1398,30 @@
                 </form>
             </div>
 
-            <div class="add-area">
-                <span class="add-label">Tambah barang masuk :</span>
+            <div class="table-toolbar">
+                <div class="entries-control">
+                    <span>Show</span>
 
-                <button class="add-btn" type="button" data-toggle="modal" data-target="#modalMasuk" aria-label="Tambah barang masuk">
-                    <span>+</span>
-                </button>
+                    <select id="masukEntries">
+                        <option value="5" selected>5</option>
+                        <option value="10">10</option>
+                        <option value="25">25</option>
+                        <option value="50">50</option>
+                    </select>
+
+                    <span>Entries</span>
+                </div>
+
+                <div class="search-box">
+                    <svg viewBox="0 0 24 24">
+                        <circle cx="11" cy="11" r="7"></circle>
+                        <path d="M16.5 16.5L21 21"></path>
+                    </svg>
+
+                    <input type="text" id="masukSearch" placeholder="Cari transaksi masuk..." autocomplete="off">
+                </div>
             </div>
-        </div>
 
-        <div class="table-toolbar">
-            <div class="entries-control">
-                <span>Show</span>
-
-                <select id="masukEntries">
-                    <option value="5" selected>5</option>
-                    <option value="10">10</option>
-                    <option value="25">25</option>
-                    <option value="50">50</option>
-                </select>
-
-                <span>Entries</span>
-            </div>
-
-            <div class="search-box">
-                <svg viewBox="0 0 24 24">
-                    <circle cx="11" cy="11" r="7"></circle>
-                    <path d="M16.5 16.5L21 21"></path>
-                </svg>
-
-                <input type="text" id="masukSearch" placeholder="Search" autocomplete="off">
-            </div>
-        </div>
-
-        <div class="table-card">
             <div class="masuk-table-wrap">
                 <table class="masuk-table">
                     <thead>
@@ -1302,7 +1463,7 @@
                                 <td>
                                     <span class="product-name">
                                         <span class="product-dot"></span>
-                                        {{ $r->produk?->nama_produk ?? '-' }}
+                                        <span class="product-text" title="{{ $r->produk?->nama_produk ?? '-' }}">{{ $r->produk?->nama_produk ?? '-' }}</span>
                                     </span>
                                 </td>
 
@@ -1330,17 +1491,17 @@
                     </tbody>
                 </table>
             </div>
-        </div>
 
-        <div class="table-footer">
-            <div id="masukInfo">
-                Showing 0 out of 0 entries
-            </div>
+            <div class="table-footer">
+                <div id="masukInfo">
+                    Showing 0 out of 0 entries
+                </div>
 
-            <div class="pagination-custom">
-                <button type="button" id="prevPage">‹ Prev</button>
-                <span class="page-number" id="currentPageText">1</span>
-                <button type="button" id="nextPage">Next ›</button>
+                <div class="pagination-custom">
+                    <button type="button" id="prevPage">‹ Prev</button>
+                    <span class="page-number" id="currentPageText">1</span>
+                    <button type="button" id="nextPage">Next ›</button>
+                </div>
             </div>
         </div>
     </div>
