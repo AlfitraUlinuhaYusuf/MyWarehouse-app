@@ -1,4 +1,4 @@
-{{-- FORMAT FIX DASHBOARD - sesuai referensi gambar, hanya navbar, 3 card, grafik, dan tabel --}}
+{{-- Dashboard publish-ready: UI diperhalus, tetap mempertahankan format navbar, 3 card, grafik, dan tabel --}}
 <!DOCTYPE html>
 <html lang="id">
 <head>
@@ -32,6 +32,12 @@
             --safe-soft: #edf8eb;
             --table-head: #d4d4d4;
             --table-border: rgba(0, 0, 0, 0.20);
+            --text-muted: rgba(5, 7, 4, 0.58);
+            --text-soft: rgba(5, 7, 4, 0.72);
+            --surface: rgba(255, 255, 255, 0.88);
+            --surface-solid: #ffffff;
+            --glass-border: rgba(255, 255, 255, 0.58);
+            --ring: rgba(143, 179, 107, 0.32);
         }
 
         * {
@@ -47,12 +53,39 @@
         body {
             min-height: 100vh;
             background:
-                radial-gradient(circle at 12% 18%, rgba(143, 179, 107, 0.13), transparent 26%),
-                radial-gradient(circle at 82% 78%, rgba(143, 179, 107, 0.12), transparent 30%),
-                #ffffff;
+                linear-gradient(135deg, #ffffff 0%, #fbfdf8 48%, #f4faef 100%);
             color: var(--black);
             font-family: "Poppins", sans-serif;
             overflow-x: hidden;
+            position: relative;
+        }
+
+        body::before {
+            content: "";
+            position: fixed;
+            inset: 0;
+            z-index: -2;
+            pointer-events: none;
+            background:
+                radial-gradient(circle at 10% 14%, rgba(143, 179, 107, 0.18), transparent 24%),
+                radial-gradient(circle at 90% 18%, rgba(111, 150, 81, 0.10), transparent 22%),
+                radial-gradient(circle at 84% 86%, rgba(143, 179, 107, 0.16), transparent 27%),
+                radial-gradient(circle at 18% 88%, rgba(240, 169, 40, 0.08), transparent 24%);
+            animation: ambientMove 13s ease-in-out infinite alternate;
+        }
+
+        body::after {
+            content: "";
+            position: fixed;
+            inset: 0;
+            z-index: -1;
+            pointer-events: none;
+            opacity: 0.34;
+            background-image:
+                linear-gradient(rgba(111, 150, 81, 0.055) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(111, 150, 81, 0.055) 1px, transparent 1px);
+            background-size: 34px 34px;
+            mask-image: linear-gradient(to bottom, rgba(0, 0, 0, 0.72), transparent 82%);
         }
 
         a {
@@ -63,6 +96,27 @@
         button,
         input {
             font-family: inherit;
+        }
+
+        ::selection {
+            background: rgba(143, 179, 107, 0.28);
+        }
+
+        :focus-visible {
+            outline: 4px solid var(--ring);
+            outline-offset: 3px;
+            border-radius: 12px;
+        }
+
+        @keyframes ambientMove {
+            from {
+                transform: translate3d(0, 0, 0) scale(1);
+                filter: saturate(1);
+            }
+            to {
+                transform: translate3d(0, -14px, 0) scale(1.025);
+                filter: saturate(1.08);
+            }
         }
 
         @keyframes fadeDown {
@@ -142,6 +196,15 @@
             }
         }
 
+        @keyframes subtleGlow {
+            0%, 100% {
+                box-shadow: 0 12px 30px rgba(90, 123, 64, 0.12);
+            }
+            50% {
+                box-shadow: 0 18px 46px rgba(90, 123, 64, 0.18);
+            }
+        }
+
         @keyframes rowIn {
             from {
                 opacity: 0;
@@ -160,18 +223,43 @@
             width: 100%;
             height: 78px;
             padding: 0 72px;
-            background: var(--green-main);
+            background: linear-gradient(135deg, #95ba72 0%, var(--green-main) 46%, #82a864 100%);
             display: flex;
             align-items: center;
             justify-content: space-between;
             position: sticky;
             top: 0;
             z-index: 1000;
-            box-shadow: 0 8px 24px rgba(70, 96, 48, 0.12);
+            box-shadow: 0 12px 32px rgba(70, 96, 48, 0.18);
             animation: fadeDown 0.55s ease both;
+            isolation: isolate;
+        }
+
+        .top-navbar::before {
+            content: "";
+            position: absolute;
+            inset: 0;
+            z-index: -1;
+            pointer-events: none;
+            background:
+                linear-gradient(90deg, rgba(255, 255, 255, 0.20), transparent 28%, transparent 68%, rgba(255, 255, 255, 0.12)),
+                radial-gradient(circle at 12% 20%, rgba(255, 255, 255, 0.20), transparent 22%);
+            opacity: 0.78;
+        }
+
+        .top-navbar::after {
+            content: "";
+            position: absolute;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            height: 1px;
+            background: rgba(255, 255, 255, 0.35);
         }
 
         .brand {
+            position: relative;
+            z-index: 2;
             display: flex;
             align-items: center;
             gap: 12px;
@@ -200,6 +288,8 @@
         }
 
         .nav-menu {
+            position: relative;
+            z-index: 2;
             display: flex;
             align-items: center;
             gap: 32px;
@@ -218,7 +308,8 @@
             cursor: pointer;
             list-style: none;
             border-radius: 999px;
-            transition: transform 0.22s ease, background 0.22s ease, opacity 0.22s ease;
+            position: relative;
+            transition: transform 0.22s ease, background 0.22s ease, opacity 0.22s ease, box-shadow 0.22s ease;
         }
 
         .nav-link {
@@ -233,7 +324,27 @@
         }
 
         .nav-link.active {
-            font-weight: 600;
+            font-weight: 700;
+            background: rgba(255, 255, 255, 0.18);
+            padding: 0 14px;
+            box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.16);
+        }
+
+        .nav-link.active::after {
+            content: "";
+            position: absolute;
+            left: 14px;
+            right: 14px;
+            bottom: 4px;
+            height: 2px;
+            border-radius: 999px;
+            background: rgba(0, 0, 0, 0.56);
+        }
+
+        .nav-dropdown[open] summary,
+        .user-dropdown[open] summary {
+            background: rgba(255, 255, 255, 0.18);
+            box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.16);
         }
 
         .nav-dropdown,
@@ -267,10 +378,11 @@
             right: 0;
             min-width: 180px;
             padding: 8px;
-            background: #ffffff;
-            border: 1px solid rgba(0, 0, 0, 0.08);
-            border-radius: 14px;
-            box-shadow: 0 18px 42px rgba(0, 0, 0, 0.16);
+            background: rgba(255, 255, 255, 0.96);
+            border: 1px solid rgba(111, 150, 81, 0.16);
+            border-radius: 16px;
+            box-shadow: 0 22px 52px rgba(47, 68, 35, 0.20);
+            backdrop-filter: blur(12px);
             animation: fadeUp 0.22s ease both;
             overflow: hidden;
         }
@@ -304,6 +416,8 @@
         .dropdown-disabled {
             color: rgba(0, 0, 0, 0.4);
             cursor: not-allowed;
+            pointer-events: none;
+            user-select: none;
         }
 
         .user-info {
@@ -336,36 +450,109 @@
             cursor: pointer;
         }
 
+        .user-menu-only-logout {
+            min-width: 132px;
+        }
+
         /* =========================
            DASHBOARD FORMAT GAMBAR
         ========================= */
         .dashboard-container {
-            width: min(100% - 144px, 1100px);
-            margin: 32px auto 48px;
+            width: min(100% - 132px, 1160px);
+            margin: 34px auto 54px;
+        }
+
+        .page-heading {
+            display: flex;
+            align-items: flex-end;
+            justify-content: space-between;
+            gap: 18px;
+            margin: 0 0 26px 8px;
+            animation: fadeUp 0.55s ease both;
+        }
+
+        .eyebrow {
+            margin-bottom: 5px;
+            color: var(--green-dark);
+            font-size: 12px;
+            font-weight: 800;
+            letter-spacing: 2.6px;
+            text-transform: uppercase;
         }
 
         .page-title {
-            margin: 0 0 26px 8px;
-            font-size: 24px;
-            font-weight: 500;
-            letter-spacing: 0.2px;
+            margin: 0;
+            font-size: clamp(24px, 3vw, 32px);
+            font-weight: 700;
+            letter-spacing: 0.4px;
             text-transform: uppercase;
-            animation: fadeUp 0.55s ease both;
+        }
+
+        .page-subtitle {
+            margin-top: 5px;
+            color: var(--text-muted);
+            font-size: 14px;
+            font-weight: 500;
+        }
+
+        .page-status-card {
+            min-width: 198px;
+            padding: 12px 15px;
+            border: 1px solid rgba(111, 150, 81, 0.16);
+            border-radius: 18px;
+            background: rgba(255, 255, 255, 0.76);
+            box-shadow: 0 14px 34px rgba(90, 123, 64, 0.12);
+            backdrop-filter: blur(10px);
+            display: grid;
+            grid-template-columns: 38px 1fr;
+            column-gap: 10px;
+            align-items: center;
+        }
+
+        .page-status-icon {
+            grid-row: span 2;
+            width: 38px;
+            height: 38px;
+            border-radius: 14px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            background: var(--green-soft);
+            color: var(--green-dark);
+            box-shadow: inset 0 0 0 1px rgba(111, 150, 81, 0.12);
+        }
+
+        .page-status-icon svg {
+            width: 21px;
+            height: 21px;
+        }
+
+        .page-status-card span {
+            color: var(--text-muted);
+            font-size: 12px;
+            font-weight: 700;
+            line-height: 1.1;
+        }
+
+        .page-status-card strong {
+            font-size: 13px;
+            font-weight: 800;
+            line-height: 1.2;
         }
 
         .summary-grid {
             display: grid;
             grid-template-columns: repeat(3, minmax(0, 1fr));
-            gap: 38px;
-            margin-bottom: 45px;
+            gap: 30px;
+            margin-bottom: 34px;
         }
 
         .summary-card {
-            min-height: 130px;
-            padding: 16px 22px;
-            border-radius: 21px;
-            background: var(--green-main);
-            box-shadow: 0 0 0 rgba(0, 0, 0, 0);
+            min-height: 138px;
+            padding: 18px 22px;
+            border-radius: 24px;
+            background: linear-gradient(135deg, #99bd78 0%, var(--green-main) 56%, #7fa35f 100%);
+            box-shadow: 0 16px 34px rgba(90, 123, 64, 0.16);
             position: relative;
             overflow: hidden;
             color: #000000;
@@ -374,6 +561,8 @@
             align-items: flex-start;
             isolation: isolate;
             animation: fadeUp 0.65s ease both;
+            border: 1px solid rgba(255, 255, 255, 0.28);
+            transform: perspective(900px) rotateX(var(--tilt-x, 0deg)) rotateY(var(--tilt-y, 0deg)) translateY(0);
             transition: transform 0.28s ease, box-shadow 0.28s ease, filter 0.28s ease;
         }
 
@@ -408,7 +597,7 @@
         }
 
         .summary-card:hover {
-            transform: translateY(-7px);
+            transform: perspective(900px) rotateX(var(--tilt-x, 0deg)) rotateY(var(--tilt-y, 0deg)) translateY(-7px);
             box-shadow: var(--shadow-hover);
             filter: saturate(1.04);
         }
@@ -423,24 +612,41 @@
 
         .summary-label {
             margin-bottom: 10px;
-            font-size: 16px;
-            font-weight: 500;
-            letter-spacing: 2.5px;
+            font-size: 15px;
+            font-weight: 700;
+            letter-spacing: 1.2px;
         }
 
         .summary-number {
-            font-size: 27px;
-            font-weight: 500;
-            letter-spacing: 5.5px;
+            font-size: 34px;
+            font-weight: 800;
+            letter-spacing: 2px;
             line-height: 1;
         }
 
+        .summary-meta {
+            margin-top: 16px;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 12px;
+            font-weight: 800;
+            letter-spacing: 0.3px;
+            color: rgba(0, 0, 0, 0.58);
+            transition: transform 0.22s ease, color 0.22s ease;
+        }
+
+        .summary-card:hover .summary-meta {
+            color: rgba(0, 0, 0, 0.82);
+            transform: translateX(4px);
+        }
+
         .summary-icon {
-            width: 42px;
-            height: 42px;
-            margin-top: 3px;
-            border: 1.5px solid rgba(0, 0, 0, 0.2);
-            border-radius: 14px;
+            width: 48px;
+            height: 48px;
+            margin-top: 2px;
+            border: 1.5px solid rgba(255, 255, 255, 0.26);
+            border-radius: 17px;
             display: inline-flex;
             align-items: center;
             justify-content: center;
@@ -456,33 +662,75 @@
 
         .panel {
             width: 100%;
-            background: var(--green-main);
-            border-radius: 21px;
+            background: linear-gradient(135deg, #98bc77 0%, var(--green-main) 58%, #7fa35f 100%);
+            border-radius: 24px;
             position: relative;
-            animation: fadeUp 0.7s ease both;
+            animation: fadeUp 0.7s ease both, subtleGlow 6s ease-in-out infinite;
             box-shadow: 0 12px 30px rgba(90, 123, 64, 0.12);
+            border: 1px solid rgba(255, 255, 255, 0.24);
+            overflow: hidden;
+        }
+
+        .panel::before {
+            content: "";
+            position: absolute;
+            inset: 0;
+            pointer-events: none;
+            background: linear-gradient(110deg, rgba(255, 255, 255, 0.18), transparent 34%, transparent 70%, rgba(255, 255, 255, 0.08));
         }
 
         .chart-panel {
-            min-height: 407px;
-            padding: 18px 13px 20px;
+            min-height: 420px;
+            padding: 20px 16px 22px;
             margin-bottom: 30px;
         }
 
+        .panel-heading {
+            position: relative;
+            z-index: 2;
+            display: flex;
+            align-items: flex-start;
+            justify-content: space-between;
+            gap: 16px;
+            margin: 0 4px 16px 8px;
+        }
+
         .panel-title {
-            margin: 0 0 18px 10px;
+            margin: 0;
             color: #000000;
             font-size: 22px;
-            font-weight: 500;
-            letter-spacing: 3px;
+            font-weight: 700;
+            letter-spacing: 1.6px;
+        }
+
+        .panel-subtitle {
+            margin-top: 4px;
+            color: rgba(0, 0, 0, 0.62);
+            font-size: 13px;
+            font-weight: 600;
+        }
+
+        .panel-chip {
+            min-height: 34px;
+            padding: 8px 13px;
+            border-radius: 999px;
+            background: rgba(255, 255, 255, 0.34);
+            border: 1px solid rgba(255, 255, 255, 0.28);
+            box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.12);
+            color: rgba(0, 0, 0, 0.70);
+            font-size: 12px;
+            font-weight: 800;
+            white-space: nowrap;
         }
 
         .chart-area {
             width: 100%;
-            height: 319px;
-            background: #ffffff;
-            border-radius: 4px;
-            border: 1px solid rgba(0, 0, 0, 0.18);
+            height: 320px;
+            background:
+                linear-gradient(180deg, rgba(255, 255, 255, 0.98), rgba(251, 253, 249, 0.98));
+            border-radius: 18px;
+            border: 1px solid rgba(255, 255, 255, 0.76);
+            box-shadow: inset 0 0 0 1px rgba(63, 97, 27, 0.06), 0 14px 30px rgba(63, 97, 27, 0.10);
             position: relative;
             overflow: hidden;
         }
@@ -563,10 +811,10 @@
         .stock-inner {
             width: 100%;
             min-height: 335px;
-            background: rgba(255, 255, 255, 0.97);
-            border: 1px solid rgba(255, 255, 255, 0.78);
-            border-radius: 15px;
-            padding: 16px 18px 30px;
+            background: rgba(255, 255, 255, 0.96);
+            border: 1px solid rgba(255, 255, 255, 0.82);
+            border-radius: 18px;
+            padding: 18px 20px 30px;
             position: relative;
             z-index: 2;
             box-shadow: inset 0 0 0 1px rgba(63, 97, 27, 0.04);
@@ -583,9 +831,16 @@
 
         .stock-title {
             font-size: 20px;
-            font-weight: 400;
+            font-weight: 700;
             color: #000000;
             margin: 0;
+        }
+
+        .stock-subtitle {
+            margin-top: 4px;
+            color: var(--text-muted);
+            font-size: 13px;
+            font-weight: 500;
         }
 
         .stock-warning-badge,
@@ -652,10 +907,12 @@
         .table-wrap {
             width: 100%;
             overflow-x: auto;
-            border-radius: 16px;
+            border-radius: 18px;
             border: 1px solid rgba(90, 123, 64, 0.16);
             background: linear-gradient(180deg, #ffffff 0%, #fbfdf9 100%);
             box-shadow: 0 12px 26px rgba(63, 97, 27, 0.08);
+            scrollbar-width: thin;
+            scrollbar-color: rgba(111, 150, 81, 0.46) transparent;
         }
 
         .stock-table {
@@ -666,7 +923,7 @@
             border-spacing: 0;
             table-layout: fixed;
             font-size: 14px;
-            font-weight: 400;
+            font-weight: 500;
             text-align: center;
             color: #000000;
             background: transparent;
@@ -675,8 +932,8 @@
         .stock-table th,
         .stock-table td {
             text-align: center;
-            padding: 13px 14px;
-            min-height: 44px;
+            padding: 14px 14px;
+            min-height: 46px;
             vertical-align: middle;
             font-weight: 400;
             border-bottom: 1px solid rgba(90, 123, 64, 0.14);
@@ -686,7 +943,7 @@
             position: sticky;
             top: 0;
             z-index: 1;
-            background: linear-gradient(180deg, #e8ece3 0%, #d8dfd1 100%);
+            background: linear-gradient(180deg, #edf3e8 0%, #dfe9d7 100%);
             color: #1e2b17;
             font-weight: 700;
             letter-spacing: 0.15px;
@@ -827,6 +1084,8 @@
         }
 
         .mobile-toggle {
+            position: relative;
+            z-index: 2;
             display: none;
             width: 42px;
             height: 42px;
@@ -845,6 +1104,17 @@
             border-radius: 999px;
         }
 
+        @media (prefers-reduced-motion: reduce) {
+            *,
+            *::before,
+            *::after {
+                animation-duration: 0.01ms !important;
+                animation-iteration-count: 1 !important;
+                scroll-behavior: auto !important;
+                transition-duration: 0.01ms !important;
+            }
+        }
+
         @media (max-width: 1050px) {
             .top-navbar {
                 padding: 0 32px;
@@ -852,6 +1122,10 @@
 
             .dashboard-container {
                 width: min(100% - 48px, 1100px);
+            }
+
+            .page-heading {
+                margin-left: 0;
             }
 
             .summary-grid {
@@ -898,6 +1172,20 @@
                 position: static;
                 margin-top: 6px;
                 box-shadow: none;
+            }
+
+            .page-heading {
+                align-items: stretch;
+                flex-direction: column;
+            }
+
+            .page-status-card {
+                width: 100%;
+            }
+
+            .panel-heading {
+                flex-direction: column;
+                gap: 8px;
             }
 
             .summary-grid {
@@ -970,7 +1258,13 @@
         $stocks = isset($chartStocks) && is_array($chartStocks) ? $chartStocks : [];
         $hasChart = count($labels) > 0 && count($stocks) > 0;
         $stokItems = isset($stokMinimum) ? collect($stokMinimum)->values() : collect();
-        $laporanKosong = (($totalKategoriBarang ?? 0) == 0) && (($totalBarangMasuk ?? 0) == 0) && (($totalBarangKeluar ?? 0) == 0);
+
+        /*
+            Status Cetak PDF harus mengikuti data laporan bulanan,
+            bukan total kategori atau total stok di dashboard.
+            Controller Dashboard mengirim $laporanPdfTersedia berdasarkan transaksi 1 bulan terakhir.
+        */
+        $laporanPdfTersedia = $laporanPdfTersedia ?? \App\Models\Transaksi::where('created_at', '>=', now()->subMonth())->exists();
     @endphp
 
     <nav class="top-navbar" id="topNavbar">
@@ -1008,10 +1302,16 @@
                 <summary>Laporan</summary>
                 <div class="dropdown-box">
                     <a href="{{ route('laporan.index') }}">Laporan</a>
-                    @if ($laporanKosong)
-                        <span class="dropdown-disabled">Cetak PDF</span>
-                    @else
+                    @if ($laporanPdfTersedia)
                         <a href="{{ route('laporan.pdf') }}">Cetak PDF</a>
+                    @else
+                        <span
+                            class="dropdown-disabled"
+                            role="link"
+                            aria-disabled="true"
+                            tabindex="-1"
+                            title="Tidak ada data laporan untuk dicetak"
+                        >Cetak PDF</span>
                     @endif
                 </div>
             </details>
@@ -1028,8 +1328,7 @@
                         <span>Hi, {{ auth()->user()->name ?? 'Nama' }}</span>
                     </span>
                 </summary>
-                <div class="dropdown-box">
-                    <a href="{{ route('profile.edit') }}">Profil</a>
+                <div class="dropdown-box user-menu-only-logout">
                     <form action="{{ route('logout') }}" method="POST">
                         @csrf
                         <button type="submit" class="logout-button">Logout</button>
@@ -1040,13 +1339,34 @@
     </nav>
 
     <main class="dashboard-container">
-        <h1 class="page-title">DASHBOARD</h1>
+        <div class="page-heading">
+            <div>
+                <p class="eyebrow">Warehouse Overview</p>
+                <h1 class="page-title">DASHBOARD</h1>
+                <p class="page-subtitle">Pantau ringkasan aktivitas barang dan kondisi stok terbaru anda secara cepat.</p>
+            </div>
+
+            <div class="page-status-card" aria-label="Status sistem">
+                <span class="page-status-icon" aria-hidden="true">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M12 3v4"></path>
+                        <path d="M12 17v4"></path>
+                        <path d="M3 12h4"></path>
+                        <path d="M17 12h4"></path>
+                        <circle cx="12" cy="12" r="4"></circle>
+                    </svg>
+                </span>
+                <span>Status Sistem</span>
+                <strong>Aktif · {{ now()->format('d M Y') }}</strong>
+            </div>
+        </div>
 
         <section class="summary-grid" aria-label="Ringkasan dashboard">
             <a href="{{ route('master-data.kategori-produk.index') }}" class="summary-card">
                 <div>
                     <p class="summary-label">Kategori Barang</p>
                     <p class="summary-number js-counter" data-target="{{ (int) ($totalKategoriBarang ?? 0) }}">{{ (int) ($totalKategoriBarang ?? 0) }}</p>
+                    <span class="summary-meta">Kelola kategori →</span>
                 </div>
                 <span class="summary-icon" aria-hidden="true">
                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -1061,6 +1381,7 @@
                 <div>
                     <p class="summary-label">Barang Masuk</p>
                     <p class="summary-number js-counter" data-target="{{ (int) ($totalBarangMasuk ?? 0) }}">{{ (int) ($totalBarangMasuk ?? 0) }}</p>
+                    <span class="summary-meta">Lihat transaksi →</span>
                 </div>
                 <span class="summary-icon" aria-hidden="true">
                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -1075,6 +1396,7 @@
                 <div>
                     <p class="summary-label">Barang Keluar</p>
                     <p class="summary-number js-counter" data-target="{{ (int) ($totalBarangKeluar ?? 0) }}">{{ (int) ($totalBarangKeluar ?? 0) }}</p>
+                    <span class="summary-meta">Cek barang keluar →</span>
                 </div>
                 <span class="summary-icon" aria-hidden="true">
                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -1087,11 +1409,17 @@
         </section>
 
         <section class="panel chart-panel">
-            <h2 class="panel-title">Grafik Stok Barang</h2>
+            <div class="panel-heading">
+                <div>
+                    <h2 class="panel-title">Grafik Stok Barang</h2>
+                    <p class="panel-subtitle">Visualisasi pergerakan stok yang memudahkan pemantauan persediaan.</p>
+                </div>
+                <span class="panel-chip">{{ count($labels) }} item tercatat</span>
+            </div>
             <div class="chart-area {{ $hasChart ? '' : 'empty' }}">
                 <canvas id="stockChart"></canvas>
                 @if (!$hasChart)
-                    <div class="empty-chart-text">Belum ada data stok barang.</div>
+                    <div class="empty-chart-text">Belum ada data stok barang untuk ditampilkan.</div>
                 @endif
             </div>
         </section>
@@ -1099,7 +1427,10 @@
         <section class="panel stock-panel">
             <div class="stock-inner">
                 <div class="stock-title-row">
-                    <h2 class="stock-title">Stock mencapai batas minimum :</h2>
+                    <div>
+                        <h2 class="stock-title">Stok mencapai batas minimum</h2>
+                        <p class="stock-subtitle">Barang yang perlu dipantau agar tidak mengganggu operasional gudang.</p>
+                    </div>
 
                     @if ($stokItems->count() > 0)
                         <div class="stock-warning-badge" title="Ada barang yang stoknya mencapai batas minimum">
@@ -1167,7 +1498,7 @@
                                 </tr>
                             @empty
                                 <tr>
-                                    <td colspan="4" class="empty-row">Tidak ada barang yang mencapai batas minimum.</td>
+                                    <td colspan="4" class="empty-row">Semua stok masih aman. Tidak ada barang yang mencapai batas minimum.</td>
                                 </tr>
                             @endforelse
                         </tbody>
@@ -1207,6 +1538,24 @@
                         detail.removeAttribute('open');
                     });
                 }
+            });
+
+
+            document.querySelectorAll('.summary-card').forEach(function (card) {
+                card.addEventListener('mousemove', function (event) {
+                    const rect = card.getBoundingClientRect();
+                    const x = event.clientX - rect.left;
+                    const y = event.clientY - rect.top;
+                    const rotateY = ((x / rect.width) - 0.5) * 5;
+                    const rotateX = -(((y / rect.height) - 0.5) * 5);
+                    card.style.setProperty('--tilt-x', rotateX.toFixed(2) + 'deg');
+                    card.style.setProperty('--tilt-y', rotateY.toFixed(2) + 'deg');
+                });
+
+                card.addEventListener('mouseleave', function () {
+                    card.style.setProperty('--tilt-x', '0deg');
+                    card.style.setProperty('--tilt-y', '0deg');
+                });
             });
 
             document.querySelectorAll('.js-counter').forEach(function (counter) {

@@ -129,6 +129,36 @@
         box-shadow: 0 8px 16px rgba(76, 148, 255, 0.22);
     }
 
+    .print-button.is-disabled {
+        background: #d6dce3;
+        cursor: not-allowed;
+        opacity: 0.72;
+        pointer-events: none;
+        box-shadow: none;
+    }
+
+    .print-button.is-disabled::after {
+        display: none;
+    }
+
+    .print-button.is-disabled:hover {
+        background: #d6dce3;
+        transform: none;
+        box-shadow: none;
+    }
+
+    .laporan-alert {
+        margin: -12px 0 22px;
+        padding: 13px 16px;
+        border-radius: 14px;
+        background: #fff6df;
+        border: 1px solid #f2d38b;
+        color: #77540c;
+        font-size: 14px;
+        font-weight: 500;
+        box-shadow: 0 8px 20px rgba(93, 66, 10, 0.07);
+    }
+
     .print-button svg {
         width: 27px;
         height: 27px;
@@ -656,16 +686,33 @@
         <div class="print-row">
             <span class="print-label">Print laporan :</span>
 
-            <a href="{{ route('laporan.pdf') }}" class="print-button" title="Print laporan">
-                <svg viewBox="0 0 24 24">
-                    <path d="M6 9V3H18V9"></path>
-                    <path d="M6 17H4C3.4 17 3 16.6 3 16V11C3 9.9 3.9 9 5 9H19C20.1 9 21 9.9 21 11V16C21 16.6 20.6 17 20 17H18"></path>
-                    <path d="M6 14H18V21H6V14Z"></path>
-                    <path d="M8 17H16"></path>
-                </svg>
-            </a>
+            @if($totalTransaksi > 0)
+                <a href="{{ route('laporan.pdf') }}" class="print-button" title="Print laporan">
+                    <svg viewBox="0 0 24 24">
+                        <path d="M6 9V3H18V9"></path>
+                        <path d="M6 17H4C3.4 17 3 16.6 3 16V11C3 9.9 3.9 9 5 9H19C20.1 9 21 9.9 21 11V16C21 16.6 20.6 17 20 17H18"></path>
+                        <path d="M6 14H18V21H6V14Z"></path>
+                        <path d="M8 17H16"></path>
+                    </svg>
+                </a>
+            @else
+                <span class="print-button is-disabled" title="Tidak ada data laporan untuk dicetak" aria-disabled="true">
+                    <svg viewBox="0 0 24 24">
+                        <path d="M6 9V3H18V9"></path>
+                        <path d="M6 17H4C3.4 17 3 16.6 3 16V11C3 9.9 3.9 9 5 9H19C20.1 9 21 9.9 21 11V16C21 16.6 20.6 17 20 17H18"></path>
+                        <path d="M6 14H18V21H6V14Z"></path>
+                        <path d="M8 17H16"></path>
+                    </svg>
+                </span>
+            @endif
         </div>
     </div>
+
+    @if(session('error'))
+        <div class="laporan-alert">
+            {{ session('error') }}
+        </div>
+    @endif
 
     <div class="laporan-summary">
         <div class="summary-card summary-total">

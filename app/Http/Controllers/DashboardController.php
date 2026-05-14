@@ -53,13 +53,18 @@ class DashboardController extends Controller
         $chartLabels = $produkGrafik->pluck('nama_produk')->values()->toArray();
         $chartStocks = $produkGrafik->pluck('stok')->values()->toArray();
 
+        // Status tombol Cetak PDF harus mengikuti isi laporan bulanan
+        // agar kondisi di dashboard sama dengan halaman laporan.
+        $laporanPdfTersedia = Transaksi::where('created_at', '>=', now()->subMonth())->exists();
+
         return view('dashboard', compact(
             'totalKategoriBarang',
             'totalBarangMasuk',
             'totalBarangKeluar',
             'stokMinimum',
             'chartLabels',
-            'chartStocks'
+            'chartStocks',
+            'laporanPdfTersedia'
         ));
     }
 }
