@@ -180,21 +180,7 @@
 
                                 <td>
                                     <div class="kategori-action-group">
-                                        <button
-                                            type="button"
-                                            class="kategori-table-button kategori-edit-button"
-                                            data-toggle="modal"
-                                            data-target="#formKategori{{ $item->id }}"
-                                            title="Edit kategori"
-                                        >
-                                            <svg viewBox="0 0 24 24" aria-hidden="true">
-                                                <path d="M4 20H8.2L18.75 9.45L14.55 5.25L4 15.8V20Z"></path>
-                                                <path d="M14.55 5.25L16.5 3.3C16.9 2.9 17.55 2.9 17.95 3.3L20.7 6.05C21.1 6.45 21.1 7.1 20.7 7.5L18.75 9.45"></path>
-                                            </svg>
-                                        </button>
-
                                         <form
-                                            id="deleteKategori{{ $item->id }}"
                                             action="{{ route('master-data.kategori-produk.destroy', $item->id) }}"
                                             method="POST"
                                             class="kategori-delete-form"
@@ -204,20 +190,32 @@
 
                                             <button
                                                 type="button"
-                                                class="kategori-table-button kategori-delete-button js-delete-trigger"
-                                                data-form-id="deleteKategori{{ $item->id }}"
-                                                data-name="{{ $item->nama_kategori }}"
-                                                title="Hapus kategori"
+                                                class="btn-delete-custom open-delete-modal"
+                                                title="Hapus data"
+                                                data-category-name="{{ $item->nama_kategori ?? 'kategori ini' }}"
                                             >
                                                 <svg viewBox="0 0 24 24" aria-hidden="true">
-                                                    <path d="M5 7H19"></path>
-                                                    <path d="M10 11V17"></path>
-                                                    <path d="M14 11V17"></path>
-                                                    <path d="M8 7L9 4H15L16 7"></path>
-                                                    <path d="M7 7L8 20H16L17 7"></path>
+                                                    <path d="M3 6H21"></path>
+                                                    <path d="M8 6V4H16V6"></path>
+                                                    <path d="M6 6L7 21H17L18 6"></path>
+                                                    <path d="M10 10V17"></path>
+                                                    <path d="M14 10V17"></path>
                                                 </svg>
                                             </button>
                                         </form>
+
+                                        <button
+                                            type="button"
+                                            class="kategori-table-button kategori-edit-button"
+                                            data-toggle="modal"
+                                            data-target="#formKategori{{ $item->id }}"
+                                            title="Edit data"
+                                        >
+                                            <svg viewBox="0 0 24 24" aria-hidden="true">
+                                                <path d="M12 20H21"></path>
+                                                <path d="M16.5 3.5A2.12 2.12 0 0 1 19.5 6.5L7 19L3 20L4 16Z"></path>
+                                            </svg>
+                                        </button>
                                     </div>
                                 </td>
                             </tr>
@@ -246,9 +244,11 @@
                     Showing {{ $dataMulai }} to {{ $dataAkhir }} out of {{ $totalData }} entries
                 </div>
 
-                <div class="kategori-pagination">
-                    {{ $kategori->onEachSide(1)->links('pagination::bootstrap-4') }}
-                </div>
+                @if(method_exists($kategori, 'onEachSide'))
+                    <div class="kategori-pagination">
+                        {{ $kategori->onEachSide(1)->links('pagination::bootstrap-4') }}
+                    </div>
+                @endif
             </div>
         </div>
     </div>
@@ -262,30 +262,32 @@
     @endforeach
 </div>
 
-<div class="kategori-confirm-backdrop" id="deleteConfirmModal" aria-hidden="true">
-    <div class="kategori-confirm-box">
-        <div class="kategori-confirm-icon" aria-hidden="true">
+<div class="delete-modal-overlay" id="deleteModal" aria-hidden="true">
+    <div class="delete-modal-box">
+        <div class="delete-modal-icon" aria-hidden="true">
             <svg viewBox="0 0 24 24">
-                <path d="M5 7H19"></path>
-                <path d="M10 11V17"></path>
-                <path d="M14 11V17"></path>
-                <path d="M8 7L9 4H15L16 7"></path>
-                <path d="M7 7L8 20H16L17 7"></path>
+                <path d="M3 6H21"></path>
+                <path d="M8 6V4H16V6"></path>
+                <path d="M6 6L7 21H17L18 6"></path>
+                <path d="M10 10V17"></path>
+                <path d="M14 10V17"></path>
             </svg>
         </div>
 
-        <h3>Hapus Kategori?</h3>
-        <p>
-            Kategori <strong id="deleteCategoryName">ini</strong> akan dihapus secara permanen.
+        <h2 class="delete-modal-title">Hapus Kategori?</h2>
+
+        <p class="delete-modal-text">
+            Data <strong id="deleteCategoryName">kategori ini</strong> akan dihapus secara permanen.
+            Tindakan ini tidak dapat dibatalkan.
         </p>
 
-        <div class="kategori-confirm-actions">
-            <button type="button" class="kategori-confirm-cancel" id="deleteCancelBtn">
+        <div class="delete-modal-actions">
+            <button type="button" class="delete-cancel-btn" id="cancelDeleteBtn">
                 Batal
             </button>
 
-            <button type="button" class="kategori-confirm-delete" id="deleteConfirmBtn">
-                Ya, Hapus
+            <button type="button" class="delete-confirm-btn" id="confirmDeleteBtn">
+                Hapus
             </button>
         </div>
     </div>
@@ -937,61 +939,79 @@
         display: inline-flex;
         align-items: center;
         justify-content: center;
-        gap: 10px;
+        gap: 9px;
     }
 
     .kategori-delete-form {
-        display: inline-flex;
         margin: 0;
         padding: 0;
-    }
-
-    .kategori-table-button {
-        width: 40px;
-        height: 40px;
-        border: none;
-        border-radius: 14px;
         display: inline-flex;
-        align-items: center;
-        justify-content: center;
-        cursor: pointer;
-        transition: transform 0.22s ease, box-shadow 0.22s ease, filter 0.22s ease;
-        color: #ffffff;
     }
 
-    .kategori-table-button svg {
-        width: 20px;
-        height: 20px;
+    .btn-delete-custom,
+    .kategori-table-button,
+    .kategori-edit-button {
+        width: 40px !important;
+        height: 40px !important;
+        min-width: 40px !important;
+        border: none !important;
+        border-radius: 14px !important;
+        display: inline-flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+        cursor: pointer !important;
+        padding: 0 !important;
+        margin: 0 !important;
+        box-shadow: none !important;
+        outline: none !important;
+        font-size: 0 !important;
+        line-height: 1 !important;
+        transition: transform 0.22s ease, box-shadow 0.22s ease, filter 0.22s ease !important;
+    }
+
+    .btn-delete-custom {
+        background: var(--mw-danger-soft) !important;
+        color: var(--mw-danger) !important;
+        border: 1px solid rgba(217, 52, 43, 0.20) !important;
     }
 
     .kategori-edit-button {
-        background: linear-gradient(135deg, var(--mw-blue), var(--mw-blue-dark));
-        box-shadow: 0 10px 18px rgba(76, 148, 255, 0.22);
+        background: #e8f0ff !important;
+        color: var(--mw-blue-dark) !important;
+        border: 1px solid rgba(76, 148, 255, 0.22) !important;
     }
 
-    .kategori-delete-button {
-        background: linear-gradient(135deg, #ef5b54, var(--mw-danger));
-        box-shadow: 0 10px 18px rgba(217, 52, 43, 0.20);
+    .btn-delete-custom:hover,
+    .kategori-edit-button:hover {
+        transform: translateY(-2px) !important;
+        filter: saturate(1.05) !important;
     }
 
-    .kategori-table-button:hover {
-        transform: translateY(-3px);
-        filter: saturate(1.08);
+    .btn-delete-custom:hover {
+        box-shadow: 0 10px 18px rgba(217, 52, 43, 0.13) !important;
     }
 
     .kategori-edit-button:hover {
-        box-shadow: 0 14px 24px rgba(76, 148, 255, 0.30);
+        box-shadow: 0 10px 18px rgba(76, 148, 255, 0.14) !important;
     }
 
-    .kategori-delete-button:hover {
-        box-shadow: 0 14px 24px rgba(217, 52, 43, 0.28);
+    .btn-delete-custom svg,
+    .kategori-edit-button svg {
+        width: 20px !important;
+        height: 20px !important;
+        stroke: currentColor !important;
+        stroke-width: 2.35 !important;
+        fill: none !important;
+        stroke-linecap: round !important;
+        stroke-linejoin: round !important;
+        transition: transform 0.22s ease !important;
     }
 
     .kategori-edit-button:hover svg {
-        transform: rotate(-8deg) scale(1.04);
+        transform: rotate(-6deg) scale(1.04);
     }
 
-    .kategori-delete-button:hover svg {
+    .btn-delete-custom:hover svg {
         animation: kategoriShake 0.42s ease;
     }
 
@@ -1119,211 +1139,416 @@
         display: none !important;
     }
 
-    .kategori-modal-bank .modal {
-        z-index: 2050 !important;
-        font-family: "Poppins", sans-serif;
-    }
-
-    .modal-backdrop {
-        z-index: 2040 !important;
-        background-color: rgba(17, 24, 13, 0.78) !important;
+    /* Modal tambah/edit kategori dibuat serasi dengan halaman daftar barang */
+    body.modal-open .kategori-page {
+        overflow: visible !important;
     }
 
     .modal-backdrop.show {
-        opacity: 0.58 !important;
+        opacity: 0.38 !important;
     }
 
-    .kategori-modal-bank .modal-dialog {
-        margin: 6rem auto;
-        max-width: 520px;
+    .modal {
+        z-index: 5050 !important;
+        overflow-x: hidden !important;
+        overflow-y: auto !important;
+        padding-right: 0 !important;
     }
 
-    .kategori-modal-bank .modal-content {
-        border: none;
-        border-radius: 22px;
-        box-shadow: 0 24px 70px rgba(0, 0, 0, 0.24);
-        overflow: hidden;
+    .modal-backdrop {
+        z-index: 5040 !important;
     }
 
-    .kategori-modal-bank .modal-header {
-        border-bottom: 1px solid rgba(79, 116, 56, 0.13);
-        padding: 20px 24px;
-        background: linear-gradient(135deg, #ffffff 0%, #f4faef 100%);
+    .modal.show .modal-dialog {
+        transform: none !important;
     }
 
-    .kategori-modal-bank .modal-title {
-        color: var(--mw-black);
-        font-size: 22px;
+    .modal-dialog.modal-lg,
+    .modal-dialog {
+        width: min(860px, calc(100vw - 36px)) !important;
+        max-width: min(860px, calc(100vw - 36px)) !important;
+        margin: 54px auto !important;
+        pointer-events: auto !important;
+    }
+
+    .modal-content {
+        border: none !important;
+        border-radius: 22px !important;
+        box-shadow: 0 18px 45px rgba(0, 0, 0, 0.22) !important;
+        overflow: hidden !important;
+        font-family: "Poppins", system-ui, sans-serif !important;
+        animation: modalPop 0.25s ease both !important;
+    }
+
+    .modal-header {
+        min-height: 74px;
+        background: linear-gradient(135deg, var(--mw-green) 0%, #9bc67a 100%) !important;
+        border-bottom: none !important;
+        padding: 22px 26px !important;
+        display: flex !important;
+        align-items: center !important;
+        justify-content: space-between !important;
+    }
+
+    .modal-title {
+        color: var(--mw-black) !important;
+        font-family: inherit !important;
+        font-size: 24px !important;
+        font-weight: 800 !important;
+        margin: 0 !important;
+    }
+
+    .modal-header .close,
+    .modal-header .btn-close {
+        width: 38px !important;
+        height: 38px !important;
+        min-width: 38px !important;
+        border: none !important;
+        border-radius: 50% !important;
+        background: #ffe4e4 !important;
+        color: var(--mw-danger) !important;
+        opacity: 1 !important;
+        padding: 0 !important;
+        margin: 0 !important;
+        display: inline-flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+        box-shadow: none !important;
+        text-shadow: none !important;
+        font-size: 0 !important;
+        line-height: 1 !important;
+        transition: transform 0.22s ease, background 0.22s ease !important;
+    }
+
+    .modal-header .close::before,
+    .modal-header .btn-close::before {
+        content: "×";
+        font-family: inherit;
+        font-size: 30px;
         font-weight: 800;
+        color: var(--mw-danger);
+        line-height: 1;
+        margin-top: -3px;
     }
 
-    .kategori-modal-bank .close {
-        width: 36px;
-        height: 36px;
+    .modal-header .close span,
+    .modal-header .close i,
+    .modal-header .close::after,
+    .modal-header .btn-close::after {
+        display: none !important;
+    }
+
+    .modal-header .close:hover,
+    .modal-header .btn-close:hover {
+        background: #ffd2d2 !important;
+        transform: rotate(90deg) !important;
+    }
+
+    .modal form {
+        display: block !important;
+        width: 100% !important;
+        margin: 0 !important;
+        padding: 0 !important;
+        background: #ffffff !important;
+    }
+
+    .modal-body {
+        background: #ffffff !important;
+        width: 100% !important;
+        max-height: calc(100vh - 220px) !important;
+        overflow-y: auto !important;
+        overflow-x: hidden !important;
+        padding: 26px 28px 14px !important;
+    }
+
+    .modal-body::-webkit-scrollbar {
+        width: 9px;
+    }
+
+    .modal-body::-webkit-scrollbar-track {
+        background: #f1f5ed;
         border-radius: 999px;
-        background: var(--mw-green-soft);
-        color: var(--mw-black);
-        opacity: 1;
-        text-shadow: none;
-        transition: background 0.2s ease, transform 0.2s ease;
     }
 
-    .kategori-modal-bank .close:hover {
-        background: #dfead5;
-        transform: rotate(90deg);
+    .modal-body::-webkit-scrollbar-thumb {
+        background: #b9cfa8;
+        border-radius: 999px;
+        border: 2px solid #f1f5ed;
     }
 
-    .kategori-modal-bank .modal-body {
-        padding: 24px;
-        background: #ffffff;
+    .modal-body .row {
+        display: grid !important;
+        grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+        gap: 18px !important;
+        margin: 0 0 18px 0 !important;
+        width: 100% !important;
     }
 
-    .kategori-modal-bank .modal-body label {
-        color: var(--mw-black);
-        font-size: 15px;
-        font-weight: 700;
-        margin-bottom: 8px;
+    .modal-body .row:last-child {
+        margin-bottom: 0 !important;
     }
 
-    .kategori-modal-bank .modal-body .form-control {
-        height: 48px;
-        border: 1px solid rgba(79, 116, 56, 0.18);
-        border-radius: 12px;
-        font-size: 15px;
-        font-weight: 600;
-        box-shadow: none;
-        transition: border-color 0.22s ease, box-shadow 0.22s ease;
+    .modal-body .col-md-6,
+    .modal-body .col-md-12,
+    .modal-body [class*="col-"] {
+        display: block !important;
+        width: 100% !important;
+        max-width: 100% !important;
+        flex: none !important;
+        padding-left: 0 !important;
+        padding-right: 0 !important;
     }
 
-    .kategori-modal-bank .modal-body .form-control:focus {
-        border-color: var(--mw-green);
-        box-shadow: 0 0 0 4px rgba(143, 179, 107, 0.14);
+    .modal .form-group {
+        width: 100% !important;
+        margin: 0 0 18px 0 !important;
     }
 
-    .kategori-modal-bank .modal-footer {
-        border-top: none;
-        padding: 0 24px 24px;
+    .modal-body .row .form-group {
+        margin-bottom: 0 !important;
     }
 
-    .kategori-modal-bank .modal-footer .btn {
-        min-width: 96px;
-        height: 42px;
-        border: none;
-        border-radius: 11px;
-        font-size: 15px;
-        font-weight: 800;
-        box-shadow: none;
+    .modal-body label,
+    .modal .form-group label {
+        font-family: inherit !important;
+        font-size: 15px !important;
+        font-weight: 700 !important;
+        color: var(--mw-black) !important;
+        margin-bottom: 8px !important;
     }
 
-    .kategori-modal-bank .modal-footer .btn-secondary {
-        background: #eeeeee;
-        color: #222222;
+    .modal .form-control,
+    .modal .form-control-file,
+    .modal select,
+    .modal input[type="text"],
+    .modal input[type="number"],
+    .modal input[type="file"],
+    .modal textarea {
+        display: block !important;
+        width: 100% !important;
+        max-width: 100% !important;
+        min-height: 44px !important;
+        border: 1px solid rgba(79, 116, 56, 0.20) !important;
+        border-radius: 12px !important;
+        box-shadow: none !important;
+        font-family: inherit !important;
+        font-size: 15px !important;
+        font-weight: 600 !important;
+        color: var(--mw-black) !important;
+        padding: 9px 12px !important;
+        background: #ffffff !important;
+        opacity: 1 !important;
+        visibility: visible !important;
     }
 
-    .kategori-modal-bank .modal-footer .btn-primary {
-        background: var(--mw-green);
-        color: #ffffff;
+    .modal select.form-control {
+        appearance: auto !important;
     }
 
-    .kategori-confirm-backdrop {
+    .modal .form-control:focus,
+    .modal select:focus,
+    .modal input:focus,
+    .modal textarea:focus {
+        border-color: var(--mw-green) !important;
+        box-shadow: 0 0 0 4px rgba(143, 179, 107, 0.15) !important;
+        outline: none !important;
+    }
+
+    .modal .text-muted,
+    .modal small {
+        font-family: inherit !important;
+        font-size: 13px !important;
+        font-weight: 600 !important;
+        color: var(--mw-muted) !important;
+    }
+
+    .modal-footer {
+        position: relative !important;
+        z-index: 2 !important;
+        border-top: none !important;
+        background: #ffffff !important;
+        padding: 16px 28px 28px !important;
+        display: flex !important;
+        justify-content: flex-end !important;
+        align-items: center !important;
+        gap: 12px !important;
+    }
+
+    .modal-footer .btn::before,
+    .modal-footer .btn::after,
+    .modal-footer button::before,
+    .modal-footer button::after {
+        display: none !important;
+        content: none !important;
+    }
+
+    .modal-footer .btn,
+    .modal-footer button {
+        min-width: 118px !important;
+        height: 43px !important;
+        border: none !important;
+        border-radius: 14px !important;
+        font-family: inherit !important;
+        font-size: 15px !important;
+        font-weight: 800 !important;
+        box-shadow: none !important;
+        padding: 0 18px !important;
+        display: inline-flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+        line-height: 1 !important;
+        transition: transform 0.22s ease, filter 0.22s ease !important;
+    }
+
+    .modal-footer .btn:hover,
+    .modal-footer button:hover {
+        transform: translateY(-1px) !important;
+        filter: brightness(0.98) !important;
+    }
+
+    .modal-footer .btn-secondary,
+    .modal-footer .btn-light,
+    .modal-footer button[data-dismiss="modal"],
+    .modal-footer button[data-bs-dismiss="modal"] {
+        background: #eeeeee !important;
+        color: var(--mw-black) !important;
+    }
+
+    .modal-footer .btn-primary,
+    .modal-footer .btn-success,
+    .modal-footer button[type="submit"] {
+        background: var(--mw-green) !important;
+        color: #ffffff !important;
+    }
+
+    .modal .invalid-feedback,
+    .modal .text-danger {
+        font-family: inherit !important;
+        font-size: 13px !important;
+        font-weight: 700 !important;
+    }
+
+    /* Delete popup */
+    .delete-modal-overlay {
         position: fixed;
         inset: 0;
-        z-index: 3000;
+        background: rgba(0, 0, 0, 0.38);
+        backdrop-filter: blur(5px);
         display: none;
         align-items: center;
         justify-content: center;
-        padding: 22px;
-        background: rgba(17, 24, 13, 0.38);
-        backdrop-filter: blur(7px);
+        z-index: 5000;
+        padding: 20px;
     }
 
-    .kategori-confirm-backdrop.show {
+    .delete-modal-overlay.show {
         display: flex;
-        animation: kategoriBackdropIn 0.24s ease both;
+        animation: fadeIn 0.2s ease both;
     }
 
-    .kategori-confirm-box {
+    .delete-modal-box {
         width: 100%;
         max-width: 430px;
-        border-radius: 24px;
-        padding: 30px;
         background: #ffffff;
-        box-shadow: 0 24px 70px rgba(0, 0, 0, 0.24);
-        text-align: center;
-        animation: kategoriConfirmIn 0.28s ease both;
+        border-radius: 22px;
+        box-shadow: 0 18px 45px rgba(0, 0, 0, 0.22);
+        padding: 30px 30px 25px;
         font-family: "Poppins", sans-serif;
+        text-align: center;
+        animation: modalPop 0.25s ease both;
     }
 
-    .kategori-confirm-icon {
+    .delete-modal-icon {
         width: 76px;
         height: 76px;
-        margin: 0 auto 16px;
-        border-radius: 999px;
+        margin: 0 auto 17px;
+        border-radius: 50%;
         background: var(--mw-danger-soft);
-        color: var(--mw-danger);
         display: flex;
         align-items: center;
         justify-content: center;
+        animation: pulseDanger 1.65s ease-in-out infinite;
     }
 
-    .kategori-confirm-icon svg {
-        width: 42px;
-        height: 42px;
+    .delete-modal-icon svg {
+        width: 39px;
+        height: 39px;
+        stroke: var(--mw-danger);
+        stroke-width: 2.4;
+        fill: none;
+        stroke-linecap: round;
+        stroke-linejoin: round;
     }
 
-    .kategori-confirm-box h3 {
-        margin: 0 0 8px;
+    .delete-modal-title {
+        font-size: 22px;
+        font-weight: 800;
         color: var(--mw-black);
-        font-size: 24px;
+        margin-bottom: 8px;
+    }
+
+    .delete-modal-text {
+        font-size: 15px;
+        font-weight: 500;
+        color: var(--mw-muted);
+        line-height: 1.6;
+        margin-bottom: 24px;
+    }
+
+    .delete-modal-text strong {
+        color: var(--mw-black);
         font-weight: 800;
     }
 
-    .kategori-confirm-box p {
-        margin: 0;
-        color: var(--mw-muted);
-        font-size: 15px;
-        font-weight: 600;
-        line-height: 1.55;
-    }
-
-    .kategori-confirm-box p strong {
-        color: var(--mw-black);
-    }
-
-    .kategori-confirm-actions {
+    .delete-modal-actions {
         display: flex;
+        align-items: center;
         justify-content: center;
         gap: 12px;
-        margin-top: 24px;
     }
 
-    .kategori-confirm-cancel,
-    .kategori-confirm-delete {
-        min-width: 120px;
-        height: 44px;
+    .delete-cancel-btn,
+    .delete-confirm-btn {
+        min-width: 122px;
+        height: 42px;
         border: none;
         border-radius: 12px;
+        font-family: inherit;
         font-size: 15px;
         font-weight: 800;
         cursor: pointer;
-        transition: transform 0.22s ease, box-shadow 0.22s ease;
-        font-family: "Poppins", sans-serif;
+        transition: transform 0.22s ease, filter 0.22s ease;
     }
 
-    .kategori-confirm-cancel {
+    .delete-cancel-btn:hover,
+    .delete-confirm-btn:hover {
+        transform: translateY(-1px);
+        filter: brightness(0.98);
+    }
+
+    .delete-cancel-btn {
         background: #eeeeee;
-        color: #222222;
+        color: var(--mw-black);
     }
 
-    .kategori-confirm-delete {
+    .delete-confirm-btn {
         background: var(--mw-danger);
         color: #ffffff;
-        box-shadow: 0 10px 20px rgba(217, 52, 43, 0.25);
     }
 
-    .kategori-confirm-cancel:hover,
-    .kategori-confirm-delete:hover {
-        transform: translateY(-2px);
+    @keyframes modalPop {
+        from { opacity: 0; transform: scale(0.96) translateY(10px); }
+        to { opacity: 1; transform: scale(1) translateY(0); }
+    }
+
+    @keyframes fadeIn {
+        from { opacity: 0; }
+        to { opacity: 1; }
+    }
+
+    @keyframes pulseDanger {
+        0%, 100% { box-shadow: 0 0 0 0 rgba(217, 52, 43, 0.22); }
+        50% { box-shadow: 0 0 0 12px rgba(217, 52, 43, 0); }
     }
 
     @keyframes kategoriFadeIn {
@@ -1442,6 +1667,48 @@
             flex-direction: column;
             align-items: flex-start;
         }
+
+        .modal-dialog.modal-lg,
+        .modal-dialog {
+            width: calc(100vw - 24px) !important;
+            max-width: calc(100vw - 24px) !important;
+            margin: 28px auto !important;
+        }
+
+        .modal-body {
+            max-height: calc(100vh - 185px) !important;
+            padding: 20px 18px 10px !important;
+        }
+
+        .modal-body .row {
+            grid-template-columns: 1fr !important;
+            gap: 14px !important;
+        }
+
+        .modal-header {
+            min-height: 66px !important;
+            padding: 18px 20px !important;
+        }
+
+        .modal-title {
+            font-size: 20px !important;
+        }
+
+        .modal-footer {
+            padding: 14px 18px 22px !important;
+            flex-direction: column-reverse !important;
+        }
+
+        .modal-footer .btn,
+        .modal-footer button,
+        .delete-cancel-btn,
+        .delete-confirm-btn {
+            width: 100% !important;
+        }
+
+        .delete-modal-actions {
+            flex-direction: column;
+        }
     }
 </style>
 @endpush
@@ -1449,54 +1716,57 @@
 @push('scripts')
 <script>
     document.addEventListener('DOMContentLoaded', function () {
+        document.querySelectorAll('.kategori-modal-bank .modal').forEach(function (modal) {
+            if (modal.parentElement !== document.body) {
+                document.body.appendChild(modal);
+            }
+        });
+
+        const deleteModal = document.getElementById('deleteModal');
+        const cancelDeleteBtn = document.getElementById('cancelDeleteBtn');
+        const confirmDeleteBtn = document.getElementById('confirmDeleteBtn');
+        const deleteCategoryName = document.getElementById('deleteCategoryName');
         let selectedDeleteForm = null;
 
-        const modal = document.getElementById('deleteConfirmModal');
-        const deleteCategoryName = document.getElementById('deleteCategoryName');
-        const cancelBtn = document.getElementById('deleteCancelBtn');
-        const confirmBtn = document.getElementById('deleteConfirmBtn');
-
-        document.querySelectorAll('.js-delete-trigger').forEach(function (button) {
+        document.querySelectorAll('.open-delete-modal').forEach(function (button) {
             button.addEventListener('click', function () {
-                const formId = button.getAttribute('data-form-id');
-                const itemName = button.getAttribute('data-name') || 'ini';
-
-                selectedDeleteForm = document.getElementById(formId);
+                selectedDeleteForm = button.closest('form');
+                const categoryName = button.getAttribute('data-category-name') || 'kategori ini';
 
                 if (deleteCategoryName) {
-                    deleteCategoryName.textContent = itemName;
+                    deleteCategoryName.textContent = categoryName;
                 }
 
-                if (modal) {
-                    modal.classList.add('show');
-                    modal.setAttribute('aria-hidden', 'false');
+                if (deleteModal) {
+                    deleteModal.classList.add('show');
+                    deleteModal.setAttribute('aria-hidden', 'false');
                 }
             });
         });
 
         function closeDeleteModal() {
-            if (modal) {
-                modal.classList.remove('show');
-                modal.setAttribute('aria-hidden', 'true');
-            }
-
             selectedDeleteForm = null;
+
+            if (deleteModal) {
+                deleteModal.classList.remove('show');
+                deleteModal.setAttribute('aria-hidden', 'true');
+            }
         }
 
-        if (cancelBtn) {
-            cancelBtn.addEventListener('click', closeDeleteModal);
+        if (cancelDeleteBtn) {
+            cancelDeleteBtn.addEventListener('click', closeDeleteModal);
         }
 
-        if (modal) {
-            modal.addEventListener('click', function (event) {
-                if (event.target === modal) {
+        if (deleteModal) {
+            deleteModal.addEventListener('click', function (event) {
+                if (event.target === deleteModal) {
                     closeDeleteModal();
                 }
             });
         }
 
-        if (confirmBtn) {
-            confirmBtn.addEventListener('click', function () {
+        if (confirmDeleteBtn) {
+            confirmDeleteBtn.addEventListener('click', function () {
                 if (selectedDeleteForm) {
                     selectedDeleteForm.submit();
                 }
@@ -1504,9 +1774,43 @@
         }
 
         document.addEventListener('keydown', function (event) {
-            if (event.key === 'Escape' && modal && modal.classList.contains('show')) {
+            if (event.key === 'Escape' && deleteModal && deleteModal.classList.contains('show')) {
                 closeDeleteModal();
             }
+        });
+
+        function cleanCategoryModalButtons() {
+            document.querySelectorAll('.modal-footer button, .modal-footer .btn').forEach(function (button) {
+                const text = button.textContent.trim().toLowerCase();
+
+                if (text.includes('simpan')) {
+                    button.textContent = 'Simpan';
+                }
+
+                if (text.includes('batal')) {
+                    button.textContent = 'Batal';
+                }
+            });
+
+            document.querySelectorAll('.modal-header .close, .modal-header .btn-close').forEach(function (button) {
+                button.setAttribute('aria-label', 'Tutup popup');
+            });
+        }
+
+        cleanCategoryModalButtons();
+
+        document.addEventListener('click', function () {
+            setTimeout(cleanCategoryModalButtons, 120);
+        });
+
+        if (window.jQuery) {
+            window.jQuery('.modal').on('shown.bs.modal', function () {
+                cleanCategoryModalButtons();
+            });
+        }
+
+        document.addEventListener('shown.bs.modal', function () {
+            cleanCategoryModalButtons();
         });
     });
 </script>

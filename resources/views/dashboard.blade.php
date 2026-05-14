@@ -190,6 +190,15 @@
             }
         }
 
+        @keyframes warningIconFloat {
+            0%, 100% {
+                transform: translateY(0) rotate(0deg) scale(1);
+            }
+            50% {
+                transform: translateY(-2px) rotate(-2deg) scale(1.04);
+            }
+        }
+
         @keyframes progressIn {
             from {
                 width: 0;
@@ -938,38 +947,51 @@
             color: var(--safe);
         }
 
-        .warning-dot,
+        .warning-alert-icon {
+            width: 22px;
+            height: 22px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--danger);
+            flex-shrink: 0;
+            position: relative;
+            filter: drop-shadow(0 6px 10px rgba(217, 52, 43, 0.22));
+            animation: warningIconFloat 2.4s ease-in-out infinite;
+        }
+
+        .warning-alert-icon svg {
+            width: 100%;
+            height: 100%;
+            display: block;
+        }
+
+        .warning-alert-icon::after {
+            content: "";
+            position: absolute;
+            inset: -5px;
+            border-radius: 999px;
+            background: rgba(217, 52, 43, 0.13);
+            z-index: -1;
+            animation: pulseRing 1.8s ease-out infinite;
+        }
+
         .ok-dot {
             width: 9px;
             height: 9px;
             border-radius: 50%;
             position: relative;
             flex-shrink: 0;
-        }
-
-        .warning-dot {
-            background: var(--danger);
-        }
-
-        .ok-dot {
             background: var(--safe);
         }
 
-        .warning-dot::after,
         .ok-dot::after {
             content: "";
             position: absolute;
             inset: -5px;
             border-radius: 50%;
-            animation: pulseRing 1.8s ease-out infinite;
-        }
-
-        .warning-dot::after {
-            background: rgba(217, 52, 43, 0.22);
-        }
-
-        .ok-dot::after {
             background: rgba(85, 139, 63, 0.22);
+            animation: pulseRing 1.8s ease-out infinite;
         }
 
         .table-wrap {
@@ -1436,7 +1458,7 @@
                     </svg>
                 </span>
                 <span>Status Sistem</span>
-                <strong>Aktif · {{ now()->format('d M Y') }}</strong>
+                <strong>Aktif · {{ now()->locale('id')->translatedFormat('d F Y') }}</strong>
             </div>
         </div>
 
@@ -1515,12 +1537,18 @@
                 <div class="stock-title-row">
                     <div>
                         <h2 class="stock-title">Stok mencapai batas minimum</h2>
-                        <p class="stock-subtitle">Barang yang perlu dipantau agar tidak mengganggu operasional gudang.</p>
+                        <p class="stock-subtitle">Barang yang perlu dipantau agar tidak mengganggu operasional.</p>
                     </div>
 
                     @if ($stokItems->count() > 0)
                         <div class="stock-warning-badge" title="Ada barang yang stoknya mencapai batas minimum">
-                            <span class="warning-dot"></span>
+                            <span class="warning-alert-icon" aria-hidden="true">
+                                <svg viewBox="0 0 24 24" fill="none">
+                                    <path d="M12 3.4L21 19.2C21.5 20.1 20.9 21.2 19.9 21.2H4.1C3.1 21.2 2.5 20.1 3 19.2L12 3.4Z" fill="currentColor" />
+                                    <path d="M12 8.2V13.4" stroke="white" stroke-width="2.1" stroke-linecap="round" />
+                                    <path d="M12 17.1H12.01" stroke="white" stroke-width="2.8" stroke-linecap="round" />
+                                </svg>
+                            </span>
                             <span>{{ $stokItems->count() }} barang perlu diperhatikan</span>
                         </div>
                     @else
