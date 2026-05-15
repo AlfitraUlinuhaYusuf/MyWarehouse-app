@@ -1443,7 +1443,7 @@
         <div class="page-heading">
             <div>
                 <p class="eyebrow">Warehouse Overview</p>
-                <h1 class="page-title">DASHBOARD</h1>
+                <h1 class="page-title">Dashboard</h1>
                 <p class="page-subtitle">Pantau ringkasan aktivitas barang dan kondisi stok terbaru anda secara cepat.</p>
             </div>
 

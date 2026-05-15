@@ -1262,23 +1262,23 @@
     }
 
     .keluar-eyebrow {
-        background: rgba(217, 52, 43, 0.10);
-        color: var(--mw-danger);
-    }
+    background: rgba(143, 179, 107, 0.14);
+    color: var(--mw-green-deep);
+}
 
-    .keluar-eyebrow::before {
-        background: var(--mw-danger);
-        box-shadow: 0 0 0 5px rgba(217, 52, 43, 0.14);
-    }
+.keluar-eyebrow::before {
+    background: var(--mw-green);
+    box-shadow: 0 0 0 5px rgba(143, 179, 107, 0.16);
+}
 
     .mini-helper,
-    .table-footer strong {
-        color: var(--mw-danger) !important;
-    }
+.table-footer strong {
+    color: var(--mw-green-deep) !important;
+}
 
     .mini-icon {
         background: var(--mw-danger-soft);
-        color: var(--mw-danger);
+        color: var(--mw-green-deep);
     }
 
     .mini-icon::after {
@@ -1286,7 +1286,7 @@
     }
 
     .keluar-panel::before {
-        background: linear-gradient(90deg, var(--mw-danger), rgba(217, 52, 43, 0.22), #b7221b);
+        background: linear-gradient(90deg, var(--mw-green), rgba(143, 179, 107, 0.25), var(--mw-green-dark));
     }
 
     .add-btn {
@@ -1406,19 +1406,20 @@
     }
 
     .pagination-custom button {
-        color: var(--mw-danger);
-        border-color: rgba(217, 52, 43, 0.14);
+        color: var(--mw-green-deep);
+        border-color: rgba(79, 116, 56, 0.16);
     }
 
     .pagination-custom button:hover:not(:disabled) {
-        background: var(--mw-danger-soft);
-        box-shadow: 0 10px 20px rgba(217, 52, 43, 0.10);
+        background: var(--mw-green-soft);
+        box-shadow: 0 10px 20px rgba(90, 123, 64, 0.12);
     }
 
     .pagination-custom .page-number {
-        background: var(--mw-danger);
-        border-color: rgba(217, 52, 43, 0.18);
-        box-shadow: 0 10px 18px rgba(217, 52, 43, 0.22);
+    background: var(--mw-green);
+    color: #ffffff;
+    border-color: rgba(79, 116, 56, 0.18);
+    box-shadow: 0 10px 18px rgba(143, 179, 107, 0.24);
     }
 
     #modalKeluar .modal-header {
@@ -1440,7 +1441,15 @@
         color: #ffffff;
         box-shadow: 0 10px 22px rgba(217, 52, 43, 0.24);
     }
+/* Khusus isi kolom Kode Transaksi: hilangkan dot */
+.kode-transaksi-badge::before {
+    content: none !important;
+    display: none !important;
+}
 
+.kode-transaksi-badge {
+    gap: 0 !important;
+}
 </style>
 
 @php
@@ -1454,7 +1463,7 @@
                 <span class="keluar-eyebrow">Transaksi Gudang</span>
                 <h1 class="keluar-title">Laporan Barang Keluar</h1>
                 <p class="keluar-subtitle">
-                    Pantau riwayat barang keluar, pengurangan stok, tanggal transaksi, dan keterangan tujuan barang dengan tampilan yang konsisten seperti halaman laporan.
+                    Pantau riwayat transaksi barang keluar yang tercatat di gudang Anda.
                 </p>
             </div>
 
@@ -1516,9 +1525,6 @@
             <div class="keluar-card-head">
                 <div>
                     <h2 class="keluar-section-title">Daftar Transaksi Keluar</h2>
-                    <p class="keluar-section-text">
-                        Gunakan filter tanggal, pencarian, dan jumlah entri untuk melihat data barang keluar dengan lebih nyaman.
-                    </p>
                 </div>
 
                 <div class="add-area">
@@ -1598,14 +1604,14 @@
                             <path d="M21 4v6h-6"></path>
                             <path d="M3 20v-6h6"></path>
                         </svg>
-                        <span>Refresh</span>
+                        <span>Segarkan</span>
                     </a>
                 </form>
             </div>
 
             <div class="table-toolbar">
                 <div class="entries-control">
-                    <span>Show</span>
+                    <span>Tampilkan</span>
 
                     <select id="keluarEntries">
                         <option value="5" selected>5</option>
@@ -1614,7 +1620,7 @@
                         <option value="50">50</option>
                     </select>
 
-                    <span>Entries</span>
+                    <span>Data</span>
                 </div>
 
                 <div class="search-box">
@@ -1648,9 +1654,15 @@
                                 </td>
 
                                 <td>
-                                    <span class="category-badge">
-                                        {{ $r->kode_transaksi ?? $r->kode ?? 'OUT-' . str_pad($r->id ?? $loop->iteration, 3, '0', STR_PAD_LEFT) }}
-                                    </span>
+                                    @php
+    $kodeAsli = $r->kode_transaksi ?? $r->kode ?? '';
+    $angkaKode = preg_replace('/\D/', '', $kodeAsli);
+    $angkaKode = $angkaKode !== '' ? $angkaKode : ($r->id ?? $loop->iteration);
+@endphp
+
+<span class="category-badge kode-transaksi-badge">
+    {{ str_pad((int) $angkaKode, 3, '0', STR_PAD_LEFT) }}
+</span>
                                 </td>
 
                                 <td>
@@ -1699,13 +1711,13 @@
 
             <div class="table-footer">
                 <div id="keluarInfo">
-                    Showing 0 out of 0 entries
+                    Menampilkan 0 dari 0 data
                 </div>
 
                 <div class="pagination-custom">
-                    <button type="button" id="prevPage">‹ Prev</button>
+                    <button type="button" id="prevPage">‹ Sebelumnya</button>
                     <span class="page-number" id="currentPageText">1</span>
-                    <button type="button" id="nextPage">Next ›</button>
+                    <button type="button" id="nextPage">Selanjutnya ›</button>
                 </div>
             </div>
         </div>
@@ -1807,7 +1819,7 @@
             const showingStart = totalRows === 0 ? 0 : startIndex + 1;
             const showingEnd = Math.min(endIndex, totalRows);
 
-            info.innerHTML = `Showing <strong>${showingStart}</strong> to <strong>${showingEnd}</strong> out of <strong>${totalRows}</strong> entries`;
+            info.innerHTML = `Menampilkan <strong>${showingStart}</strong> sampai <strong>${showingEnd}</strong> dari <strong>${totalRows}</strong> data`;
             currentPageText.textContent = currentPage;
 
             prevButton.disabled = currentPage <= 1;

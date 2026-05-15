@@ -1243,6 +1243,15 @@
             justify-content: space-between;
         }
     }
+    /* Menghilangkan dot khusus pada isi kolom kode transaksi */
+.kode-transaksi-badge::before {
+    content: none !important;
+    display: none !important;
+}
+
+.kode-transaksi-badge {
+    gap: 0 !important;
+}
 </style>
 
 @php
@@ -1256,7 +1265,7 @@
                 <span class="masuk-eyebrow">Transaksi Gudang</span>
                 <h1 class="masuk-title">Laporan Barang Masuk</h1>
                 <p class="masuk-subtitle">
-                    Pantau riwayat barang masuk, jumlah stok tambahan, tanggal transaksi, dan keterangan dengan tampilan yang konsisten seperti halaman laporan.
+                    Pantau riwayat transaksi barang masuk yang tercatat di gudang Anda.
                 </p>
             </div>
 
@@ -1308,13 +1317,9 @@
             <div class="masuk-card-head">
                 <div>
                     <h2 class="masuk-section-title">Daftar Transaksi Masuk</h2>
-                    <p class="masuk-section-text">
-                        Gunakan filter tanggal, pencarian, dan jumlah entri untuk melihat data barang masuk dengan lebih nyaman.
-                    </p>
                 </div>
 
                 <div class="add-area">
-                    <span class="add-label">Tambah transaksi</span>
 
                     <button class="add-btn" type="button" data-toggle="modal" data-target="#modalMasuk" aria-label="Tambah barang masuk">
                         <svg viewBox="0 0 24 24">
@@ -1393,14 +1398,14 @@
                             <path d="M21 4v6h-6"></path>
                             <path d="M3 20v-6h6"></path>
                         </svg>
-                        <span>Refresh</span>
+                        <span>Segarkan</span>
                     </a>
                 </form>
             </div>
 
             <div class="table-toolbar">
                 <div class="entries-control">
-                    <span>Show</span>
+                    <span>Tampilkan</span>
 
                     <select id="masukEntries">
                         <option value="5" selected>5</option>
@@ -1409,7 +1414,7 @@
                         <option value="50">50</option>
                     </select>
 
-                    <span>Entries</span>
+                    <span>Data</span>
                 </div>
 
                 <div class="search-box">
@@ -1443,8 +1448,14 @@
                                 </td>
 
                                 <td>
-                                    <span class="category-badge">
-                                        {{ $r->kode_transaksi ?? $r->kode ?? 'TRX-' . str_pad($r->id ?? $loop->iteration, 3, '0', STR_PAD_LEFT) }}
+                                    @php
+                                        $kodeAsli = $r->kode_transaksi ?? $r->kode ?? '';
+                                        $angkaKode = preg_replace('/\D/', '', $kodeAsli);
+                                        $angkaKode = $angkaKode !== '' ? $angkaKode : ($r->id ?? $loop->iteration);
+                                    @endphp
+
+                                    <span class="category-badge kode-transaksi-badge">
+                                        {{ str_pad((int) $angkaKode, 3, '0', STR_PAD_LEFT) }}
                                     </span>
                                 </td>
 
@@ -1494,13 +1505,13 @@
 
             <div class="table-footer">
                 <div id="masukInfo">
-                    Showing 0 out of 0 entries
+                    Menampilkan 0 dari 0 data
                 </div>
 
                 <div class="pagination-custom">
-                    <button type="button" id="prevPage">‹ Prev</button>
+                    <button type="button" id="prevPage">‹ Sebelumnya</button>
                     <span class="page-number" id="currentPageText">1</span>
-                    <button type="button" id="nextPage">Next ›</button>
+                    <button type="button" id="nextPage">Selanjutnya ›</button>
                 </div>
             </div>
         </div>
@@ -1602,7 +1613,7 @@
             const showingStart = totalRows === 0 ? 0 : startIndex + 1;
             const showingEnd = Math.min(endIndex, totalRows);
 
-            info.innerHTML = `Showing <strong>${showingStart}</strong> to <strong>${showingEnd}</strong> out of <strong>${totalRows}</strong> entries`;
+            info.innerHTML = `Menampilkan <strong>${showingStart}</strong> sampai <strong>${showingEnd}</strong> dari <strong>${totalRows}</strong> data`;
             currentPageText.textContent = currentPage;
 
             prevButton.disabled = currentPage <= 1;

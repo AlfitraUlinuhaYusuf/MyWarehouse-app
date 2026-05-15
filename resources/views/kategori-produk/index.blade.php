@@ -109,7 +109,7 @@
                 <div>
                     <div class="kategori-summary-label">Halaman</div>
                     <div class="kategori-summary-number">{{ $halamanSekarang }}/{{ $totalHalaman }}</div>
-                    <div class="kategori-summary-caption">Navigasi data kategori</div>
+                    <div class="kategori-summary-caption">Total halaman tabel</div>
                 </div>
                 <div class="kategori-summary-icon" aria-hidden="true">
                     <svg viewBox="0 0 24 24">
