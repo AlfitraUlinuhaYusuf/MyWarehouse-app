@@ -1522,8 +1522,6 @@
                 </div>
 
                 <div class="add-area">
-                    <span class="add-label">Tambah transaksi</span>
-
                     <button class="add-btn" type="button" data-toggle="modal" data-target="#modalKeluar" aria-label="Tambah barang keluar">
                         <svg viewBox="0 0 24 24">
                             <path d="M5 12H19"></path>

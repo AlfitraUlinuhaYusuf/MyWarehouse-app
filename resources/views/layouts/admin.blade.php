@@ -500,7 +500,7 @@
             <details class="nav-dropdown">
                 <summary class="{{ $isLaporan ? 'active' : '' }}">Laporan</summary>
                 <div class="dropdown-box">
-                    <a href="{{ route('laporan.index') }}">Laporan</a>
+                    <a href="{{ route('laporan.index') }}">Rekap Data</a>
 
                     @if ($laporanPdfTersedia)
                         <a href="{{ route('laporan.pdf') }}">Cetak PDF</a>

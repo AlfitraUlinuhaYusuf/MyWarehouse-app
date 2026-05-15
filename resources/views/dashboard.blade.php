@@ -1497,7 +1497,7 @@
                 <div>
                     <p class="summary-label">Barang Keluar</p>
                     <p class="summary-number js-counter" data-target="{{ (int) ($totalBarangKeluar ?? 0) }}">{{ (int) ($totalBarangKeluar ?? 0) }}</p>
-                    <span class="summary-meta">Cek barang keluar →</span>
+                    <span class="summary-meta">Lihat transaksi →</span>
                 </div>
                 <span class="summary-icon" aria-hidden="true">
                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -1515,7 +1515,7 @@
                     <h2 class="panel-title">Grafik Stok Barang</h2>
                     <p class="panel-subtitle">Visualisasi pergerakan stok yang memudahkan pemantauan persediaan.</p>
                 </div>
-                <span class="panel-chip">{{ count($labels) }} item tercatat</span>
+                <span class="panel-chip">{{ count($labels) }} tercatat</span>
             </div>
             <div class="chart-area {{ $hasChart ? '' : 'empty' }}">
                 <div class="chart-scroll" aria-label="Area grafik stok barang yang dapat digeser horizontal">

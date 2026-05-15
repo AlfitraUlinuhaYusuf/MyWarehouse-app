@@ -7,7 +7,6 @@ use App\Http\Controllers\TransaksiController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\LaporanController;
 use Illuminate\Support\Facades\Route;
-use Illuminate\Support\Facades\Auth;
 
 /*
 |--------------------------------------------------------------------------
@@ -16,25 +15,20 @@ use Illuminate\Support\Facades\Auth;
 */
 
 // Halaman awal website
-// Jika belum login, user diarahkan ke halaman login
-// Jika sudah login, user diarahkan ke homepage
+// Bisa dibuka tanpa login
 Route::get('/', function () {
-    if (Auth::check()) {
-        return redirect()->route('home');
-    }
+    return view('home');
+})->name('home');
 
-    return redirect()->route('login');
+// Supaya jika user membuka /home, tetap tampil homepage
+Route::get('/home', function () {
+    return view('home');
 });
 
 // Semua halaman di bawah ini hanya bisa diakses setelah login
 Route::middleware(['auth', 'verified'])->group(function () {
 
-    // Homepage setelah login
-    Route::get('/home', function () {
-        return view('home');
-    })->name('home');
-
-    // Dashboard
+    // Dashboard setelah login
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
 
     // Master Data

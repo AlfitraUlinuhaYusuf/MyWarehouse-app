@@ -21,7 +21,7 @@
                 <span class="kategori-eyebrow">Master Data</span>
                 <h1 class="kategori-title">Kategori Barang</h1>
                 <p class="kategori-subtitle">
-                    Kelola kategori barang agar data persediaan lebih terstruktur, mudah dicari, dan konsisten dengan kebutuhan operasional gudang.
+                    Kelola kategori barang lebih mudah, terstruktur, dan konsisten.
                 </p>
             </div>
 
@@ -125,9 +125,6 @@
             <div class="kategori-card-head">
                 <div>
                     <h2 class="kategori-section-title">Daftar Kategori Barang</h2>
-                    <p class="kategori-section-text">
-                        Gunakan pencarian untuk menemukan kategori tertentu, lalu kelola data melalui tombol aksi pada tabel.
-                    </p>
                 </div>
             </div>
 
@@ -241,7 +238,11 @@
 
             <div class="kategori-footer">
                 <div class="kategori-info-text">
-                    Showing {{ $dataMulai }} to {{ $dataAkhir }} out of {{ $totalData }} entries
+                    @if($totalData > 0)
+                        Menampilkan {{ $dataMulai }} sampai {{ $dataAkhir }} dari {{ $totalData }} data
+                    @else
+                        Tidak ada data yang ditampilkan
+                    @endif
                 </div>
 
                 @if(method_exists($kategori, 'onEachSide'))

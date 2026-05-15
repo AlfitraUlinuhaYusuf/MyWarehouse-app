@@ -948,7 +948,7 @@
                 <span class="laporan-eyebrow">Laporan Bulanan</span>
                 <h1 class="laporan-title">Laporan Transaksi Barang</h1>
                 <p class="laporan-subtitle">
-                    Rekap transaksi barang masuk dan barang keluar dalam periode satu bulan terakhir untuk membantu pemantauan aktivitas gudang.
+                    Rekap transaksi barang masuk dan barang keluar dengan praktis.
                 </p>
             </div>
 
@@ -1039,15 +1039,12 @@
             <div class="laporan-card-head">
                 <div>
                     <h2 class="laporan-section-title">Daftar Transaksi</h2>
-                    <p class="laporan-section-text">
-                        Gunakan pencarian dan jumlah entri untuk melihat data laporan dengan lebih nyaman.
-                    </p>
                 </div>
             </div>
 
             <div class="laporan-control-row">
                 <div class="entries-control">
-                    <span>Show</span>
+                    <span>Tampilkan</span>
 
                     <select id="laporanEntries">
                         <option value="5" selected>5</option>
@@ -1056,7 +1053,7 @@
                         <option value="50">50</option>
                     </select>
 
-                    <span>Entries</span>
+                    <span>Data</span>
                 </div>
 
                 <div class="laporan-search">
@@ -1147,13 +1144,13 @@
 
             <div class="laporan-footer">
                 <div id="laporanInfo">
-                    Showing 0 out of 0 entries
+                    Tidak ada data yang ditampilkan
                 </div>
 
                 <div class="pagination-custom">
-                    <button type="button" id="prevPage">‹ Prev</button>
+                    <button type="button" id="prevPage">‹ Sebelumnya</button>
                     <span class="page-number" id="currentPageText">1</span>
-                    <button type="button" id="nextPage">Next ›</button>
+                    <button type="button" id="nextPage">Selanjutnya ›</button>
                 </div>
             </div>
         </div>
@@ -1209,7 +1206,11 @@
             const showingStart = totalRows === 0 ? 0 : startIndex + 1;
             const showingEnd = Math.min(endIndex, totalRows);
 
-            info.textContent = `Showing ${showingStart} to ${showingEnd} out of ${totalRows} entries`;
+            if (totalRows === 0) {
+    info.textContent = 'Tidak ada data yang ditampilkan';
+} else {
+    info.textContent = `Menampilkan ${showingStart} sampai ${showingEnd} dari ${totalRows} data`;
+}
             currentPageText.textContent = currentPage;
 
             prevButton.disabled = currentPage <= 1;

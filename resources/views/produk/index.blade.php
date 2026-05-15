@@ -1704,7 +1704,7 @@
                 <span class="produk-eyebrow">Master Data</span>
                 <h1 class="produk-title">Daftar Barang</h1>
                 <p class="produk-subtitle">
-                    Kelola data barang, stok, kategori, gambar, dan harga agar data persediaan gudang tetap rapi serta mudah dipantau.
+                    Kelola data barang untuk mempermudah pemantauan persediaan.
                 </p>
             </div>
 
@@ -1764,7 +1764,7 @@
                 <div>
                     <div class="summary-label">Stok Rendah</div>
                     <div class="summary-number">{{ $stokRendah }}</div>
-                    <div class="summary-caption">Perlu dipantau kembali</div>
+                    <div class="summary-caption">Barang perlu diperhatikan</div>
                 </div>
                 <div class="summary-icon" aria-hidden="true">
                     <svg viewBox="0 0 24 24">
@@ -1795,9 +1795,7 @@
             <div class="produk-card-head">
                 <div>
                     <h2 class="produk-section-title">Data Barang</h2>
-                    <p class="produk-section-text">
-                        Gunakan filter stok, pencarian, dan jumlah entri untuk mengelola data barang dengan lebih nyaman.
-                    </p>
+                   
                 </div>
             </div>
 
@@ -1807,7 +1805,7 @@
                     <input type="hidden" name="stock_filter" value="{{ $currentStockFilter }}">
 
                     <div class="entries-control">
-                        <span>Show</span>
+                        <span>Tampilkan</span>
                         <select
                             name="per_page"
                             onchange="document.getElementById('entriesForm').submit()"
@@ -1818,7 +1816,7 @@
                             <option value="25" {{ (int) $currentPerPage === 25 ? 'selected' : '' }}>25</option>
                             <option value="50" {{ (int) $currentPerPage === 50 ? 'selected' : '' }}>50</option>
                         </select>
-                        <span>Entries</span>
+                        <span>Data</span>
                     </div>
                 </form>
 
@@ -2005,26 +2003,26 @@
             <div class="produk-footer">
                 <div class="produk-footer-count">
                     @if($produk instanceof \Illuminate\Pagination\LengthAwarePaginator && $produk->total() > 0)
-                        Showing {{ $produk->firstItem() }} to {{ $produk->lastItem() }} out of {{ $produk->total() }} entries
+                        Menampilkan {{ $produk->firstItem() }} sampai {{ $produk->lastItem() }} dari {{ $produk->total() }} data
                     @else
-                        Showing 0 out of 0 entries
+                        Tidak ada data yang ditampilkan
                     @endif
                 </div>
 
                 @if($produk instanceof \Illuminate\Pagination\LengthAwarePaginator)
                     <div class="pagination-custom">
                         @if($produk->onFirstPage())
-                            <span class="disabled">‹ Prev</span>
+                            <span class="disabled">‹ Sebelumnya</span>
                         @else
-                            <a href="{{ $produk->appends(request()->query())->previousPageUrl() }}">‹ Prev</a>
+                            <a href="{{ $produk->appends(request()->query())->previousPageUrl() }}">‹ Sebelumnya</a>
                         @endif
 
                         <span class="page-num">{{ $produk->currentPage() }}</span>
 
                         @if($produk->hasMorePages())
-                            <a href="{{ $produk->appends(request()->query())->nextPageUrl() }}">Next ›</a>
+                            <a href="{{ $produk->appends(request()->query())->nextPageUrl() }}">Selanjutnya ›</a>
                         @else
-                            <span class="disabled">Next ›</span>
+                            <span class="disabled">Selanjutnya ›</span>
                         @endif
                     </div>
                 @endif

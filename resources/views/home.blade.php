@@ -1,14 +1,17 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="id">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Home - MyWarehouse</title>
 
-    <!-- Font: Playwrite US Modern + Poppins -->
+    <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Playwrite+US+Modern:wght@100..400&family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Playwrite+US+Modern:wght@100..400&family=Poppins:wght@300;400;500;600;700;800&display=swap"
+        rel="stylesheet"
+    >
 
     <style>
         * {
@@ -22,7 +25,11 @@
             width: 100%;
             min-height: 100vh;
             font-family: "Poppins", sans-serif;
-            background: #000;
+            background: #000000;
+        }
+
+        body {
+            overflow-x: hidden;
         }
 
         .page-wrapper {
@@ -30,7 +37,7 @@
             width: 100%;
             min-height: 100vh;
             overflow: hidden;
-            background-color: #000;
+            background-color: #000000;
         }
 
         .page-wrapper::before {
@@ -38,19 +45,28 @@
             position: absolute;
             inset: 0;
             background-image: url("{{ asset('images/login-bg.jpg') }}");
-            background-size: 100% 100%;
-            background-position: center center;
+            background-size: cover;
+            background-position: center;
             background-repeat: no-repeat;
             z-index: 0;
+        }
+
+        .page-wrapper::after {
+            content: "";
+            position: absolute;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.12);
+            z-index: 0;
+            pointer-events: none;
         }
 
         .navbar,
         .hero-section {
             position: relative;
-            z-index: 1;
+            z-index: 2;
         }
 
-        /* NAVBAR */
+        /* Navbar */
         .navbar {
             width: 100%;
             height: 102px;
@@ -58,6 +74,7 @@
             display: flex;
             align-items: center;
             justify-content: center;
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.16);
         }
 
         .brand {
@@ -65,7 +82,7 @@
             align-items: center;
             gap: 14px;
             text-decoration: none;
-            color: #000;
+            color: #000000;
         }
 
         .brand img {
@@ -83,26 +100,30 @@
             letter-spacing: -1px;
         }
 
-        /* HERO */
+        /* Hero */
         .hero-section {
             min-height: calc(100vh - 102px);
-            position: relative;
-            padding-top: 12px;
+            display: flex;
+            align-items: flex-start;
+            justify-content: center;
+            padding: 12px 20px 80px;
         }
 
         .hero-card {
             width: 748px;
-            height: 493px;
+            min-height: 493px;
             margin: 0 auto;
             background: rgba(102, 123, 43, 0.76);
             border-radius: 36px;
-            padding: 78px 54px 0 54px;
+            padding: 78px 54px 54px;
             color: #ffffff;
+            box-shadow: 0 26px 60px rgba(0, 0, 0, 0.25);
+            backdrop-filter: blur(2px);
+            animation: fadeUp 0.8s ease forwards;
         }
 
         .hero-card h1 {
-            width: 600px;
-            font-family: "Poppins", sans-serif;
+            max-width: 600px;
             font-size: 34px;
             font-weight: 700;
             line-height: 1.28;
@@ -111,8 +132,7 @@
         }
 
         .hero-card p {
-            width: 620px;
-            font-family: "Poppins", sans-serif;
+            max-width: 620px;
             font-size: 26px;
             font-weight: 400;
             line-height: 1.55;
@@ -120,34 +140,42 @@
             margin-bottom: 27px;
         }
 
-      .start-button {
-    width: 252px;
-    height: 44px;
-    background: #8ab13c;
-    border-radius: 10px;
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    color: #ffffff;
-    font-family: "Poppins", sans-serif;
-    font-size: 21px;
-    font-weight: 400;
-    text-decoration: none;
-    border: none;
-    cursor: pointer;
-}
+        .start-button {
+            width: 252px;
+            height: 44px;
+            background: #8ab13c;
+            border-radius: 10px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            color: #ffffff;
+            font-size: 21px;
+            font-weight: 400;
+            text-decoration: none;
+            border: none;
+            cursor: pointer;
+            transition: 0.25s ease;
+            box-shadow: 0 10px 22px rgba(0, 0, 0, 0.16);
+        }
 
         .start-button:hover {
             background: #345118;
+            transform: translateY(-2px);
+            box-shadow: 0 14px 28px rgba(0, 0, 0, 0.22);
         }
 
-        /* DECORATION BARS */
+        .start-button:active {
+            transform: translateY(0);
+        }
+
+        /* Decoration Bars */
         .bar {
             position: absolute;
             left: 0;
             height: 37px;
             border-radius: 0 20px 20px 0;
-            z-index: 2;
+            z-index: 1;
+            pointer-events: none;
         }
 
         .bar-one {
@@ -168,6 +196,19 @@
             background: rgba(174, 196, 82, 0.72);
         }
 
+        @keyframes fadeUp {
+            from {
+                opacity: 0;
+                transform: translateY(24px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Responsive */
         @media (max-width: 900px) {
             .navbar {
                 height: 92px;
@@ -183,31 +224,76 @@
             }
 
             .hero-section {
+                min-height: calc(100vh - 92px);
                 padding: 50px 20px;
+                align-items: center;
             }
 
             .hero-card {
                 width: 100%;
-                height: auto;
+                max-width: 680px;
                 min-height: 460px;
                 padding: 50px 32px;
             }
 
-            .hero-card h1,
-            .hero-card p {
-                width: 100%;
-            }
-
             .hero-card h1 {
+                max-width: 100%;
                 font-size: 28px;
             }
 
             .hero-card p {
+                max-width: 100%;
                 font-size: 20px;
             }
 
             .bar {
                 display: none;
+            }
+        }
+
+        @media (max-width: 520px) {
+            .navbar {
+                height: 82px;
+            }
+
+            .brand {
+                gap: 10px;
+            }
+
+            .brand img {
+                width: 48px;
+                height: 48px;
+            }
+
+            .brand span {
+                font-size: 22px;
+            }
+
+            .hero-section {
+                padding: 34px 16px;
+            }
+
+            .hero-card {
+                border-radius: 26px;
+                padding: 38px 24px;
+                min-height: auto;
+            }
+
+            .hero-card h1 {
+                font-size: 25px;
+                margin-bottom: 22px;
+            }
+
+            .hero-card p {
+                font-size: 17px;
+                line-height: 1.7;
+                margin-bottom: 26px;
+            }
+
+            .start-button {
+                width: 100%;
+                height: 46px;
+                font-size: 18px;
             }
         }
     </style>
@@ -226,14 +312,19 @@
                 <h1>Solusi untuk kebutuhan manajemen gudang anda</h1>
 
                 <p>
-                    MyWarehouse merupakan sistem berbasis web
-                    yang membantu admin gudang dalam mengelola
-                    data inventaris secara lebih efisien dan terstruktur
+                    MyWarehouse merupakan sistem berbasis web yang membantu admin gudang
+                    dalam mengelola data inventaris secara lebih efisien dan terstruktur.
                 </p>
 
-                <a href="{{ route('dashboard') }}" class="start-button">
-                    Mulai Sekarang
-                </a>
+                @auth
+                    <a href="{{ route('dashboard') }}" class="start-button">
+                        Masuk Dashboard
+                    </a>
+                @else
+                    <a href="{{ route('login') }}" class="start-button">
+                        Mulai Sekarang
+                    </a>
+                @endauth
             </div>
 
             <div class="bar bar-one"></div>
