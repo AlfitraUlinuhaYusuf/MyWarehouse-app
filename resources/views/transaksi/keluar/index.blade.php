@@ -1277,7 +1277,7 @@
 }
 
     .mini-icon {
-        background: var(--mw-danger-soft);
+        background: var(--mw-green);
         color: var(--mw-green-deep);
     }
 
