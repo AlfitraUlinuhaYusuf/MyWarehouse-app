@@ -523,7 +523,7 @@
                                 <path d="M4 21c1.6-5.3 14.4-5.3 16 0"></path>
                             </svg>
                         </span>
-                        <span>Hi, {{ auth()->user()->name ?? 'Nama' }}</span>
+                        <span>{{ auth()->user()->name ?? 'Nama' }}</span>
                     </span>
                 </summary>
 

@@ -9,7 +9,7 @@
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Playwrite+US+Modern:wght@100..400&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Playwrite+US+Modern:wght@100..400&family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
 
     <style>
         :root {
@@ -472,30 +472,46 @@
         }
 
         .page-heading {
-            display: flex;
-            align-items: flex-end;
-            justify-content: space-between;
-            gap: 18px;
-            margin: 0 0 26px 8px;
-            animation: fadeUp 0.55s ease both;
-        }
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 24px;
+    margin: 0 0 34px 0;
+    animation: fadeUp 0.55s ease both;
+}
 
-        .eyebrow {
-            margin-bottom: 5px;
-            color: var(--green-dark);
-            font-size: 12px;
-            font-weight: 800;
-            letter-spacing: 2.6px;
-            text-transform: uppercase;
-        }
+.eyebrow {
+    margin: 0 0 8px;
+    color: var(--green-dark);
+    font-size: 15px;
+    font-weight: 500;
+    letter-spacing: 0.2px;
+    text-transform: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 9px;
+}
 
-        .page-title {
-            margin: 0;
-            font-size: clamp(24px, 3vw, 32px);
-            font-weight: 700;
-            letter-spacing: 0.4px;
-            text-transform: uppercase;
-        }
+.eyebrow::before {
+    content: "";
+    width: 9px;
+    height: 9px;
+    border-radius: 999px;
+    background: var(--green-main);
+    box-shadow: 0 0 0 5px rgba(143, 179, 107, 0.18);
+    flex-shrink: 0;
+}
+
+.page-title {
+    margin: 0;
+    font-family: "Poppins", sans-serif;
+   font-size: clamp(26px, 3vw, 38px);
+        font-weight: 800;
+        line-height: 1.14;
+        letter-spacing: -0.8px;
+    text-transform: none;
+    color: #000000;
+}
 
         .page-subtitle {
             margin-top: 5px;
@@ -1402,7 +1418,7 @@
             <details class="nav-dropdown">
                 <summary>Laporan</summary>
                 <div class="dropdown-box">
-                    <a href="{{ route('laporan.index') }}">Laporan</a>
+                    <a href="{{ route('laporan.index') }}">Rekap Data</a>
                     @if ($laporanPdfTersedia)
                         <a href="{{ route('laporan.pdf') }}">Cetak PDF</a>
                     @else
@@ -1426,7 +1442,7 @@
                                 <path d="M4 21c1.6-5.3 14.4-5.3 16 0"></path>
                             </svg>
                         </span>
-                        <span>Hi, {{ auth()->user()->name ?? 'Nama' }}</span>
+                        <span>{{ auth()->user()->name ?? 'Nama' }}</span>
                     </span>
                 </summary>
                 <div class="dropdown-box user-menu-only-logout">
@@ -1442,7 +1458,6 @@
     <main class="dashboard-container">
         <div class="page-heading">
             <div>
-                <p class="eyebrow">Warehouse Overview</p>
                 <h1 class="page-title">Dashboard</h1>
                 <p class="page-subtitle">Pantau ringkasan aktivitas barang dan kondisi stok terbaru anda secara cepat.</p>
             </div>
