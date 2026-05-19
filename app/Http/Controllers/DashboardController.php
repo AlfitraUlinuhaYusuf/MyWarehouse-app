@@ -2,43 +2,69 @@
 
 namespace App\Http\Controllers;
 
-namespace App\Http\Controllers;
-
-
-// Pastikan baris ini ada agar Auth bisa dideteksi
-use Illuminate\Support\Facades\Auth;
 use App\Models\Produk;
 use App\Models\Transaksi;
-use Illuminate\Http\Request;
-
+use App\Models\KategoriProduk;
+use Illuminate\Support\Facades\Schema;
 
 class DashboardController extends Controller
 {
     public function index()
     {
-        $totalJenisBarang = Produk::count();
-        $totalBarangMasuk = Transaksi::where('jenis', 'masuk')->sum('jumlah');
-        $totalBarangKeluar = Transaksi::where('jenis', 'keluar')->sum('jumlah');
-        
-        // Ambil produk yang stoknya di bawah 10
-        $stokMinimum = Produk::where('stok', '<', 10)->get();
+        // Total kategori barang
+        $totalKategoriBarang = KategoriProduk::count();
 
-        // Data untuk Chart (Nama Produk & Stok)
-        $produkChart = Produk::select('nama_produk', 'stok')->get();
+        // Total barang masuk dan keluar
+        $totalBarangMasuk = 0;
+        $totalBarangKeluar = 0;
 
-        $produkData = Produk::select('nama_produk', 'stok')->get();
-        $labels = $produkData->pluck('nama_produk'); // Variabel ini yang dicari View
-        $values = $produkData->pluck('stok');        // Variabel ini juga
+        if (Schema::hasTable('transaksis')) {
+            $jenisColumn = null;
+            $jumlahColumn = null;
+
+            if (Schema::hasColumn('transaksis', 'jenis')) {
+                $jenisColumn = 'jenis';
+            } elseif (Schema::hasColumn('transaksis', 'tipe')) {
+                $jenisColumn = 'tipe';
+            } elseif (Schema::hasColumn('transaksis', 'jenis_transaksi')) {
+                $jenisColumn = 'jenis_transaksi';
+            }
+
+            if (Schema::hasColumn('transaksis', 'jumlah')) {
+                $jumlahColumn = 'jumlah';
+            } elseif (Schema::hasColumn('transaksis', 'jumlah_barang')) {
+                $jumlahColumn = 'jumlah_barang';
+            } elseif (Schema::hasColumn('transaksis', 'qty')) {
+                $jumlahColumn = 'qty';
+            }
+
+            if ($jenisColumn && $jumlahColumn) {
+                $totalBarangMasuk = Transaksi::where($jenisColumn, 'masuk')->sum($jumlahColumn);
+                $totalBarangKeluar = Transaksi::where($jenisColumn, 'keluar')->sum($jumlahColumn);
+            }
+        }
+
+        // Produk dengan stok minimum
+        $stokMinimum = Produk::where('stok', '<=', 5)->get();
+
+        // Data grafik stok barang
+        $produkGrafik = Produk::select('nama_produk', 'stok')->get();
+
+        $chartLabels = $produkGrafik->pluck('nama_produk')->values()->toArray();
+        $chartStocks = $produkGrafik->pluck('stok')->values()->toArray();
+
+        // Status tombol Cetak PDF harus mengikuti isi laporan bulanan
+        // agar kondisi di dashboard sama dengan halaman laporan.
+        $laporanPdfTersedia = Transaksi::where('created_at', '>=', now()->subMonth())->exists();
 
         return view('dashboard', compact(
-            'totalJenisBarang', 
-            'totalBarangMasuk', 
-            'totalBarangKeluar', 
+            'totalKategoriBarang',
+            'totalBarangMasuk',
+            'totalBarangKeluar',
             'stokMinimum',
-            'labels',  // Pastikan ini ADA
-            'values'   // Dan ini juga ADA
+            'chartLabels',
+            'chartStocks',
+            'laporanPdfTersedia'
         ));
     }
-    }
-
-
+}

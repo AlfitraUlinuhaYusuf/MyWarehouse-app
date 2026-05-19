@@ -29,6 +29,12 @@ class LaporanController extends Controller
                     ->orderBy('created_at', 'asc')
                     ->get();
 
+        if ($laporan->isEmpty()) {
+            return redirect()
+                ->route('laporan.index')
+                ->with('error', 'Cetak PDF tidak tersedia karena data laporan masih kosong.');
+        }
+
         $pdf = Pdf::loadView('laporan.pdf', compact('laporan'));
         return $pdf->download('laporan-bulanan-mywarehouse.pdf');
     }

@@ -16,7 +16,7 @@
                     <h5 class="modal-title" id="formKategoriLabel">
                         {{ isset($id) && $id ? 'Edit Kategori' : 'Tambah Kategori Baru' }}
                     </h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Batal">
                         <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
@@ -34,7 +34,7 @@
                         </div>
                         
                         <div class="modal-footer px-0 pb-0">
-                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Batal</button>
                             <button type="submit" class="btn btn-primary">Simpan</button>
                         </div>
                     </form>
